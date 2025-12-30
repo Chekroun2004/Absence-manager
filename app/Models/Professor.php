@@ -21,9 +21,9 @@ class Professor extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function modules(): HasMany
+    public function modules()
     {
-        return $this->hasMany(Module::class);
+        return $this->hasMany(Module::class, 'professor_id');
     }
 
     public function recommendationRequests(): HasMany

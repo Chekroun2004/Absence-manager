@@ -7,7 +7,6 @@ import { useState } from 'react';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
-
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -16,6 +15,7 @@ export default function AuthenticatedLayout({ header, children }) {
             <nav className="border-b border-gray-100 bg-white">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
+                        {/* LOGO */}
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
                                 <Link href="/">
@@ -23,6 +23,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </Link>
                             </div>
 
+                            {/* NAVIGATION DESKTOP */}
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
                                     href={route('dashboard')}
@@ -30,18 +31,102 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Dashboard
                                 </NavLink>
-                                
+
+                                {/* ADMIN LINKS */}
                                 {user.role === 'admin' && (
-                                    <NavLink
-                                        href={route('admin.pending-users')}
-                                        active={route().current('admin.pending-users')}
-                                    >
-                                        📋 Approbations
-                                    </NavLink>
+                                    <>
+                                        <NavLink
+                                            href={route(
+                                                'admin.pending-users'
+                                            )}
+                                            active={route().current(
+                                                'admin.pending-users'
+                                            )}
+                                        >
+                                            📋 Approbations
+                                        </NavLink>
+                                        <NavLink
+                                            href={route('admin.users.index')}
+                                            active={route().current(
+                                                'admin.users.index'
+                                            )}
+                                        >
+                                            👥 Utilisateurs
+                                        </NavLink>
+                                        <NavLink
+                                            href={route(
+                                                'admin.modules.index'
+                                            )}
+                                            active={route().current(
+                                                'admin.modules.index'
+                                            )}
+                                        >
+                                            📚 Modules
+                                        </NavLink>
+                                    </>
+                                )}
+
+                                {/* PROFESSOR LINKS */}
+                                {user.role === 'professor' && (
+                                    <>
+                                        <NavLink
+                                            href={route(
+                                                'professor.sessions'
+                                            )}
+                                            active={route().current(
+                                                'professor.sessions'
+                                            )}
+                                        >
+                                            📚 Mes Séances
+                                        </NavLink>
+                                        <NavLink
+                                            href={route(
+                                                'professor.recommendations'
+                                            )}
+                                            active={route().current(
+                                                'professor.recommendations'
+                                            )}
+                                        >
+                                            📝 Recommandations
+                                        </NavLink>
+                                    </>
+                                )}
+
+                                {/* STUDENT LINKS */}
+                                {user.role === 'student' && (
+                                    <>
+                                        <NavLink
+                                            href={route('student.modules')}
+                                            active={route().current(
+                                                'student.modules'
+                                            )}
+                                        >
+                                            📚 Mes Modules
+                                        </NavLink>
+                                        <NavLink
+                                            href={route(
+                                                'student.mark-presence'
+                                            )}
+                                            active={route().current(
+                                                'student.mark-presence'
+                                            )}
+                                        >
+                                            ✅ Marquer Présence
+                                        </NavLink>
+                                        <NavLink
+                                            href={route('student.letters')}
+                                            active={route().current(
+                                                'student.letters'
+                                            )}
+                                        >
+                                            📜 Mes Lettres
+                                        </NavLink>
+                                    </>
                                 )}
                             </div>
                         </div>
 
+                        {/* PROFILE DROPDOWN */}
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
                             <div className="relative ms-3">
                                 <Dropdown>
@@ -87,11 +172,12 @@ export default function AuthenticatedLayout({ header, children }) {
                             </div>
                         </div>
 
+                        {/* HAMBURGER MOBILE */}
                         <div className="-me-2 flex items-center sm:hidden">
                             <button
                                 onClick={() =>
                                     setShowingNavigationDropdown(
-                                        (previousState) => !previousState,
+                                        (previousState) => !previousState
                                     )
                                 }
                                 className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
@@ -130,6 +216,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     </div>
                 </div>
 
+                {/* NAVIGATION MOBILE */}
                 <div
                     className={
                         (showingNavigationDropdown ? 'block' : 'hidden') +
@@ -143,17 +230,101 @@ export default function AuthenticatedLayout({ header, children }) {
                         >
                             Dashboard
                         </ResponsiveNavLink>
-                        
+
+                        {/* ADMIN LINKS MOBILE */}
                         {user.role === 'admin' && (
-                            <ResponsiveNavLink
-                                href={route('admin.pending-users')}
-                                active={route().current('admin.pending-users')}
-                            >
-                                📋 Approbations
-                            </ResponsiveNavLink>
+                            <>
+                                <ResponsiveNavLink
+                                    href={route(
+                                        'admin.pending-users'
+                                    )}
+                                    active={route().current(
+                                        'admin.pending-users'
+                                    )}
+                                >
+                                    📋 Approbations
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('admin.users.index')}
+                                    active={route().current(
+                                        'admin.users.index'
+                                    )}
+                                >
+                                    👥 Utilisateurs
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route(
+                                        'admin.modules.index'
+                                    )}
+                                    active={route().current(
+                                        'admin.modules.index'
+                                    )}
+                                >
+                                    📚 Modules
+                                </ResponsiveNavLink>
+                            </>
+                        )}
+
+                        {/* PROFESSOR LINKS MOBILE */}
+                        {user.role === 'professor' && (
+                            <>
+                                <ResponsiveNavLink
+                                    href={route(
+                                        'professor.sessions'
+                                    )}
+                                    active={route().current(
+                                        'professor.sessions'
+                                    )}
+                                >
+                                    📚 Mes Séances
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route(
+                                        'professor.recommendations'
+                                    )}
+                                    active={route().current(
+                                        'professor.recommendations'
+                                    )}
+                                >
+                                    📝 Recommandations
+                                </ResponsiveNavLink>
+                            </>
+                        )}
+
+                        {/* STUDENT LINKS MOBILE */}
+                        {user.role === 'student' && (
+                            <>
+                                <ResponsiveNavLink
+                                    href={route('student.modules')}
+                                    active={route().current(
+                                        'student.modules'
+                                    )}
+                                >
+                                    📚 Mes Modules
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route(
+                                        'student.mark-presence'
+                                    )}
+                                    active={route().current(
+                                        'student.mark-presence'
+                                    )}
+                                >
+                                    ✅ Marquer Présence
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('student.letters')}
+                                    active={route().current(
+                                        'student.letters'
+                                    )}
+                                >
+                                    📜 Mes Lettres
+                                </ResponsiveNavLink>
+                            </>
                         )}
                     </div>
 
+                    {/* MOBILE PROFILE */}
                     <div className="border-t border-gray-200 pb-1 pt-4">
                         <div className="px-4">
                             <div className="text-base font-medium text-gray-800">
@@ -165,7 +336,9 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
+                            <ResponsiveNavLink
+                                href={route('profile.edit')}
+                            >
                                 Profile
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
@@ -180,6 +353,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 </div>
             </nav>
 
+            {/* HEADER */}
             {header && (
                 <header className="bg-white shadow">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -188,6 +362,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 </header>
             )}
 
+            {/* MAIN CONTENT */}
             <main>{children}</main>
         </div>
     );

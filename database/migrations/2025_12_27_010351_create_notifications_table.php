@@ -8,20 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('attendances', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
-            $table->foreignId('module_id')->constrained('modules')->onDelete('cascade');
-            $table->date('date');
-            $table->enum('status', ['present', 'absent', 'late'])->default('absent');
-            $table->text('notes')->nullable();
-            $table->timestamp('marked_at')->nullable();
+            $table->foreignId('class_session_id')->constrained('class_sessions')->onDelete('cascade');
+            $table->string('title');
+            $table->text('message');
+            $table->boolean('read')->default(false);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('attendances');
+        Schema::dropIfExists('notifications');
     }
 };
