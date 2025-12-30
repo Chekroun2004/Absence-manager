@@ -9,13 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('attendances', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
-    }
+   public function up(): void
+{
+    Schema::create('attendances', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
+        $table->foreignId('student_id')->constrained()->onDelete('cascade');
+        $table->enum('status', ['present', 'absent', 'justified'])->default('absent');
+        $table->text('justification')->nullable();
+        $table->timestamp('marked_at')->nullable();
+        $table->timestamps();
+        $table->unique(['lesson_id', 'student_id']);
+    });
+}
 
     /**
      * Reverse the migrations.

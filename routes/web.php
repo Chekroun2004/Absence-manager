@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserApprovalController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,6 +12,7 @@ Route::get('/', function () {
     ]);
 });
 
+// Routes authentifiées (protégées par 'auth' et 'approved')
 Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
@@ -35,14 +35,11 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Routes Admin - SANS middleware role pour le moment
-Route::middleware(['auth', 'approved'])->prefix('admin')->group(function () {
-    Route::get('/pending-users', [UserApprovalController::class, 'index'])
-        ->name('admin.pending-users');
-    Route::post('/users/{user}/approve', [UserApprovalController::class, 'approve'])
-        ->name('admin.users.approve');
-    Route::delete('/users/{user}/reject', [UserApprovalController::class, 'reject'])
-        ->name('admin.users.reject');
+// Routes Admin
+Route::middleware(['auth', 'approved'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/pending-users', [UserApprovalController::class, 'index'])->name('pending-users');
+    Route::post('/users/{user}/approve', [UserApprovalController::class, 'approve'])->name('users.approve');
+    Route::delete('/users/{user}/reject', [UserApprovalController::class, 'reject'])->name('users.reject');
 });
 
 require __DIR__.'/auth.php';

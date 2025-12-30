@@ -30,6 +30,15 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Dashboard
                                 </NavLink>
+                                
+                                {user.role === 'admin' && (
+                                    <NavLink
+                                        href={route('admin.pending-users')}
+                                        active={route().current('admin.pending-users')}
+                                    >
+                                        📋 Approbations
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 
@@ -134,6 +143,15 @@ export default function AuthenticatedLayout({ header, children }) {
                         >
                             Dashboard
                         </ResponsiveNavLink>
+                        
+                        {user.role === 'admin' && (
+                            <ResponsiveNavLink
+                                href={route('admin.pending-users')}
+                                active={route().current('admin.pending-users')}
+                            >
+                                📋 Approbations
+                            </ResponsiveNavLink>
+                        )}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">

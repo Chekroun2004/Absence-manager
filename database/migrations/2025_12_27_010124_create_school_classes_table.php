@@ -10,12 +10,15 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('school_classes', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('school_classes', function (Blueprint $table) {
+        $table->id();
+        $table->string('name'); // Master name
+        $table->string('speciality'); // Filière
+        $table->string('academic_year');
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

@@ -33,19 +33,21 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'role' => 'required|in:student,professor',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'role' => $request->role,
             'password' => Hash::make($request->password),
+            'is_approved' => false, // Important : non approuvé par défaut
         ]);
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        // ✅ Redirection avec message
+        return redirect()->route('login')->with('status', 'Compte créé avec succès ! En attente d\'approbation de l\'administrateur.');
     }
 }

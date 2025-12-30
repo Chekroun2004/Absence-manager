@@ -10,12 +10,17 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('recommendation_requests', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('recommendation_requests', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('student_id')->constrained()->onDelete('cascade');
+        $table->foreignId('professor_id')->constrained('professors')->onDelete('cascade');
+        $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
+        $table->text('rejection_reason')->nullable();
+        $table->timestamp('responded_at')->nullable();
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

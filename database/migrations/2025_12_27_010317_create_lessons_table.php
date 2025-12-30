@@ -10,12 +10,18 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('lessons', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('lessons', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('module_id')->constrained()->onDelete('cascade');
+        $table->dateTime('start_time');
+        $table->dateTime('end_time');
+        $table->string('dynamic_code')->unique(); // Code temporaire
+        $table->timestamp('code_expires_at')->nullable();
+        $table->enum('status', ['pending', 'active', 'closed'])->default('pending');
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.
