@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\SchoolClassController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\Admin\UserApprovalController;
@@ -18,6 +19,10 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
     ]);
 });
+Route::get('/professor/sessions/{session}/attendances', [
+    ProfessorSessionController::class,
+    'getAttendances',
+])->name('sessions.attendances');
 
 // ========== ROUTES AUTHENTIFIÉES (Pour tous les utilisateurs approuvés) ==========
 Route::middleware(['auth', 'approved'])->group(function () {
@@ -53,6 +58,12 @@ Route::middleware(['auth', 'verified', 'approved', 'role:admin'])
         Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
+        // ========== GESTION DES CLASSES (MASTER) ==========
+        Route::get('/school-classes', [App\Http\Controllers\Admin\SchoolClassController::class, 'index'])->name('school-classes.index');
+        Route::post('/school-classes', [App\Http\Controllers\Admin\SchoolClassController::class, 'store'])->name('school-classes.store');
+        Route::put('/school-classes/{schoolClass}', [App\Http\Controllers\Admin\SchoolClassController::class, 'update'])->name('school-classes.update');
+        Route::delete('/school-classes/{schoolClass}', [App\Http\Controllers\Admin\SchoolClassController::class, 'destroy'])->name('school-classes.destroy');
+
         // ========== GESTION DES MODULES ==========
         Route::get('/modules', [ModuleController::class, 'index'])->name('modules.index');
         Route::post('/modules', [ModuleController::class, 'store'])->name('modules.store');
@@ -66,7 +77,6 @@ Route::middleware(['auth', 'verified', 'approved', 'role:admin'])
         Route::post('/users/{user}/approve', [UserApprovalController::class, 'approve'])->name('users.approve');
         Route::post('/users/{user}/reject', [UserApprovalController::class, 'reject'])->name('users.reject');
     });
-
 // ========== ROUTES PROFESSEUR ==========
 Route::middleware(['auth', 'verified', 'approved', 'role:professor'])
     ->prefix('professor')

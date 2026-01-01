@@ -89,7 +89,6 @@ class DatabaseSeeder extends Seeder
 
             $student = Student::create([
                 'user_id' => $studentUser->id,
-                'apogee_code' => 'APO' . str_pad($i, 5, '0', STR_PAD_LEFT),
                 'academic_mention' => ['Très Bien', 'Bien', 'Assez Bien', 'Passable'][rand(0, 3)],
             ]);
 

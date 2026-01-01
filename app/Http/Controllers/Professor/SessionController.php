@@ -149,4 +149,25 @@ class SessionController extends Controller
             'total' => $total,
         ]);
     }
+
+    public function getAttendances(ClassSession $session)
+    {
+        $attendances = Attendance::where('class_session_id', $session->id)
+            ->with('student.user')
+            ->get()
+            ->map(function ($attendance) {
+                return [
+                    'id' => $attendance->id,
+                    'student_id' => $attendance->student_id,  // ✅ IMPORTANT !
+                    'student_name' => $attendance->student->user->name,
+                    'is_present' => $attendance->is_present,
+                    'marked_at' => $attendance->marked_at,
+                ];
+            });
+
+        return response()->json([
+            'attendances' => $attendances,
+            'session_expired' => now() > $session->expires_at,
+        ]);
+    }
 }

@@ -63,6 +63,16 @@ export default function AuthenticatedLayout({ header, children }) {
                                         >
                                             📚 Modules
                                         </NavLink>
+                                        <NavLink
+                                            href={route(
+                                                'admin.school-classes.index'
+                                            )}
+                                            active={route().current(
+                                                'admin.school-classes.index'
+                                            )}
+                                        >
+                                            🎓 Gestion Classes
+                                        </NavLink>
                                     </>
                                 )}
 
@@ -261,6 +271,16 @@ export default function AuthenticatedLayout({ header, children }) {
                                     )}
                                 >
                                     📚 Modules
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route(
+                                        'admin.school-classes.index'
+                                    )}
+                                    active={route().current(
+                                        'admin.school-classes.index'
+                                    )}
+                                >
+                                    🎓 Gestion Classes
                                 </ResponsiveNavLink>
                             </>
                         )}

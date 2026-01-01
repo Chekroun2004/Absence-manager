@@ -8,6 +8,7 @@ use App\Models\Professor;
 use App\Models\SchoolClass;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class ModuleController extends Controller
 {
@@ -60,7 +61,19 @@ class ModuleController extends Controller
     // ✅ NOUVELLE MÉTHODE : Afficher la page d'assignation
     public function showAssignForm(Module $module)
     {
-        $students = Student::with('user')->get();
+        // Récupérer les users approuvés avec role 'student'
+        $approvedStudentUsers = User::where('role', 'student')
+            ->where('is_approved', 1)
+            ->get();
+        
+        // Pour chaque user, créer/récupérer son entrée Student
+        $students = $approvedStudentUsers->map(function($user) {
+            $student = Student::firstOrCreate(
+                ['user_id' => $user->id]
+            );
+            $student->load('user');
+            return $student;
+        });
         
         return inertia('Admin/AssignStudents', [
             'module' => $module,

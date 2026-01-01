@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::table('attendances', function (Blueprint $table) {
             $table->foreignId('class_session_id')
                 ->nullable()
-                ->after('module_id')
                 ->constrained('class_sessions')
                 ->onDelete('cascade');
         });

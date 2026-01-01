@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
-export default function ActiveSession({ session, students }) {
+export default function ActiveSession({ session, students: initialStudents }) {
   const [timeLeft, setTimeLeft] = useState(20);
   const [copied, setCopied] = useState(false);
+  const [students, setStudents] = useState(initialStudents);
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   // Timer countdown
   useEffect(() => {
@@ -16,6 +18,36 @@ export default function ActiveSession({ session, students }) {
 
     return () => clearInterval(interval);
   }, [timeLeft]);
+
+  // ✅ POLLING : Rafraîchir les présences toutes les 2 secondes
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const response = await fetch(
+          `/professor/sessions/${session.id}/attendances`
+        );
+        const data = await response.json();
+        
+        // Mettre à jour les étudiants avec les présences
+        setStudents((prevStudents) =>
+          prevStudents.map((student) => {
+            const attendance = data.attendances.find(
+              (a) => a.student_id === student.id
+            );
+            return attendance
+              ? { ...student, ...attendance }
+              : student;
+          })
+        );
+        
+        setSessionExpired(data.session_expired);
+      } catch (error) {
+        console.error('Erreur lors du rafraîchissement:', error);
+      }
+    }, 2000); // ✅ Rafraîchir toutes les 2 secondes
+
+    return () => clearInterval(interval);
+  }, [session.id]);
 
   const copyCode = () => {
     navigator.clipboard.writeText(session.code);
@@ -71,6 +103,11 @@ export default function ActiveSession({ session, students }) {
                 👥 Étudiants ({presentCount}/{totalCount})
               </h2>
 
+              {/* 🔄 Indicateur de synchronisation */}
+              <div className="mb-4 p-3 bg-blue-50 rounded text-sm text-blue-700">
+                🔄 Mise à jour automatique en cours...
+              </div>
+
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {students.length === 0 ? (
                   <p className="text-gray-500">Aucun étudiant assigné.</p>
@@ -78,7 +115,7 @@ export default function ActiveSession({ session, students }) {
                   students.map((student) => (
                     <div
                       key={student.id}
-                      className={`p-4 rounded border-l-4 flex justify-between items-center ${
+                      className={`p-4 rounded border-l-4 flex justify-between items-center transition ${
                         student.is_present
                           ? 'bg-green-50 border-green-500'
                           : 'bg-gray-50 border-gray-300'
@@ -97,9 +134,11 @@ export default function ActiveSession({ session, students }) {
                             ✅ Présent
                           </p>
                           <p className="text-xs text-gray-600">
-                            {new Date(
-                              student.marked_at
-                            ).toLocaleTimeString('fr-FR')}
+                            {student.marked_at
+                              ? new Date(
+                                  student.marked_at
+                                ).toLocaleTimeString('fr-FR')
+                              : ''}
                           </p>
                         </div>
                       ) : (
