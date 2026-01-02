@@ -87,14 +87,14 @@ class SessionController extends Controller
             ->get()
             ->map(function ($student) use ($session) {
                 $attendance = Attendance::where('student_id', $student->id)
-                    ->where('class_session_id', $session->id)
+                    ->where('class_session_id', $session->id)  // ✅ class_session_id
                     ->first();
 
                 return [
                     'id' => $student->id,
                     'name' => $student->user->name,
                     'email' => $student->user->email,
-                    'is_present' => $attendance ? true : false,
+                    'is_present' => $attendance && $attendance->status === 'present' ? true : false,
                     'marked_at' => $attendance ? $attendance->marked_at : null,
                 ];
             });
@@ -108,6 +108,26 @@ class SessionController extends Controller
                 'module_name' => $session->module->name,
             ],
             'students' => $students,
+        ]);
+    }
+
+    // ✅ NOUVELLE MÉTHODE : API pour polling
+    public function getAttendances(ClassSession $session)
+    {
+        $user = Auth::user();
+        $professor = Professor::where('user_id', $user->id)->first();
+
+        if (!$professor || $session->professor_id !== $professor->id) {
+            abort(403, 'Non autorisé.');
+        }
+
+        $attendances = Attendance::where('class_session_id', $session->id)  // ✅ class_session_id
+            ->with('student.user')
+            ->get();
+
+        return response()->json([
+            'attendances' => $attendances,
+            'session_expired' => now() > $session->expires_at,
         ]);
     }
 
@@ -134,7 +154,9 @@ class SessionController extends Controller
             abort(403, 'Non autorisé.');
         }
 
-        $present = $session->attendances()->count();
+        $present = Attendance::where('class_session_id', $session->id)  // ✅ class_session_id
+            ->where('status', 'present')
+            ->count();
         $total = $session->module->students()->count();
         $absent = $total - $present;
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
@@ -8,46 +8,96 @@ export default function ActiveSession({ session, students: initialStudents }) {
   const [students, setStudents] = useState(initialStudents);
   const [sessionExpired, setSessionExpired] = useState(false);
 
-  // Timer countdown
+  // ✅ CALCUL DU TEMPS DEPUIS expires_at (pas de state local qui recommence)
   useEffect(() => {
-    if (timeLeft <= 0) return;
+    const calculateTimeLeft = () => {
+      const now = new Date().getTime();
+      const expiresAt = new Date(session.expires_at).getTime();
+      const remaining = Math.max(0, Math.ceil((expiresAt - now) / 1000));
+      setTimeLeft(remaining);
+      
+      if (remaining <= 0) {
+        setSessionExpired(true);
+      }
+    };
 
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => Math.max(0, prev - 1));
-    }, 1000);
+    // Calculer immédiatement
+    calculateTimeLeft();
+
+    // Mettre à jour chaque seconde
+    const interval = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(interval);
-  }, [timeLeft]);
+  }, [session.expires_at]); // ✅ Dépend SEULEMENT de expires_at
 
   // ✅ POLLING : Rafraîchir les présences toutes les 2 secondes
+  // ✅ PAS de timeLeft dans les dépendances !
   useEffect(() => {
+    // Arrêter le polling si le temps est écoulé
+    if (sessionExpired) {
+      console.log('⏸️ POLLING ARRÊTÉ - Temps écoulé');
+      return;
+    }
+
     const interval = setInterval(async () => {
       try {
+        console.log(`🔄 [${new Date().toLocaleTimeString()}] Polling...`);
+        
         const response = await fetch(
           `/professor/sessions/${session.id}/attendances`
         );
-        const data = await response.json();
         
-        // Mettre à jour les étudiants avec les présences
-        setStudents((prevStudents) =>
-          prevStudents.map((student) => {
+        console.log(`📊 Status HTTP: ${response.status}`);
+        
+        if (!response.ok) {
+          console.error(`❌ ERREUR HTTP ${response.status}: ${response.statusText}`);
+          return;
+        }
+        
+        const data = await response.json();
+        console.log('✅ Data reçue:', data.attendances);
+        console.log('✅ Nombre d\'attendances:', data.attendances.length);
+        
+        // ✅ Mettre à jour les étudiants
+        setStudents((prevStudents) => {
+          const updated = prevStudents.map((student) => {
             const attendance = data.attendances.find(
               (a) => a.student_id === student.id
             );
-            return attendance
-              ? { ...student, ...attendance }
-              : student;
-          })
-        );
+            
+            if (attendance && attendance.status === 'present' && !student.is_present) {
+              console.log(`✅ ${student.name} est maintenant PRÉSENT`);
+              return {
+                ...student,
+                is_present: true,
+                marked_at: attendance.marked_at,
+              };
+            }
+            return student;
+          });
+          
+          // ✅ Vérifier s'il y a eu des changements
+          const changed = updated.some((s, i) => 
+            s.is_present !== prevStudents[i].is_present
+          );
+          
+          if (changed) {
+            console.log('🔄 CHANGEMENTS DÉTECTÉS - Mise à jour UI');
+          }
+          
+          return updated;
+        });
         
-        setSessionExpired(data.session_expired);
       } catch (error) {
-        console.error('Erreur lors du rafraîchissement:', error);
+        console.error('❌ ERREUR FETCH:', error);
       }
-    }, 2000); // ✅ Rafraîchir toutes les 2 secondes
+    }, 2000);
 
-    return () => clearInterval(interval);
-  }, [session.id]);
+    return () => {
+      console.log('🧹 Nettoyage polling');
+      clearInterval(interval);
+    };
+  }, [session.id, sessionExpired]); // ✅ SEULEMENT session.id et sessionExpired, PAS timeLeft !
 
   const copyCode = () => {
     navigator.clipboard.writeText(session.code);
@@ -55,7 +105,10 @@ export default function ActiveSession({ session, students: initialStudents }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const presentCount = students.filter((s) => s.is_present).length;
+  const presentCount = useMemo(
+    () => students.filter((s) => s.is_present).length,
+    [students]
+  );
   const totalCount = students.length;
 
   return (
@@ -71,14 +124,23 @@ export default function ActiveSession({ session, students: initialStudents }) {
               <p className="text-gray-600 mb-6">{session.module_name}</p>
 
               {/* CODE PIN EN GROS */}
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-8 mb-6 text-white">
+              <div className={`rounded-lg p-8 mb-6 text-white ${
+                timeLeft <= 0
+                  ? 'bg-gradient-to-r from-gray-500 to-gray-600'
+                  : 'bg-gradient-to-r from-blue-500 to-blue-600'
+              }`}>
                 <p className="text-sm mb-2">Code PIN</p>
                 <p className="text-6xl font-bold font-mono tracking-widest mb-4">
-                  {session.code}
+                  {timeLeft <= 0 ? '⏹️ EXPIRÉ' : session.code}
                 </p>
                 <button
                   onClick={copyCode}
-                  className="bg-white text-blue-600 px-6 py-2 rounded font-semibold hover:bg-gray-100"
+                  disabled={timeLeft <= 0}
+                  className={`${
+                    timeLeft <= 0
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-white hover:bg-gray-100'
+                  } text-blue-600 px-6 py-2 rounded font-semibold`}
                 >
                   {copied ? '✅ Copié !' : '📋 Copier'}
                 </button>
@@ -87,12 +149,18 @@ export default function ActiveSession({ session, students: initialStudents }) {
               {/* TIMER */}
               <div
                 className={`text-5xl font-bold font-mono ${
-                  timeLeft <= 5 ? 'text-red-600' : 'text-green-600'
+                  timeLeft <= 0
+                    ? 'text-gray-600'
+                    : timeLeft <= 5
+                      ? 'text-red-600'
+                      : 'text-green-600'
                 }`}
               >
                 ⏱️ {timeLeft}s
               </div>
-              <p className="text-gray-600 mt-2">Temps restant</p>
+              <p className="text-gray-600 mt-2">
+                {timeLeft <= 0 ? '❌ Séance terminée' : 'Temps restant'}
+              </p>
             </div>
           </div>
 
@@ -104,9 +172,15 @@ export default function ActiveSession({ session, students: initialStudents }) {
               </h2>
 
               {/* 🔄 Indicateur de synchronisation */}
-              <div className="mb-4 p-3 bg-blue-50 rounded text-sm text-blue-700">
-                🔄 Mise à jour automatique en cours...
-              </div>
+              {timeLeft > 0 ? (
+                <div className="mb-4 p-3 bg-blue-50 rounded text-sm text-blue-700">
+                  🔄 Mise à jour automatique en cours... (toutes les 2s)
+                </div>
+              ) : (
+                <div className="mb-4 p-3 bg-red-50 rounded text-sm text-red-700">
+                  ⏹️ Séance terminée - Polling arrêté
+                </div>
+              )}
 
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {students.length === 0 ? (
@@ -114,7 +188,7 @@ export default function ActiveSession({ session, students: initialStudents }) {
                 ) : (
                   students.map((student) => (
                     <div
-                      key={student.id}
+                      key={`student-${student.id}`}
                       className={`p-4 rounded border-l-4 flex justify-between items-center transition ${
                         student.is_present
                           ? 'bg-green-50 border-green-500'

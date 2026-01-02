@@ -11,10 +11,12 @@ class Attendance extends Model
     use HasFactory;
 
     protected $fillable = [
-        'lesson_id',
         'student_id',
+        'class_session_id',  // ✅ Au lieu de lesson_id
+        'module_id',
+        'date',
         'status',
-        'justification',
+        'notes',
         'marked_at',
     ];
 
@@ -22,9 +24,9 @@ class Attendance extends Model
         'marked_at' => 'datetime',
     ];
 
-    public function lesson(): BelongsTo
+    public function classSession(): BelongsTo
     {
-        return $this->belongsTo(Lesson::class);
+        return $this->belongsTo(ClassSession::class);
     }
 
     public function student(): BelongsTo

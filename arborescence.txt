@@ -1,0 +1,315 @@
+﻿├─ app
+│  ├─ Http
+│  │  ├─ Controllers
+│  │  │  ├─ Admin
+│  │  │  │  ├─ ModuleController.php
+│  │  │  │  ├─ ModuleManagement.jsx
+│  │  │  │  ├─ SchoolClassController.php
+│  │  │  │  ├─ UserApprovalController.php
+│  │  │  │  ├─ UserController.php
+│  │  │  │  └─ UserManager.jsx
+│  │  │  ├─ Api
+│  │  │  │  ├─ AttendanceController.php
+│  │  │  │  ├─ LessonController.php
+│  │  │  │  └─ RecommendationRequestController.php
+│  │  │  ├─ Auth
+│  │  │  │  ├─ AuthenticatedSessionController.php
+│  │  │  │  ├─ ConfirmablePasswordController.php
+│  │  │  │  ├─ EmailVerificationNotificationController.php
+│  │  │  │  ├─ EmailVerificationPromptController.php
+│  │  │  │  ├─ LoginController.php
+│  │  │  │  ├─ NewPasswordController.php
+│  │  │  │  ├─ PasswordController.php
+│  │  │  │  ├─ PasswordResetLinkController.php
+│  │  │  │  ├─ RegisteredUserController.php
+│  │  │  │  └─ VerifyEmailController.php
+│  │  │  ├─ Professor
+│  │  │  │  ├─ RecommendationController.php
+│  │  │  │  └─ SessionController.php
+│  │  │  ├─ Student
+│  │  │  │  └─ StudentController.php
+│  │  │  ├─ Controller.php
+│  │  │  ├─ ProfileController.php
+│  │  │  └─ SessionController.php
+│  │  ├─ Middleware
+│  │  │  ├─ CheckRole.php
+│  │  │  ├─ CheckUserApproved.php
+│  │  │  └─ HandleInertiaRequests.php
+│  │  └─ Requests
+│  │     ├─ Auth
+│  │     │  └─ LoginRequest.php
+│  │     └─ ProfileUpdateRequest.php
+│  ├─ Models
+│  │  ├─ Attendance.php
+│  │  ├─ ClassSession.php
+│  │  ├─ Lesson.php
+│  │  ├─ Module.php
+│  │  ├─ Professor.php
+│  │  ├─ Recommendation.php
+│  │  ├─ RecommendationLetter.php
+│  │  ├─ RecommendationRequest.php
+│  │  ├─ SchoolClass.php
+│  │  ├─ Student.php
+│  │  └─ User.php
+│  └─ Providers
+│     └─ AppServiceProvider.php
+├─ bootstrap
+│  ├─ cache
+│  │  ├─ .gitignore
+│  │  ├─ packages.php
+│  │  └─ services.php
+│  ├─ app.php
+│  └─ providers.php
+├─ config
+│  ├─ app.php
+│  ├─ auth.php
+│  ├─ cache.php
+│  ├─ database.php
+│  ├─ filesystems.php
+│  ├─ logging.php
+│  ├─ mail.php
+│  ├─ queue.php
+│  ├─ services.php
+│  ├─ session.php
+│  └─ snappy.php
+├─ database
+│  ├─ factories
+│  │  └─ UserFactory.php
+│  ├─ migrations
+│  │  ├─ 0001_01_01_000000_create_users_table.php
+│  │  ├─ 0001_01_01_000001_create_cache_table.php
+│  │  ├─ 0001_01_01_000002_create_jobs_table.php
+│  │  ├─ 2025_12_27_010004_create_students_table.php
+│  │  ├─ 2025_12_27_010055_create_professors_table.php
+│  │  ├─ 2025_12_27_010124_create_school_classes_table.php
+│  │  ├─ 2025_12_27_010229_add_role_to_users_table.php
+│  │  ├─ 2025_12_27_010301_create_modules_table.php
+│  │  ├─ 2025_12_27_010317_create_lessons_table.php
+│  │  ├─ 2025_12_27_010339_create_attendances_table.php
+│  │  ├─ 2025_12_27_010350_create_app_sessions_table.php
+│  │  ├─ 2025_12_27_010351_create_notifications_table.php
+│  │  ├─ 2025_12_27_010404_create_recommendation_requests_table.php
+│  │  ├─ 2025_12_27_010501_create_recommendation_letters_table.php
+│  │  ├─ 2025_12_27_010630_create_student_school_class_table.php
+│  │  ├─ 2025_12_27_130550_add_is_approved_to_users_table.php
+│  │  ├─ 2025_12_30_152904_create_recommendations_table.php
+│  │  ├─ 2025_12_30_190741_create_module_student_table.php
+│  │  ├─ 2025_12_30_194051_add_class_session_to_attendances.php
+│  │  ├─ 2025_12_30_202743_drop_apogee_code_from_students_table.php
+│  │  ├─ 2025_12_31_180131_make_speciality_nullable_in_school_classes_table.php
+│  │  ├─ 2025_12_31_180709_make_academic_year_nullable_in_school_classes_table.php
+│  │  ├─ 2025_12_31_220629_make_title_nullable_in_professors_table.php
+│  │  ├─ 2025_12_31_233128_make_module_id_nullable_in_attendances_table.php
+│  │  └─ 2025_12_31_233404_make_date_nullable_in_attendances_table.php
+│  ├─ seeders
+│  │  ├─ DatabaseSeeder.php
+│  │  └─ walou.txt
+│  └─ .gitignore
+├─ node_modules
+│  ├─ .bin
+│  │  .
+	.
+	 .
+├─ public
+│  ├─ build
+│  │  ├─ assets
+│  │  │  ├─ app-CwvDm2lU.css
+│  │  │  ├─ app-C_LbDOWR.js
+│  │  │  ├─ ApplicationLogo-Bd6ZhVNt.js
+│  │  │  ├─ AuthenticatedLayout-CvjvScPp.js
+│  │  │  ├─ ConfirmPassword-DhntokpA.js
+│  │  │  ├─ Dashboard-BzX5Rqop.js
+│  │  │  ├─ DeleteUserForm-B9v8XhMP.js
+│  │  │  ├─ Edit-DeSzyey9.js
+│  │  │  ├─ ForgotPassword-CnG9coFl.js
+│  │  │  ├─ GuestLayout-BsIDQUhv.js
+│  │  │  ├─ InputLabel-NKcEDvRO.js
+│  │  │  ├─ Login-CqBYEJNC.js
+│  │  │  ├─ PrimaryButton-CnoSdVKY.js
+│  │  │  ├─ Register-CmUCsRgy.js
+│  │  │  ├─ ResetPassword-ysbOffxZ.js
+│  │  │  ├─ TextInput-BOY7-KCj.js
+│  │  │  ├─ transition-DL-QNpCQ.js
+│  │  │  ├─ UpdatePasswordForm-BAO9AcA9.js
+│  │  │  ├─ UpdateProfileInformationForm-hhLKfhvW.js
+│  │  │  ├─ VerifyEmail-DVZzQee9.js
+│  │  │  └─ Welcome-DeLKhsKM.js
+│  │  └─ manifest.json
+│  ├─ .htaccess
+│  ├─ favicon.ico
+│  ├─ hot
+│  ├─ index.php
+│  └─ robots.txt
+├─ resources
+│  ├─ css
+│  │  └─ app.css
+│  ├─ js
+│  │  ├─ Components
+│  │  │  ├─ ApplicationLogo.jsx
+│  │  │  ├─ Checkbox.jsx
+│  │  │  ├─ DangerButton.jsx
+│  │  │  ├─ Dropdown.jsx
+│  │  │  ├─ InputError.jsx
+│  │  │  ├─ InputLabel.jsx
+│  │  │  ├─ Modal.jsx
+│  │  │  ├─ NavLink.jsx
+│  │  │  ├─ PrimaryButton.jsx
+│  │  │  ├─ ResponsiveNavLink.jsx
+│  │  │  ├─ SecondaryButton.jsx
+│  │  │  └─ TextInput.jsx
+│  │  ├─ Layouts
+│  │  │  ├─ AuthenticatedLayout.jsx
+│  │  │  └─ GuestLayout.jsx
+│  │  ├─ Pages
+│  │  │  ├─ Admin
+│  │  │  │  ├─ AssignStudents.jsx
+│  │  │  │  ├─ ModuleManagement.jsx
+│  │  │  │  ├─ PendingUsers.jsx
+│  │  │  │  ├─ SchoolClassManagement.jsx
+│  │  │  │  └─ UserManagement.jsx
+│  │  │  ├─ Attendance
+│  │  │  │  └─ MarkAttendance.jsx
+│  │  │  ├─ Auth
+│  │  │  │  ├─ ConfirmPassword.jsx
+│  │  │  │  ├─ ForgotPassword.jsx
+│  │  │  │  ├─ Login.jsx
+│  │  │  │  ├─ Pending.jsx
+│  │  │  │  ├─ Register.jsx
+│  │  │  │  ├─ ResetPassword.jsx
+│  │  │  │  └─ VerifyEmail.jsx
+│  │  │  ├─ Professor
+│  │  │  │  ├─ ActiveSession.jsx
+│  │  │  │  ├─ CreateLesson.jsx
+│  │  │  │  ├─ Recommendations.jsx
+│  │  │  │  └─ TeachingSessions.jsx
+│  │  │  ├─ Profile
+│  │  │  │  ├─ Partials
+│  │  │  │  │  ├─ DeleteUserForm.jsx
+│  │  │  │  │  ├─ UpdatePasswordForm.jsx
+│  │  │  │  │  └─ UpdateProfileInformationForm.jsx
+│  │  │  │  └─ Edit.jsx
+│  │  │  ├─ Student
+│  │  │  │  ├─ MarkPresence.jsx
+│  │  │  │  ├─ RequestLetter.jsx
+│  │  │  │  └─ StudentModules.jsx
+│  │  │  ├─ Dashboard.jsx
+│  │  │  └─ Welcome.jsx
+│  │  ├─ app.jsx
+│  │  └─ bootstrap.js
+│  └─ views
+│     └─ app.blade.php
+├─ routes
+│  ├─ api.php
+│  ├─ auth.php
+│  ├─ console.php
+│  └─ web.php
+├─ storage
+│  ├─ app
+│  │  ├─ private
+│  │  │  └─ .gitignore
+│  │  ├─ public
+│  │  │  └─ .gitignore
+│  │  └─ .gitignore
+│  ├─ framework
+│  │  ├─ cache
+│  │  │  ├─ data
+│  │  │  │  └─ .gitignore
+│  │  │  └─ .gitignore
+│  │  ├─ sessions
+│  │  │  └─ .gitignore
+│  │  ├─ testing
+│  │  │  └─ .gitignore
+│  │  ├─ views
+│  │  │  ├─ .gitignore
+│  │  │  ├─ 017af7ec99ba1d6c9181aeb99d2cd9e6.php
+│  │  │  ├─ 107cf3e819b3e4ab0b67589d5ee19e88.php
+│  │  │  ├─ 1208b40585f1d13e2954a5cc54493533.php
+│  │  │  ├─ 1240748dbaa319a7cf97881437c822cf.php
+│  │  │  ├─ 129b6a22a76e12e50b551ee2187f5539.php
+│  │  │  ├─ 1747d9eeff4ae963421bf494c256c8f3.php
+│  │  │  ├─ 1a96ba85987829ff037f5d9d49106364.php
+│  │  │  ├─ 1be8dcc977df27c4892011aeeb36c165.php
+│  │  │  ├─ 1d9bde93f45b5e345c9c8a12aae5b7d7.php
+│  │  │  ├─ 1f1b5664ca5c524d1f103df94b0efc6d.php
+│  │  │  ├─ 2316ed90c948f5271feb919dfc8e4f4b.php
+│  │  │  ├─ 23520cd8531c9e44c29f096773d06611.php
+│  │  │  ├─ 24334bdae471ab87f6865441de3b35b2.php
+│  │  │  ├─ 28b901237a9b557c80ea8a92f1bbe78c.php
+│  │  │  ├─ 292b52e67443982fda7ff6b9e9919ba9.php
+│  │  │  ├─ 2a149b55f72ccbb74d58ac58d81dcc63.php
+│  │  │  ├─ 2a1ae289facc95b960eef1c0addf0dff.php
+│  │  │  ├─ 2de6fd31281ff008d246c0a1418ce724.php
+│  │  │  ├─ 2e07f1070c3f8f306e1671eb7ddf58e7.php
+│  │  │  ├─ 2ff6d390f2957523f54fbfcea3559038.php
+│  │  │  ├─ 3175d8c89d41df43660b9731f5cedb80.php
+│  │  │  ├─ 3232c409f248e0f9c815599ca1116bc6.php
+│  │  │  ├─ 375174e8a4b74fdebde5653834d0e27e.php
+│  │  │  ├─ 39733a579465aac22f3c9e1d402fef65.php
+│  │  │  ├─ 3d8352dc94c976586734d6c491c1a08e.php
+│  │  │  ├─ 3e55788400139442285d5dab3c8edb38.php
+│  │  │  ├─ 3f28d0f9e5e90c2d2e55e6fc81072596.php
+│  │  │  ├─ 43a26423df0a8ef9f96613357f1cea30.php
+│  │  │  ├─ 43e7eb4aca74d55528c7262237180cc2.php
+│  │  │  ├─ 44cf9c87e06f84f2849dbced5dbb309d.php
+│  │  │  ├─ 4855bffe0c77c17bc869df6087b5e846.php
+│  │  │  ├─ 49cf61adb88050b300729464f1429901.php
+│  │  │  ├─ 4d1f2804a59a57d3c025a41e6ec1b7ae.php
+│  │  │  ├─ 4e4671a84b5f8b1670000d0b977fe2f1.php
+│  │  │  ├─ 4ffb8489568daed3ec29af9c7fddf460.php
+│  │  │  ├─ 5189224f00ccee38fb616a330dee770a.php
+│  │  │  ├─ 5197692a008dcb93b8d3591fe9fe8be7.php
+│  │  │  ├─ 52ff13573232b4577d462888f2595c98.php
+│  │  │  ├─ 55cdd7386408af4fbaec3ceec878f1e6.php
+│  │  │  ├─ 55e0edea9adf201de812e1f20741f26f.php
+│  │  │  ├─ 58feaeed29f9321c17528ab26563a903.php
+│  │  │  ├─ 59aff74cc487b410280f21816d792434.php
+│  │  │  ├─ 5ad46a0fc33b4a84fb193080e1307c4d.php
+│  │  │  ├─ 5cf5fe7acb34c94d25e58e97c52487f2.php
+│  │  │  ├─ 5d520f6095e61b20eeb410e0fc96ac02.php
+│  │  │  ├─ 5eb4811dc2ae648de0837cdaef2e6cbd.php
+│  │  │  ├─ 637c270684e7911b2c3d639abeca71f1.php
+│  │  │  ├─ 69a8d01d8d2e29285e5722a95c8d48bd.php
+│  │  │  ├─ 6b9634da65509d217553ef03e036578e.php
+│  │  │  ├─ 789190e993dcac5d350e725bae8ec691.php
+│  │  │  ├─ 806da18eccb59ddbd055d83322edb14f.php
+│  │  │  ├─ 818970314c75561e71c2d360572ea165.php
+│  │  │  ├─ 84549d1f0d8d3f65d52ede6794da8e81.php
+│  │  │  ├─ 8fb9b9a189ea0654d97e1acd50878af8.php
+│  │  │  ├─ 927e3810c4c997b0cbdc231e2f3f47bb.php
+│  │  │  ├─ 9c9dda5516168701b5a0f1e738bf1007.php
+│  │  │  ├─ 9eb7e768006c3a912b6e7b093958bf8f.php
+│  │  │  ├─ a271415aa8e0cf9b681cc92a23cf1183.php
+│  │  │  ├─ a27371fe46abbdc83ec73e4b0858b46d.php
+│  │  │  ├─ a3e585807bed88d1aa679871d4af48ff.php
+│  │  │  ├─ a467a24797b6ac89b548ea7af031f300.php
+│  │  │  ├─ afd1a2af28bfd6a2a60bb2f5e2a1d38d.php
+│  │  │  ├─ b3ebdb0c4d2cb7a17d50cd045a4f5c7b.php
+│  │  │  ├─ b414300997b63600d5a6e39ef1c14f68.php
+│  │  │  ├─ b453416db80483a8d1e7c351e58a706d.php
+│  │  │  ├─ b4b0d21ede1eb2ec1d68331761b1e5c9.php
+│  │  │  ├─ be0aa3019b9b77f3468cbb0cd94be1e3.php
+│  │  │  ├─ c0cfec9887c7c15298756270b6f5a26a.php
+│  │  │  ├─ c256236ac8aa6e3a8a805f3851fb189a.php
+│  │  │  ├─ c7199bdf4b0b20cd7fd6260cf2b7a803.php
+│  │  │  ├─ cc258e8b20c3e28a1adf80ced4172e30.php
+│  │  │  ├─ d0987cd2e3e7c909f1668a34d9f86451.php
+│  │  │  ├─ d2310e763ba66371f2617d415a050aec.php
+│  │  │  ├─ d6b0ff8958d90a3a1d66c4fd0b424d41.php
+│  │  │  ├─ da92c9f567ebe62a1672949b1abfe1da.php
+│  │  │  ├─ db9afed53422aaf9740978d558c7bff8.php
+│  │  │  ├─ debba4d4dc66a9e749ea466b71a303c7.php
+│  │  │  ├─ e7a400f04b8226f24d9426fb6a3555d5.php
+│  │  │  ├─ e82e85dcd997629c83d9cc50dfb071de.php
+│  │  │  ├─ eb54a499d994695b512004f19cbb5e3c.php
+│  │  │  ├─ ef7ac9a162c9f66e4140486996b61bdb.php
+│  │  │  ├─ f213cd81d28711b6fd3b07696a7f6824.php
+│  │  │  ├─ f21bfd4851f8be6dcefb4491a691ac99.php
+│  │  │  ├─ f31451490a119e81d35ce27baca49c8f.php
+│  │  │  ├─ f70c3ee4c046a7b23a6397f6b1073ea8.php
+│  │  │  ├─ f8ea24598ad74ecea9e717d87bc51bdd.php
+│  │  │  └─ ff33bac693d56e4695fe63176f8d7108.php
+│  │  └─ .gitignore
+│  └─ logs
+│     ├─ .gitignore
+│     └─ laravel.log
+...

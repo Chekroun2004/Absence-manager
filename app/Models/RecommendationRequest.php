@@ -11,7 +11,7 @@ class RecommendationRequest extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
+    protected $fillable = [ 
         'student_id',
         'professor_id',
         'status',

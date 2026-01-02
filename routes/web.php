@@ -19,6 +19,7 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
     ]);
 });
+
 Route::get('/professor/sessions/{session}/attendances', [
     ProfessorSessionController::class,
     'getAttendances',
@@ -59,10 +60,10 @@ Route::middleware(['auth', 'verified', 'approved', 'role:admin'])
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
         // ========== GESTION DES CLASSES (MASTER) ==========
-        Route::get('/school-classes', [App\Http\Controllers\Admin\SchoolClassController::class, 'index'])->name('school-classes.index');
-        Route::post('/school-classes', [App\Http\Controllers\Admin\SchoolClassController::class, 'store'])->name('school-classes.store');
-        Route::put('/school-classes/{schoolClass}', [App\Http\Controllers\Admin\SchoolClassController::class, 'update'])->name('school-classes.update');
-        Route::delete('/school-classes/{schoolClass}', [App\Http\Controllers\Admin\SchoolClassController::class, 'destroy'])->name('school-classes.destroy');
+        Route::get('/school-classes', [SchoolClassController::class, 'index'])->name('school-classes.index');
+        Route::post('/school-classes', [SchoolClassController::class, 'store'])->name('school-classes.store');
+        Route::put('/school-classes/{schoolClass}', [SchoolClassController::class, 'update'])->name('school-classes.update');
+        Route::delete('/school-classes/{schoolClass}', [SchoolClassController::class, 'destroy'])->name('school-classes.destroy');
 
         // ========== GESTION DES MODULES ==========
         Route::get('/modules', [ModuleController::class, 'index'])->name('modules.index');
@@ -77,12 +78,13 @@ Route::middleware(['auth', 'verified', 'approved', 'role:admin'])
         Route::post('/users/{user}/approve', [UserApprovalController::class, 'approve'])->name('users.approve');
         Route::post('/users/{user}/reject', [UserApprovalController::class, 'reject'])->name('users.reject');
     });
+
 // ========== ROUTES PROFESSEUR ==========
 Route::middleware(['auth', 'verified', 'approved', 'role:professor'])
     ->prefix('professor')
     ->name('professor.')
     ->group(function () {
-        // Gestion des séances
+        // ========== GESTION DES SÉANCES ==========
         Route::get('/sessions', [
             ProfessorSessionController::class,
             'index',
@@ -108,11 +110,26 @@ Route::middleware(['auth', 'verified', 'approved', 'role:professor'])
             'stats',
         ])->name('sessions.stats');
 
-        // Gestion des recommandations
+        // ========== GESTION DES RECOMMANDATIONS ==========
         Route::get('/recommendations', [
             RecommendationController::class,
             'index',
         ])->name('recommendations');
+
+        Route::post('/recommendations/{recommendationRequest}/accept', [
+            RecommendationController::class,
+            'accept',
+        ])->name('recommendations.accept');
+
+        Route::post('/recommendations/{recommendationRequest}/reject', [
+            RecommendationController::class,
+            'reject',
+        ])->name('recommendations.reject');
+
+        Route::get('/recommendations/{recommendationRequest}/download', [
+            RecommendationController::class,
+            'downloadLetter',
+        ])->name('recommendations.download');
     });
 
 // ========== ROUTES ÉTUDIANT ==========
@@ -120,13 +137,13 @@ Route::middleware(['auth', 'verified', 'approved', 'role:student'])
     ->prefix('student')
     ->name('student.')
     ->group(function () {
-        // Mes modules
+        // ========== MES MODULES ==========
         Route::get('/modules', [
             \App\Http\Controllers\Student\StudentController::class,
             'modules',
         ])->name('modules');
 
-        // Marquer présence
+        // ========== MARQUER PRÉSENCE ==========
         Route::get('/mark-presence', [
             \App\Http\Controllers\Student\StudentController::class,
             'markPresenceForm',
@@ -137,11 +154,21 @@ Route::middleware(['auth', 'verified', 'approved', 'role:student'])
             'markPresence',
         ])->name('mark-presence.store');
 
-        // Lettres
+        // ========== LETTRES DE RECOMMANDATION ==========
         Route::get('/letters', [
             \App\Http\Controllers\Student\StudentController::class,
             'letters',
         ])->name('letters');
+
+        Route::post('/letters/request', [
+            \App\Http\Controllers\Student\StudentController::class,
+            'requestLetter',
+        ])->name('letters.request');
+
+        Route::get('/letters/{recommendationRequest}/download', [
+            \App\Http\Controllers\Student\StudentController::class,
+            'downloadLetter',
+        ])->name('letters.download');
     });
 
 require __DIR__.'/auth.php';

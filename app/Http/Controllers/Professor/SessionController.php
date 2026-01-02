@@ -94,7 +94,7 @@ class SessionController extends Controller
                     'id' => $student->id,
                     'name' => $student->user->name,
                     'email' => $student->user->email,
-                    'is_present' => $attendance ? true : false,
+                    'is_present' => $attendance && $attendance->status === 'present' ? true : false,  // ✅ FIXÉ
                     'marked_at' => $attendance ? $attendance->marked_at : null,
                 ];
             });
@@ -134,7 +134,9 @@ class SessionController extends Controller
             abort(403, 'Non autorisé.');
         }
 
-        $present = $session->attendances()->count();
+        $present = Attendance::where('class_session_id', $session->id)
+            ->where('status', 'present')  // ✅ FIXÉ
+            ->count();
         $total = $session->module->students()->count();
         $absent = $total - $present;
 
@@ -150,20 +152,26 @@ class SessionController extends Controller
         ]);
     }
 
+    // ✅ API ENDPOINT pour le polling
+    // ✅ API ENDPOINT pour le polling
+// ✅ API ENDPOINT pour le polling
     public function getAttendances(ClassSession $session)
     {
+        $user = Auth::user();
+        $professor = Professor::where('user_id', $user->id)->first();
+
+        if (!$professor || $session->professor_id !== $professor->id) {
+            abort(403, 'Non autorisé.');
+        }
+
         $attendances = Attendance::where('class_session_id', $session->id)
             ->with('student.user')
-            ->get()
-            ->map(function ($attendance) {
-                return [
-                    'id' => $attendance->id,
-                    'student_id' => $attendance->student_id,  // ✅ IMPORTANT !
-                    'student_name' => $attendance->student->user->name,
-                    'is_present' => $attendance->is_present,
-                    'marked_at' => $attendance->marked_at,
-                ];
-            });
+            ->get();
+
+        // ✅ Logs de debug
+        \Log::info('🔍 getAttendances - Session: ' . $session->id);
+        \Log::info('🔍 Nombre d\'attendances: ' . $attendances->count());
+        \Log::info('🔍 Data: ' . json_encode($attendances));
 
         return response()->json([
             'attendances' => $attendances,
