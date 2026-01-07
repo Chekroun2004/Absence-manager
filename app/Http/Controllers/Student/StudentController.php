@@ -170,7 +170,7 @@ public function letters()
 
         // Créer la demande
         RecommendationRequest::create([
-            'student_id' => $stvudent->id,
+            'student_id' => $student->id,
             'professor_id' => $validated['professor_id'],
             'mention' => $validated['mention'],
             'status' => 'pending',
