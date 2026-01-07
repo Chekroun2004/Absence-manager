@@ -67,7 +67,7 @@ Route::middleware(['auth', 'verified', 'approved', 'role:professor'])
         Route::get('/sessions/{session}/active', [ProfessorSessionController::class, 'showActive'])->name('sessions.active');
         Route::post('/sessions/{session}/close', [ProfessorSessionController::class, 'close'])->name('sessions.close');
         Route::get('/sessions/{session}/stats', [ProfessorSessionController::class, 'stats'])->name('sessions.stats');
-
+        Route::get('/sessions/{session}/attendances', [ProfessorSessionController::class, 'getAttendances'])->name('sessions.attendances');
         // Recommandations
         Route::get('/recommendations', [RecommendationController::class, 'index'])->name('recommendations');
         Route::post('/recommendations/{request}/accept', [RecommendationController::class, 'accept'])->name('recommendations.accept');
