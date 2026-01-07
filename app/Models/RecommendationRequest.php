@@ -14,6 +14,7 @@ class RecommendationRequest extends Model
     protected $fillable = [ 
         'student_id',
         'professor_id',
+        'mention',
         'status',
         'rejection_reason',
         'responded_at',
@@ -33,8 +34,9 @@ class RecommendationRequest extends Model
         return $this->belongsTo(Professor::class);
     }
 
+    // ✅ CORRIGER : Spécifier la clé étrangère exacte
     public function letter(): HasOne
     {
-        return $this->hasOne(RecommendationLetter::class);
+        return $this->hasOne(RecommendationLetter::class, 'recommendation_request_id');
     }
 }

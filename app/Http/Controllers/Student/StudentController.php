@@ -10,9 +10,13 @@ use App\Models\RecommendationLetter;
 use App\Models\Student;
 use App\Models\Professor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
+    /**
+     * Afficher les modules de l'étudiant
+     */
     public function modules()
     {
         $user = auth()->user();
@@ -24,11 +28,17 @@ class StudentController extends Controller
         ]);
     }
 
+    /**
+     * Afficher le formulaire pour marquer la présence
+     */
     public function markPresenceForm()
     {
         return inertia('Student/MarkPresence');
     }
 
+    /**
+     * Marquer la présence
+     */
     public function markPresence(Request $request)
     {
         $validated = $request->validate([
@@ -46,12 +56,12 @@ class StudentController extends Controller
             ->first();
 
         if (!$session) {
-            return redirect()->back()->withErrors(['code' => 'Code invalide']);
+            return redirect()->back()->withErrors(['code' => '❌ Code invalide']);
         }
 
         // Vérifier que le code n'a pas expiré
         if (now() > $session->expires_at) {
-            return redirect()->back()->withErrors(['code' => 'Code expiré']);
+            return redirect()->back()->withErrors(['code' => '❌ Code expiré']);
         }
 
         // Vérifier que l'étudiant est assigné à ce module
@@ -60,7 +70,7 @@ class StudentController extends Controller
             ->exists();
 
         if (!$isAssigned) {
-            return redirect()->back()->withErrors(['code' => 'Vous n\'êtes pas assigné à ce module']);
+            return redirect()->back()->withErrors(['code' => '❌ Non assigné à ce module']);
         }
 
         // Vérifier si présence déjà marquée
@@ -69,7 +79,7 @@ class StudentController extends Controller
             ->first();
 
         if ($existingAttendance) {
-            return redirect()->back()->withErrors(['code' => 'Vous avez déjà marqué votre présence']);
+            return redirect()->back()->withErrors(['code' => '⚠️ Présence déjà marquée']);
         }
 
         // Créer l'enregistrement de présence
@@ -79,58 +89,61 @@ class StudentController extends Controller
             'module_id' => $session->module_id,
             'status' => 'present',
             'marked_at' => now(),
+            'date' => now()->toDateString(),
         ]);
 
-        return redirect()->back()->with('success', 'Présence marquée avec succès !');
+        return redirect()->back()->with('success', '✅ Présence marquée avec succès !');
     }
 
-    // ✅ NOUVELLE MÉTHODE 1 : Afficher les demandes et lettres
-    public function letters()
-    {
-        $user = auth()->user();
-        $student = $user->student;
+    /**
+     * Afficher les lettres de recommandation
+     */
+    /**
+ * Afficher les lettres de recommandation
+ */
+public function letters()
+{
+    $user = auth()->user();
+    $student = $user->student;
 
-        if (!$student) {
-            abort(403, 'Profil étudiant non trouvé.');
-        }
+    if (!$student) {
+        abort(403, 'Profil étudiant non trouvé.');
+    }
 
-        // Récupérer tous les professeurs (pour le formulaire)
-        $professors = Professor::with('user')->get()->map(function ($prof) {
+    // Tous les professeurs
+    $professors = Professor::with('user')->get();
+
+    // Demandes de l'étudiant avec les lettres associées
+    $myRequests = RecommendationRequest::where('student_id', $student->id)
+        ->with(['professor.user', 'letter'])  // ✅ Charger la relation letter
+        ->orderByDesc('created_at')
+        ->get()
+        ->map(function ($request) {
             return [
-                'id' => $prof->id,
-                'user' => [
-                    'name' => $prof->user->name,
-                    'email' => $prof->user->email,
+                'id' => $request->id,
+                'professor' => [
+                    'user' => [
+                        'name' => $request->professor->user->name,
+                        'email' => $request->professor->user->email,
+                    ]
                 ],
+                'mention' => $request->mention,
+                'status' => $request->status,
+                'has_letter' => $request->letter ? true : false,  // ✅ AJOUTER
+                'rejection_reason' => $request->rejection_reason,
+                'created_at' => $request->created_at->format('d/m/Y'),
             ];
         });
 
-        // Récupérer les demandes de l'étudiant
-        $myRequests = RecommendationRequest::where('student_id', $student->id)
-            ->with(['professor.user', 'letter'])
-            ->orderByDesc('created_at')
-            ->get()
-            ->map(function ($request) {
-                return [
-                    'id' => $request->id,
-                    'professor_name' => $request->professor->user->name,
-                    'professor_email' => $request->professor->user->email,
-                    'status' => $request->status,
-                    'has_letter' => $request->letter ? true : false,
-                    'letter_path' => $request->letter?->file_path,
-                    'rejection_reason' => $request->rejection_reason,
-                    'created_at' => $request->created_at->format('d/m/Y H:i'),
-                    'responded_at' => $request->responded_at?->format('d/m/Y H:i'),
-                ];
-            });
+    return inertia('Student/RequestLetter', [
+        'professors' => $professors,
+        'myRequests' => $myRequests,
+    ]);
+}
 
-        return inertia('Student/RequestLetter', [
-            'professors' => $professors,
-            'myRequests' => $myRequests,
-        ]);
-    }
-
-    // ✅ NOUVELLE MÉTHODE 2 : Soumettre une demande
+    /**
+     * Soumettre une demande de lettre
+     */
     public function requestLetter(Request $request)
     {
         $user = auth()->user();
@@ -142,6 +155,7 @@ class StudentController extends Controller
 
         $validated = $request->validate([
             'professor_id' => 'required|exists:professors,id',
+            'mention' => 'required|in:Très Bien,Bien,Assez Bien,Passable',
         ]);
 
         // Vérifier si une demande est déjà en attente
@@ -151,43 +165,51 @@ class StudentController extends Controller
             ->first();
 
         if ($existingPending) {
-            return redirect()->back()->withErrors(['error' => 'Une demande est déjà en attente pour ce professeur']);
+            return redirect()->back()->withErrors(['error' => 'Demande déjà en attente pour ce professeur']);
         }
 
         // Créer la demande
         RecommendationRequest::create([
-            'student_id' => $student->id,
+            'student_id' => $stvudent->id,
             'professor_id' => $validated['professor_id'],
+            'mention' => $validated['mention'],
             'status' => 'pending',
         ]);
 
-        return redirect()->back()->with('success', 'Demande envoyée avec succès !');
+        return redirect()->back()->with('success', '✅ Demande envoyée avec succès !');
     }
 
-    // ✅ NOUVELLE MÉTHODE 3 : Télécharger la lettre PDF
-    public function downloadLetter(RecommendationRequest $request)
-    {
-        $user = auth()->user();
-        $student = $user->student;
+    /**
+ * Télécharger une lettre PDF
+ */
+public function downloadLetter(RecommendationRequest $request)
+{
+    $user = auth()->user();
+    $student = $user->student;
 
-        // Vérifier que c'est bien la lettre de cet étudiant
-        if ($request->student_id !== $student->id) {
-            abort(403, 'Non autorisé.');
-        }
+    // Vérifier que c'est bien la lettre de cet étudiant
+    if ($request->student_id !== $student->id) {
+        abort(403, 'Non autorisé.');
+    }
 
-        if (!$request->letter) {
-            abort(404, 'Lettre non trouvée.');
-        }
+    if (!$request->letter) {
+        abort(404, 'Lettre non trouvée.');
+    }
 
-        $path = storage_path('app/' . $request->letter->file_path);
+    // ✅ Utiliser Storage::download() au lieu de response()->download()
+    $filePath = $request->letter->file_path;
 
-        if (!file_exists($path)) {
-            abort(404, 'Fichier non trouvé.');
-        }
+    if (!Storage::exists($filePath)) {
+        \Log::error('❌ Fichier non trouvé', [
+            'file_path' => $filePath,
+            'full_path' => storage_path('app/' . $filePath),
+        ]);
+        abort(404, 'Fichier non trouvé : ' . $filePath);
+    }
 
-        return response()->download(
-            $path,
-            'lettre_recommandation_' . $student->user->name . '.pdf'
-        );
+    return Storage::download(
+        $filePath,
+        'lettre_recommandation_' . $student->user->name . '.pdf'
+    );
     }
 }

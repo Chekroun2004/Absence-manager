@@ -7,6 +7,8 @@ use App\Models\RecommendationRequest;
 use App\Models\Professor;
 use App\Services\RecommendationLetterService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Log;
 
 class RecommendationController extends Controller
 {
@@ -17,7 +19,9 @@ class RecommendationController extends Controller
         $this->letterService = $letterService;
     }
 
-    // ✅ Afficher les demandes de recommandation du prof
+    /**
+     * Afficher les demandes de recommandation du prof
+     */
     public function index()
     {
         $user = auth()->user();
@@ -27,52 +31,55 @@ class RecommendationController extends Controller
             abort(403, 'Professeur non trouvé.');
         }
 
-        // Récupérer les demandes de ce professeur
-        $requests = RecommendationRequest::where('professor_id', $professor->id)
-            ->with('student.user', 'letter')
+        // Demandes en attente
+        $pendingRequests = RecommendationRequest::where('professor_id', $professor->id)
+            ->where('status', 'pending')
+            ->with('student.user')
             ->orderByDesc('created_at')
-            ->get()
-            ->map(function ($request) {
-                return [
-                    'id' => $request->id,
-                    'student_name' => $request->student->user->name,
-                    'student_email' => $request->student->user->email,
-                    'mention' => $request->student->academic_mention,
-                    'status' => $request->status,
-                    'has_letter' => $request->letter ? true : false,
-                    'letter_path' => $request->letter?->file_path,
-                    'created_at' => $request->created_at->format('d/m/Y H:i'),
-                    'responded_at' => $request->responded_at?->format('d/m/Y H:i'),
-                ];
-            });
+            ->get();
+
+        // Demandes traitées
+        $processedRequests = RecommendationRequest::where('professor_id', $professor->id)
+            ->whereIn('status', ['accepted', 'rejected'])
+            ->with('student.user')
+            ->orderByDesc('responded_at')
+            ->get();
+
+        Log::info('📋 Affichage recommendations', [
+            'professor_id' => $professor->id,
+            'pending' => $pendingRequests->count(),
+            'processed' => $processedRequests->count(),
+        ]);
 
         return inertia('Professor/Recommendations', [
-            'recommendations' => $requests,
+            'pendingRequests' => $pendingRequests,
+            'processedRequests' => $processedRequests,
         ]);
     }
 
-    // ✅ Accepter une demande et générer la lettre (VERSION CORRIGÉE)
+    /**
+     * Accepter une demande et générer la lettre
+     */
     public function accept(RecommendationRequest $request)
     {
         $user = auth()->user();
         $professor = Professor::where('user_id', $user->id)->first();
 
-        // ❌ Vérifier que le professeur existe
         if (!$professor) {
             return redirect()->back()->withErrors(['error' => 'Profil professeur non trouvé.']);
         }
 
-        // ❌ Vérifier que c'est bien le prof qui reçoit la demande (conversion de type sûre)
         if ((int)$request->professor_id !== (int)$professor->id) {
             return redirect()->back()->withErrors(['error' => 'Cette demande ne vous appartient pas.']);
         }
 
-        // ❌ Vérifier que la demande est en attente
         if ($request->status !== 'pending') {
             return redirect()->back()->withErrors(['error' => 'Demande déjà traitée.']);
         }
 
         try {
+            Log::info('🎯 Génération de lettre', ['request_id' => $request->id]);
+
             // Générer la lettre PDF
             $this->letterService->generateLetter($request);
 
@@ -82,75 +89,81 @@ class RecommendationController extends Controller
                 'responded_at' => now(),
             ]);
 
-            return redirect()->back()->with('success', 'Lettre générée et demande acceptée ! ✅');
+            Log::info('✅ Lettre générée avec succès');
+
+            return redirect()->back()->with('success', '✅ Lettre générée avec succès !');
+
         } catch (\Exception $e) {
-            \Log::error('Erreur génération lettre', [
+            Log::error('❌ Erreur génération lettre', [
                 'error' => $e->getMessage(),
                 'request_id' => $request->id,
-                'professor_id' => $professor->id,
             ]);
-            return redirect()->back()->withErrors(['error' => 'Erreur lors de la génération: ' . $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => 'Erreur : ' . $e->getMessage()]);
         }
     }
 
-    // ✅ Refuser une demande (VERSION CORRIGÉE)
+    /**
+     * Refuser une demande
+     */
     public function reject(RecommendationRequest $request, Request $httpRequest)
     {
         $user = auth()->user();
         $professor = Professor::where('user_id', $user->id)->first();
 
-        // ❌ Vérifier que le professeur existe
         if (!$professor) {
             return redirect()->back()->withErrors(['error' => 'Profil professeur non trouvé.']);
         }
 
-        // ❌ Vérifier que c'est bien le prof qui reçoit la demande (conversion de type sûre)
         if ((int)$request->professor_id !== (int)$professor->id) {
             return redirect()->back()->withErrors(['error' => 'Cette demande ne vous appartient pas.']);
         }
 
-        // ❌ Vérifier que la demande est en attente
         if ($request->status !== 'pending') {
             return redirect()->back()->withErrors(['error' => 'Demande déjà traitée.']);
         }
 
-        // Valider la raison du refus
+        // Valider la raison
         $data = $httpRequest->validate([
-            'rejection_reason' => 'required|string|min:10|max:500',
+            'rejection_reason' => 'required|string|min:5|max:500',
         ]);
 
-        // Mettre à jour la demande
-        $request->update([
-            'status' => 'rejected',
-            'rejection_reason' => $data['rejection_reason'],
-            'responded_at' => now(),
-        ]);
+        try {
+            $request->update([
+                'status' => 'rejected',
+                'rejection_reason' => $data['rejection_reason'],
+                'responded_at' => now(),
+            ]);
 
-        return redirect()->back()->with('success', 'Demande refusée. ❌');
+            Log::info('🚫 Demande refusée', ['request_id' => $request->id]);
+
+            return redirect()->back()->with('success', '❌ Demande refusée.');
+
+        } catch (\Exception $e) {
+            Log::error('❌ Erreur refus', ['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => 'Erreur : ' . $e->getMessage()]);
+        }
     }
 
-    // ✅ Télécharger la lettre PDF (VERSION CORRIGÉE)
+    /**
+     * Télécharger la lettre PDF
+     */
     public function downloadLetter(RecommendationRequest $request)
     {
         $user = auth()->user();
         $professor = Professor::where('user_id', $user->id)->first();
 
-        // ❌ Vérifier que le professeur existe
         if (!$professor) {
             abort(403, 'Profil professeur non trouvé.');
         }
 
-        // ❌ Vérifier l'autorisation (conversion de type sûre)
         if ((int)$request->professor_id !== (int)$professor->id) {
             abort(403, 'Non autorisé.');
         }
 
-        // ❌ Vérifier que la lettre existe
         if (!$request->letter) {
             abort(404, 'Lettre non trouvée.');
         }
 
-        // ❌ Vérifier que le fichier existe physiquement
         $path = storage_path('app/' . $request->letter->file_path);
 
         if (!file_exists($path)) {

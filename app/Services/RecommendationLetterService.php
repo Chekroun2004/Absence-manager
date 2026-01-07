@@ -5,6 +5,7 @@ namespace App\Services;
 use Mpdf\Mpdf;
 use App\Models\RecommendationRequest;
 use App\Models\RecommendationLetter;
+use Illuminate\Support\Facades\Storage;
 
 class RecommendationLetterService
 {
@@ -15,15 +16,16 @@ class RecommendationLetterService
         $user = $student->user;
         $profUser = $professor->user;
         
-        // Déterminer la mention et le template
-        $mention = $student->academic_mention ?? 'Bien';
+        // Récupérer la mention DE LA DEMANDE
+        $mention = $request->mention ?? 'Bien';
         $academicYear = '2024-2025';
+        $master = $student->modules()->first()?->schoolClass?->name ?? 'Master';
         
-        // Template de lettre selon la mention
+        // Obtenir le template de lettre
         $letterContent = $this->getLetterTemplate(
             $mention,
             $user->name,
-            $student->modules()->first()?->schoolClass?->name ?? 'Master',
+            $master,
             $profUser->name
         );
         
@@ -39,26 +41,27 @@ class RecommendationLetterService
         
         $mpdf->WriteHTML($letterContent);
         
-        // Sauvegarder le PDF
-        $filename = 'letter_' . $student->id . '_' . time() . '.pdf';
-        $path = storage_path('app/letters/' . $filename);
-        
         // Créer dossier s'il n'existe pas
-        if (!file_exists(storage_path('app/letters'))) {
-            mkdir(storage_path('app/letters'), 0755, true);
+        if (!Storage::exists('letters')) {
+            Storage::makeDirectory('letters');
         }
         
-        $mpdf->Output($path, 'F');
+        // Sauvegarder le PDF
+        $filename = 'letter_' . $student->id . '_' . $professor->id . '_' . time() . '.pdf';
+        $filePath = 'letters/' . $filename;
+        
+        $pdfContent = $mpdf->Output('', 'S');
+        Storage::put($filePath, $pdfContent);
         
         // Sauvegarder en BD
         RecommendationLetter::create([
-            'recommendation_request_id' => $request->id,
-            'file_path' => 'letters/' . $filename,
-            'mention_used' => $mention,
-            'generated_at' => now(),
-        ]);
+        'recommendation_request_id' => $request->id,  // ← Utiliser le bon nom
+        'file_path' => $filePath,
+        'mention_used' => $mention,
+        'generated_at' => now(),
+]);
         
-        return 'letters/' . $filename;
+        return $filePath;
     }
     
     private function getLetterTemplate($mention, $studentName, $master, $professorName)
@@ -80,6 +83,7 @@ class RecommendationLetterService
         return <<<HTML
         <html>
         <head>
+            <meta charset="UTF-8">
             <style>
                 body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
                 .header { text-align: center; margin-bottom: 30px; }
@@ -135,6 +139,7 @@ class RecommendationLetterService
         return <<<HTML
         <html>
         <head>
+            <meta charset="UTF-8">
             <style>
                 body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
                 .header { text-align: center; margin-bottom: 30px; }
@@ -190,6 +195,7 @@ class RecommendationLetterService
         return <<<HTML
         <html>
         <head>
+            <meta charset="UTF-8">
             <style>
                 body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
                 .header { text-align: center; margin-bottom: 30px; }
@@ -245,6 +251,7 @@ class RecommendationLetterService
         return <<<HTML
         <html>
         <head>
+            <meta charset="UTF-8">
             <style>
                 body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
                 .header { text-align: center; margin-bottom: 30px; }

@@ -11,7 +11,7 @@ class RecommendationLetter extends Model
     use HasFactory;
 
     protected $fillable = [
-        'recommendation_request_id',
+        'recommendation_request_id',  // ✅ Utiliser le vrai nom
         'file_path',
         'mention_used',
         'generated_at',
@@ -21,8 +21,9 @@ class RecommendationLetter extends Model
         'generated_at' => 'datetime',
     ];
 
-    public function recommendationRequest(): BelongsTo
+    // ✅ CORRIGER : Spécifier la clé étrangère exacte
+    public function request(): BelongsTo
     {
-        return $this->belongsTo(RecommendationRequest::class);
+        return $this->belongsTo(RecommendationRequest::class, 'recommendation_request_id');
     }
 }
