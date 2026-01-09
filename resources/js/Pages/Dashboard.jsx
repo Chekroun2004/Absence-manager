@@ -1,26 +1,22 @@
+import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import AdminDashboard from '@/Pages/Dashboard/AdminDashboard';
+import ProfessorDashboard from '@/Pages/Dashboard/ProfessorDashboard';
+import StudentDashboard from '@/Pages/Dashboard/StudentDashboard';
 
-export default function Dashboard() {
+export default function Dashboard({ role, stats, modules, sessions, recentSessions }) {
   return (
-    <AuthenticatedLayout
-      header={
-        <h2 className="text-xl font-semibold leading-tight text-gray-800">
-          Tableau de bord
-        </h2>
-      }
-    >
+    <AuthenticatedLayout>
       <Head title="Dashboard" />
 
-      <div className="py-12">
-        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-            <div className="p-6 text-gray-900">
-              Bienvenue sur votre tableau de bord !
-            </div>
-          </div>
-        </div>
-      </div>
+      {role === 'admin' && <AdminDashboard stats={stats} />}
+      {role === 'professor' && (
+        <ProfessorDashboard stats={stats} modules={modules} recentSessions={recentSessions} />
+      )}
+      {role === 'student' && (
+        <StudentDashboard stats={stats} sessions={sessions} />
+      )}
     </AuthenticatedLayout>
   );
 }

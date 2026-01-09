@@ -15,7 +15,7 @@ class UserController extends Controller
     {
         $users = User::with(['student', 'professor'])
             ->whereIn('role', ['student', 'professor'])
-            ->where('is_approved', 1)  // ✅ AJOUTER CETTE LIGNE
+            ->where('is_approved', 1)
             ->get();
 
         return inertia('Admin/UserManagement', [
@@ -37,10 +37,17 @@ class UserController extends Controller
 
         $user = User::create($validated);
 
+        // ✅ CORRECTION : Ajouter le title pour les professeurs
         if ($validated['role'] === 'professor') {
-            Professor::firstOrCreate(['user_id' => $user->id]);
+            Professor::create([
+                'user_id' => $user->id,
+                'title' => 'Professor',  // ✅ AJOUTER TITLE
+            ]);
         } else {
-            Student::firstOrCreate(['user_id' => $user->id]);
+            Student::create([
+                'user_id' => $user->id,
+                'academic_mention' => 'Assez Bien',
+            ]);
         }
 
         return redirect()->back()->with('success', 'Utilisateur créé');

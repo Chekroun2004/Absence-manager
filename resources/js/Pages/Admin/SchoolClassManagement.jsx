@@ -8,11 +8,17 @@ export default function SchoolClassManagement({ schoolClasses }) {
 
   const { data, setData, post, put, processing, reset, errors } = useForm({
     name: '',
+    speciality: '',  // ✅ AJOUTÉ
+    academic_year: '',  // ✅ AJOUTÉ
   });
 
   const handleEdit = (schoolClass) => {
     setEditingId(schoolClass.id);
-    setData('name', schoolClass.name);
+    setData({
+      name: schoolClass.name,
+      speciality: schoolClass.speciality,  // ✅ AJOUTÉ
+      academic_year: schoolClass.academic_year,  // ✅ AJOUTÉ
+    });
     setIsFormOpen(true);
   };
 
@@ -73,9 +79,10 @@ export default function SchoolClassManagement({ schoolClasses }) {
                 onSubmit={handleSubmit}
                 className="mb-8 p-6 bg-gray-100 rounded-lg space-y-4"
               >
+                {/* NOM */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Nom de la classe
+                    Nom de la classe *
                   </label>
                   <input
                     type="text"
@@ -89,6 +96,48 @@ export default function SchoolClassManagement({ schoolClasses }) {
                   {errors.name && (
                     <p className="text-red-600 text-sm mt-1">
                       {errors.name}
+                    </p>
+                  )}
+                </div>
+
+                {/* SPÉCIALITÉ */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Spécialité *
+                  </label>
+                  <input
+                    type="text"
+                    value={data.speciality}
+                    onChange={(e) =>
+                      setData('speciality', e.target.value)
+                    }
+                    placeholder="Ex: Informatique, Génie Logiciel"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.speciality && (
+                    <p className="text-red-600 text-sm mt-1">
+                      {errors.speciality}
+                    </p>
+                  )}
+                </div>
+
+                {/* ANNÉE ACADÉMIQUE */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Année académique *
+                  </label>
+                  <input
+                    type="text"
+                    value={data.academic_year}
+                    onChange={(e) =>
+                      setData('academic_year', e.target.value)
+                    }
+                    placeholder="Ex: 2025-2026"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.academic_year && (
+                    <p className="text-red-600 text-sm mt-1">
+                      {errors.academic_year}
                     </p>
                   )}
                 </div>
@@ -129,6 +178,12 @@ export default function SchoolClassManagement({ schoolClasses }) {
                       Nom
                     </th>
                     <th className="border border-gray-300 px-4 py-2 text-left">
+                      Spécialité
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">
+                      Année académique
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">
                       Modules
                     </th>
                     <th className="border border-gray-300 px-4 py-2 text-center">
@@ -140,7 +195,7 @@ export default function SchoolClassManagement({ schoolClasses }) {
                   {schoolClasses.length === 0 ? (
                     <tr>
                       <td
-                        colSpan="3"
+                        colSpan="5"
                         className="border border-gray-300 px-4 py-2 text-center text-gray-500"
                       >
                         Aucune classe créée
@@ -154,6 +209,12 @@ export default function SchoolClassManagement({ schoolClasses }) {
                       >
                         <td className="border border-gray-300 px-4 py-2">
                           <strong>{schoolClass.name}</strong>
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {schoolClass.speciality}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {schoolClass.academic_year}
                         </td>
                         <td className="border border-gray-300 px-4 py-2">
                           {schoolClass.modules
