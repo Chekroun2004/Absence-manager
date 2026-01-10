@@ -28,6 +28,11 @@ class Student extends Model
         return $this->hasMany(Attendance::class);
     }
 
+     public function absenceJustifications(): HasMany
+    {
+        return $this->hasMany(AbsenceJustification::class);
+    }
+    
     public function recommendationRequests(): HasMany
     {
         return $this->hasMany(RecommendationRequest::class);

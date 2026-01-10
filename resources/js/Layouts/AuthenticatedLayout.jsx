@@ -91,13 +91,23 @@ export default function AuthenticatedLayout({ header, children }) {
                                         </NavLink>
                                         <NavLink
                                             href={route(
+                                                'professor.absences.justifications'
+                                            )}
+                                            active={route().current(
+                                                'professor.absences.justifications'
+                                            )}
+                                        >
+                                            📝 Justifications
+                                        </NavLink>
+                                        <NavLink
+                                            href={route(
                                                 'professor.recommendations'
                                             )}
                                             active={route().current(
                                                 'professor.recommendations'
                                             )}
                                         >
-                                            📝 Recommandations
+                                            📜 Recommandations
                                         </NavLink>
                                     </>
                                 )}
@@ -300,13 +310,23 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink
                                     href={route(
+                                        'professor.absences.justifications'
+                                    )}
+                                    active={route().current(
+                                        'professor.absences.justifications'
+                                    )}
+                                >
+                                    📝 Justifications
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route(
                                         'professor.recommendations'
                                     )}
                                     active={route().current(
                                         'professor.recommendations'
                                     )}
                                 >
-                                    📝 Recommandations
+                                    📜 Recommandations
                                 </ResponsiveNavLink>
                             </>
                         )}

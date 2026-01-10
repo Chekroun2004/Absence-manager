@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 
 export default function ActiveSession({ session, students: initialStudents }) {
   const [timeLeft, setTimeLeft] = useState(20);
   const [copied, setCopied] = useState(false);
   const [students, setStudents] = useState(initialStudents);
   const [sessionExpired, setSessionExpired] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
-  // ✅ CALCUL DU TEMPS DEPUIS expires_at (pas de state local qui recommence)
+  // ✅ CALCUL DU TEMPS DEPUIS expires_at
   useEffect(() => {
     const calculateTimeLeft = () => {
       const now = new Date().getTime();
@@ -21,19 +22,13 @@ export default function ActiveSession({ session, students: initialStudents }) {
       }
     };
 
-    // Calculer immédiatement
     calculateTimeLeft();
-
-    // Mettre à jour chaque seconde
     const interval = setInterval(calculateTimeLeft, 1000);
-
     return () => clearInterval(interval);
-  }, [session.expires_at]); // ✅ Dépend SEULEMENT de expires_at
+  }, [session.expires_at]);
 
   // ✅ POLLING : Rafraîchir les présences toutes les 2 secondes
-  // ✅ PAS de timeLeft dans les dépendances !
   useEffect(() => {
-    // Arrêter le polling si le temps est écoulé
     if (sessionExpired) {
       console.log('⏸️ POLLING ARRÊTÉ - Temps écoulé');
       return;
@@ -47,18 +42,13 @@ export default function ActiveSession({ session, students: initialStudents }) {
           `/professor/sessions/${session.id}/attendances`
         );
         
-        console.log(`📊 Status HTTP: ${response.status}`);
-        
         if (!response.ok) {
-          console.error(`❌ ERREUR HTTP ${response.status}: ${response.statusText}`);
+          console.error(`❌ ERREUR HTTP ${response.status}`);
           return;
         }
         
         const data = await response.json();
-        console.log('✅ Data reçue:', data.attendances);
-        console.log('✅ Nombre d\'attendances:', data.attendances.length);
         
-        // ✅ Mettre à jour les étudiants
         setStudents((prevStudents) => {
           const updated = prevStudents.map((student) => {
             const attendance = data.attendances.find(
@@ -76,15 +66,6 @@ export default function ActiveSession({ session, students: initialStudents }) {
             return student;
           });
           
-          // ✅ Vérifier s'il y a eu des changements
-          const changed = updated.some((s, i) => 
-            s.is_present !== prevStudents[i].is_present
-          );
-          
-          if (changed) {
-            console.log('🔄 CHANGEMENTS DÉTECTÉS - Mise à jour UI');
-          }
-          
           return updated;
         });
         
@@ -93,16 +74,29 @@ export default function ActiveSession({ session, students: initialStudents }) {
       }
     }, 2000);
 
-    return () => {
-      console.log('🧹 Nettoyage polling');
-      clearInterval(interval);
-    };
-  }, [session.id, sessionExpired]); // ✅ SEULEMENT session.id et sessionExpired, PAS timeLeft !
+    return () => clearInterval(interval);
+  }, [session.id, sessionExpired]);
 
   const copyCode = () => {
     navigator.clipboard.writeText(session.code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  // ✅ FONCTION POUR ARRÊTER LA SÉANCE
+  const handleCloseSession = () => {
+    if (confirm('Êtes-vous sûr de vouloir arrêter la séance ?')) {
+      setIsClosing(true);
+      router.post(route('professor.sessions.close', session.id), {}, {
+        onSuccess: () => {
+          router.visit(route('professor.sessions.stats', session.id));
+        },
+        onError: (error) => {
+          console.error('❌ Erreur:', error);
+          setIsClosing(false);
+        }
+      });
+    }
   };
 
   const presentCount = useMemo(
@@ -225,9 +219,23 @@ export default function ActiveSession({ session, students: initialStudents }) {
                 )}
               </div>
 
-              <button className="w-full mt-6 bg-red-600 text-white py-2 rounded hover:bg-red-700 font-semibold">
-                ⛔ Arrêter la séance
-              </button>
+              {/* ✅ BOUTONS D'ACTIONS */}
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={handleCloseSession}
+                  disabled={isClosing}
+                  className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isClosing ? '⏳ Arrêt en cours...' : '⛔ Arrêter la séance'}
+                </button>
+                
+                <button
+                  onClick={() => router.visit(route('professor.sessions'))}
+                  className="flex-1 bg-gray-600 text-white py-2 rounded hover:bg-gray-700 font-semibold"
+                >
+                  ← Retour aux séances
+                </button>
+              </div>
             </div>
           </div>
         </div>

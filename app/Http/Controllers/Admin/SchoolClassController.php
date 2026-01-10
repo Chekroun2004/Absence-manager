@@ -21,6 +21,8 @@ class SchoolClassController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|unique:school_classes,name',
+            'speciality' => 'required|string',  // ✅ AJOUTÉ
+            'academic_year' => 'required|string',  // ✅ AJOUTÉ
         ]);
 
         SchoolClass::create($validated);
@@ -32,6 +34,8 @@ class SchoolClassController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|unique:school_classes,name,' . $schoolClass->id,
+            'speciality' => 'required|string',  // ✅ AJOUTÉ
+            'academic_year' => 'required|string',  // ✅ AJOUTÉ
         ]);
 
         $schoolClass->update($validated);

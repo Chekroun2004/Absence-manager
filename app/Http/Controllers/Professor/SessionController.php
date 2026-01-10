@@ -112,18 +112,40 @@ class SessionController extends Controller
     }
 
     public function close(ClassSession $session)
-    {
-        $user = Auth::user();
-        $professor = Professor::where('user_id', $user->id)->first();
-
-        if (!$professor || $session->professor_id !== $professor->id) {
-            abort(403, 'Non autorisé.');
-        }
-
-        $session->update(['status' => 'closed']);
-
-        return redirect()->route('professor.sessions')->with('success', 'Séance fermée');
+{
+    // Vérifier autorisation
+    if ($session->professor_id !== auth()->user()->professor->id) {
+        abort(403, 'Non autorisé');
     }
+
+    // Récupérer les étudiants du module
+    $students = $session->module->students()->pluck('students.id');
+
+    // Parcourir TOUS les étudiants
+    foreach ($students as $student_id) {
+        // Vérifier si l'étudiant a marqué sa présence
+        $attendance = Attendance::where('class_session_id', $session->id)
+            ->where('student_id', $student_id)
+            ->first();
+
+        // ✅ Si pas d'attendance, créer une absence
+        if (!$attendance) {
+            Attendance::create([
+                'student_id' => $student_id,
+                'module_id' => $session->module_id,
+                'class_session_id' => $session->id,
+                'date' => $session->started_at->toDateString(),
+                'status' => 'absent',  // ✅ Marquer comme absent
+                'marked_at' => now(),
+            ]);
+        }
+    }
+
+    // Clôturer la séance
+    $session->update(['status' => 'closed']);
+
+    return redirect()->back()->with('success', '✅ Séance clôturée !');
+}
 
     public function stats(ClassSession $session)
     {
@@ -155,27 +177,41 @@ class SessionController extends Controller
     // ✅ API ENDPOINT pour le polling
     // ✅ API ENDPOINT pour le polling
 // ✅ API ENDPOINT pour le polling
-    public function getAttendances(ClassSession $session)
-    {
-        $user = Auth::user();
-        $professor = Professor::where('user_id', $user->id)->first();
+   public function getAttendances(ClassSession $session)
+{
+    $user = Auth::user();
+    $professor = Professor::where('user_id', $user->id)->first();
 
-        if (!$professor || $session->professor_id !== $professor->id) {
-            abort(403, 'Non autorisé.');
-        }
-
-        $attendances = Attendance::where('class_session_id', $session->id)
-            ->with('student.user')
-            ->get();
-
-        // ✅ Logs de debug
-        \Log::info('🔍 getAttendances - Session: ' . $session->id);
-        \Log::info('🔍 Nombre d\'attendances: ' . $attendances->count());
-        \Log::info('🔍 Data: ' . json_encode($attendances));
-
-        return response()->json([
-            'attendances' => $attendances,
-            'session_expired' => now() > $session->expires_at,
-        ]);
+    if (!$professor || $session->professor_id !== $professor->id) {
+        abort(403, 'Non autorisé.');
     }
+
+    // ✅ RÉCUPÉRER LES PRÉSENCES AVEC LES BONNES COLONNES
+    $attendances = Attendance::where('class_session_id', $session->id)
+        ->select('id', 'student_id', 'status', 'marked_at', 'date')
+        ->with('student.user:id,name,email')
+        ->get()
+        ->map(function ($attendance) {
+            return [
+                'id' => $attendance->id,
+                'student_id' => $attendance->student_id,
+                'status' => $attendance->status,  // ✅ 'present', 'absent', 'late'
+                'marked_at' => $attendance->marked_at,
+                'date' => $attendance->date,
+                'student_name' => $attendance->student->user->name,
+                'student_email' => $attendance->student->user->email,
+            ];
+        });
+
+    // ✅ LOGS DE DEBUG
+    \Log::info('🔍 getAttendances - Session: ' . $session->id);
+    \Log::info('🔍 Nombre d\'attendances: ' . $attendances->count());
+    \Log::info('🔍 Présents: ' . $attendances->where('status', 'present')->count());
+    \Log::info('🔍 Data: ' . json_encode($attendances));
+
+    return response()->json([
+        'attendances' => $attendances,
+        'session_expired' => now() > $session->expires_at,
+    ]);
+}
 }

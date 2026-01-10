@@ -12,10 +12,10 @@ class Attendance extends Model
 
     protected $fillable = [
         'student_id',
-        'class_session_id',  // ✅ Au lieu de lesson_id
+        'class_session_id',
         'module_id',
         'date',
-        'status',
+        'status',  // ✅ CHANGÉ de 'is_present' à 'status'
         'notes',
         'marked_at',
     ];
@@ -32,5 +32,16 @@ class Attendance extends Model
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function module(): BelongsTo
+    {
+        return $this->belongsTo(Module::class);
+    }
+
+    // ✅ RELATION POUR JUSTIFICATIONS
+    public function justification()
+    {
+        return $this->hasOne(AbsenceJustification::class);
     }
 }

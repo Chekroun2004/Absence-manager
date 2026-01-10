@@ -3,213 +3,231 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
-use App\Models\ClassSession;
 use App\Models\Attendance;
-use App\Models\RecommendationRequest;
-use App\Models\RecommendationLetter;
-use App\Models\Student;
-use App\Models\Professor;
+use App\Models\ClassSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class StudentController extends Controller
 {
-    /**
-     * Afficher les modules de l'étudiant
-     */
+    // ========== DASHBOARD ==========
+    public function dashboard()
+    {
+        $student = auth()->user()->student;
+        
+        // Récupérer tous les modules de l'étudiant
+        $modules = $student->modules()->pluck('modules.id');
+
+        // Récupérer toutes les séances de ses modules
+        $sessions = ClassSession::whereIn('module_id', $modules)
+            ->with([
+                'module' => function ($query) {
+                    $query->select('id', 'name', 'professor_id');
+                },
+                'module.professor' => function ($query) {
+                    $query->select('id', 'user_id');
+                    $query->with('user:id,name');
+                },
+            ])
+            ->orderBy('started_at', 'desc')
+            ->get()
+            ->map(function ($session) use ($student) {
+                $attendance = Attendance::where('student_id', $student->id)
+                    ->where('class_session_id', $session->id)
+                    ->first();
+
+                return [
+                    'id' => $session->id,
+                    'module_name' => $session->module->name,
+                    'module_id' => $session->module->id,
+                    'professor_name' => $session->module->professor->user->name,
+                    'started_at' => $session->started_at->format('d/m/Y H:i'),
+                    'started_at_raw' => $session->started_at,
+                    'status' => $session->status,
+                    'attendance' => $attendance ? [
+                        'id' => $attendance->id,
+                        'status' => $attendance->status,  // ✅ CHANGÉ de 'is_present' à 'status'
+                        'marked_at' => $attendance->marked_at,
+                    ] : null,
+                ];
+            })
+            ->toArray();
+
+        // Calculer les statistiques
+        $totalSessions = count($sessions);
+        // ✅ CHANGÉ: Utiliser 'status === present' au lieu de 'is_present'
+        $presentCount = count(array_filter($sessions, function ($s) {
+            return $s['attendance'] && $s['attendance']['status'] === 'present';
+        }));
+        $absentCount = $totalSessions - $presentCount;
+        $attendanceRate = $totalSessions > 0 ? round(($presentCount / $totalSessions) * 100, 2) : 0;
+
+        return Inertia::render('Student/Dashboard', [
+            'sessions' => $sessions,
+            'stats' => [
+                'total_sessions' => $totalSessions,
+                'present_count' => $presentCount,
+                'absent_count' => $absentCount,
+                'attendance_rate' => $attendanceRate,
+            ],
+        ]);
+    }
+
+    // ========== MODULES ==========
     public function modules()
     {
-        $user = auth()->user();
-        $student = $user->student;
-        $modules = $student->modules()->with('professor.user', 'schoolClass')->get();
+        $student = auth()->user()->student;
+        $modules = $student->modules()
+            ->with('professor.user')
+            ->get();
 
-        return inertia('Student/StudentModules', [
+        return Inertia::render('Student/StudentModules', [
             'modules' => $modules,
         ]);
     }
 
-    /**
-     * Afficher le formulaire pour marquer la présence
-     */
+    // ========== MARQUER PRÉSENCE ==========
     public function markPresenceForm()
     {
-        return inertia('Student/MarkPresence');
+        return Inertia::render('Student/MarkPresence');
     }
 
-    /**
-     * Marquer la présence
-     */
     public function markPresence(Request $request)
     {
         $validated = $request->validate([
             'code' => 'required|string|size:6',
         ]);
 
-        // Récupérer l'étudiant
         $student = auth()->user()->student;
-        if (!$student) {
-            return redirect()->back()->withErrors(['code' => 'Profil étudiant non trouvé']);
-        }
 
-        // Chercher la séance avec ce code
-        $session = ClassSession::where('code', strtoupper($validated['code']))
+        // Trouver la séance active avec ce code
+        $session = ClassSession::where('code', $validated['code'])
+            ->where('status', 'active')
             ->first();
 
         if (!$session) {
-            return redirect()->back()->withErrors(['code' => '❌ Code invalide']);
+            return redirect()->back()->with('error', '❌ Code invalide ou séance non active.');
         }
 
-        // Vérifier que le code n'a pas expiré
-        if (now() > $session->expires_at) {
-            return redirect()->back()->withErrors(['code' => '❌ Code expiré']);
+        // Vérifier que l'étudiant est inscrit au module
+        if (!$student->modules->contains($session->module_id)) {
+            return redirect()->back()->with('error', '❌ Vous n\'êtes pas inscrit à ce module.');
         }
 
-        // Vérifier que l'étudiant est assigné à ce module
-        $isAssigned = $student->modules()
-            ->where('module_id', $session->module_id)
-            ->exists();
-
-        if (!$isAssigned) {
-            return redirect()->back()->withErrors(['code' => '❌ Non assigné à ce module']);
-        }
-
-        // Vérifier si présence déjà marquée
+        // Vérifier s'il a déjà marqué sa présence
         $existingAttendance = Attendance::where('student_id', $student->id)
             ->where('class_session_id', $session->id)
             ->first();
 
         if ($existingAttendance) {
-            return redirect()->back()->withErrors(['code' => '⚠️ Présence déjà marquée']);
+            return redirect()->back()->with('error', '✅ Vous avez déjà marqué votre présence.');
         }
 
-        // Créer l'enregistrement de présence
+        // ✅ CRÉER L'ENREGISTREMENT DE PRÉSENCE AVEC module_id
         Attendance::create([
             'student_id' => $student->id,
             'class_session_id' => $session->id,
+            'date' => $session->started_at->toDateString(),
             'module_id' => $session->module_id,
             'status' => 'present',
             'marked_at' => now(),
-            'date' => now()->toDateString(),
         ]);
 
         return redirect()->back()->with('success', '✅ Présence marquée avec succès !');
     }
 
-    /**
-     * Afficher les lettres de recommandation
-     */
-    /**
- * Afficher les lettres de recommandation
- */
-public function letters()
-{
-    $user = auth()->user();
-    $student = $user->student;
+    // ========== LETTRES DE RECOMMANDATION ==========
+    public function letters()
+    {
+        $student = auth()->user()->student;
+        
+        // ✅ CHARGER ET MAPPER LES REQUÊTES AVEC has_letter
+        $requests = $student->recommendationRequests()
+            ->with('professor.user', 'letter')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($request) {
+                return [
+                    'id' => $request->id,
+                    'status' => $request->status,
+                    'mention' => $request->mention,
+                    'rejection_reason' => $request->rejection_reason,
+                    'created_at' => $request->created_at,
+                    'professor' => [
+                        'id' => $request->professor->id,
+                        'user' => [
+                            'id' => $request->professor->user->id,
+                            'name' => $request->professor->user->name,
+                        ],
+                    ],
+                    'has_letter' => $request->letter !== null,  // ✅ AJOUTER CECI
+                    'letter' => $request->letter,
+                ];
+            });
 
-    if (!$student) {
-        abort(403, 'Profil étudiant non trouvé.');
+        // ✅ RÉCUPÉRER LES PROFESSEURS DE L'ÉTUDIANT
+        $professors = $student->modules()
+            ->with('professor.user')
+            ->get()
+            ->pluck('professor')
+            ->unique('id')
+            ->values();
+
+        return Inertia::render('Student/RequestLetter', [
+            'myRequests' => $requests,
+            'professors' => $professors,
+        ]);
     }
 
-    // Tous les professeurs
-    $professors = Professor::with('user')->get();
-
-    // Demandes de l'étudiant avec les lettres associées
-    $myRequests = RecommendationRequest::where('student_id', $student->id)
-        ->with(['professor.user', 'letter'])  // ✅ Charger la relation letter
-        ->orderByDesc('created_at')
-        ->get()
-        ->map(function ($request) {
-            return [
-                'id' => $request->id,
-                'professor' => [
-                    'user' => [
-                        'name' => $request->professor->user->name,
-                        'email' => $request->professor->user->email,
-                    ]
-                ],
-                'mention' => $request->mention,
-                'status' => $request->status,
-                'has_letter' => $request->letter ? true : false,  // ✅ AJOUTER
-                'rejection_reason' => $request->rejection_reason,
-                'created_at' => $request->created_at->format('d/m/Y'),
-            ];
-        });
-
-    return inertia('Student/RequestLetter', [
-        'professors' => $professors,
-        'myRequests' => $myRequests,
-    ]);
-}
-
-    /**
-     * Soumettre une demande de lettre
-     */
     public function requestLetter(Request $request)
     {
-        $user = auth()->user();
-        $student = $user->student;
-
-        if (!$student) {
-            return redirect()->back()->withErrors(['error' => 'Profil étudiant non trouvé']);
-        }
-
         $validated = $request->validate([
             'professor_id' => 'required|exists:professors,id',
-            'mention' => 'required|in:Très Bien,Bien,Assez Bien,Passable',
+            'mention' => 'required|string|max:255',
         ]);
 
-        // Vérifier si une demande est déjà en attente
-        $existingPending = RecommendationRequest::where('student_id', $student->id)
-            ->where('professor_id', $validated['professor_id'])
-            ->where('status', 'pending')
-            ->first();
+        $student = auth()->user()->student;
 
-        if ($existingPending) {
-            return redirect()->back()->withErrors(['error' => 'Demande déjà en attente pour ce professeur']);
+        // Vérifier que l'étudiant a suivi un cours avec ce professeur
+        $hasClass = $student->modules()
+            ->where('professor_id', $validated['professor_id'])
+            ->exists();
+
+        if (!$hasClass) {
+            return redirect()->back()->with('error', 'Vous n\'avez pas suivi de cours avec ce professeur.');
         }
 
         // Créer la demande
-        RecommendationRequest::create([
-            'student_id' => $student->id,
+        $student->recommendationRequests()->create([
             'professor_id' => $validated['professor_id'],
             'mention' => $validated['mention'],
             'status' => 'pending',
         ]);
 
-        return redirect()->back()->with('success', '✅ Demande envoyée avec succès !');
+        return redirect()->back()->with('success', '✅ Demande de lettre envoyée !');
     }
 
-    /**
- * Télécharger une lettre PDF
- */
-public function downloadLetter(RecommendationRequest $request)
+    public function downloadLetter($requestId)
 {
-    $user = auth()->user();
-    $student = $user->student;
+    $student = auth()->user()->student;
+    $recommendationRequest = $student->recommendationRequests()->findOrFail($requestId);
 
-    // Vérifier que c'est bien la lettre de cet étudiant
-    if ($request->student_id !== $student->id) {
-        abort(403, 'Non autorisé.');
+    if ($recommendationRequest->status !== 'accepted') {
+        return redirect()->back()->with('error', 'Cette demande n\'a pas encore été acceptée.');
     }
 
-    if (!$request->letter) {
-        abort(404, 'Lettre non trouvée.');
+    $letter = $recommendationRequest->letter;
+    
+    if (!$letter || !$letter->file_path) {
+        return redirect()->back()->with('error', 'Le PDF n\'est pas disponible.');
     }
 
-    // ✅ Utiliser Storage::download() au lieu de response()->download()
-    $filePath = $request->letter->file_path;
-
-    if (!Storage::exists($filePath)) {
-        \Log::error('❌ Fichier non trouvé', [
-            'file_path' => $filePath,
-            'full_path' => storage_path('app/' . $filePath),
-        ]);
-        abort(404, 'Fichier non trouvé : ' . $filePath);
+    // ✅ UTILISER LE DISQUE 'local' (pas 'private')
+    if (!Storage::disk('local')->exists($letter->file_path)) {
+        return redirect()->back()->with('error', 'Le fichier PDF n\'existe pas sur le serveur.');
     }
 
-    return Storage::download(
-        $filePath,
-        'lettre_recommandation_' . $student->user->name . '.pdf'
-    );
-    }
+    return Storage::disk('local')->download($letter->file_path, 'lettre_recommandation.pdf');
+}
 }
