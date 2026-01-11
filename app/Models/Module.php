@@ -35,8 +35,7 @@ class Module extends Model
 
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(Student::class, 'module_student', 'module_id',
-            'student_id');
+        return $this->belongsToMany(Student::class, 'module_student', 'module_id', 'student_id');
     }
 
     public function attendances(): HasMany
@@ -47,5 +46,24 @@ class Module extends Model
     public function classSessions(): HasMany
     {
         return $this->hasMany(ClassSession::class);
+    }
+
+    // ✅ UTILISER LE BON NOM : moduleGrades()
+    public function moduleGrades(): HasMany
+    {
+        return $this->hasMany(ModuleStudentGrade::class);
+    }
+
+    public function studentsWithGrades()
+    {
+        return $this->students()
+            ->with(['moduleGrades' => function ($query) {
+                $query->where('module_id', $this->id);
+            }]);
+    }
+
+    public function recommendationRequests(): HasMany
+    {
+        return $this->hasMany(RecommendationRequest::class);
     }
 }

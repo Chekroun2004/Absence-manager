@@ -16,10 +16,8 @@ class StudentController extends Controller
     {
         $student = auth()->user()->student;
         
-        // Récupérer tous les modules de l'étudiant
         $modules = $student->modules()->pluck('modules.id');
 
-        // Récupérer toutes les séances de ses modules
         $sessions = ClassSession::whereIn('module_id', $modules)
             ->with([
                 'module' => function ($query) {
@@ -47,16 +45,14 @@ class StudentController extends Controller
                     'status' => $session->status,
                     'attendance' => $attendance ? [
                         'id' => $attendance->id,
-                        'status' => $attendance->status,  // ✅ CHANGÉ de 'is_present' à 'status'
+                        'status' => $attendance->status,
                         'marked_at' => $attendance->marked_at,
                     ] : null,
                 ];
             })
             ->toArray();
 
-        // Calculer les statistiques
         $totalSessions = count($sessions);
-        // ✅ CHANGÉ: Utiliser 'status === present' au lieu de 'is_present'
         $presentCount = count(array_filter($sessions, function ($s) {
             return $s['attendance'] && $s['attendance']['status'] === 'present';
         }));
@@ -79,7 +75,7 @@ class StudentController extends Controller
     {
         $student = auth()->user()->student;
         $modules = $student->modules()
-            ->with('professor.user')
+            ->with('professor.user', 'schoolClass')
             ->get();
 
         return Inertia::render('Student/StudentModules', [
@@ -101,7 +97,6 @@ class StudentController extends Controller
 
         $student = auth()->user()->student;
 
-        // Trouver la séance active avec ce code
         $session = ClassSession::where('code', $validated['code'])
             ->where('status', 'active')
             ->first();
@@ -110,12 +105,10 @@ class StudentController extends Controller
             return redirect()->back()->with('error', '❌ Code invalide ou séance non active.');
         }
 
-        // Vérifier que l'étudiant est inscrit au module
         if (!$student->modules->contains($session->module_id)) {
             return redirect()->back()->with('error', '❌ Vous n\'êtes pas inscrit à ce module.');
         }
 
-        // Vérifier s'il a déjà marqué sa présence
         $existingAttendance = Attendance::where('student_id', $student->id)
             ->where('class_session_id', $session->id)
             ->first();
@@ -124,7 +117,6 @@ class StudentController extends Controller
             return redirect()->back()->with('error', '✅ Vous avez déjà marqué votre présence.');
         }
 
-        // ✅ CRÉER L'ENREGISTREMENT DE PRÉSENCE AVEC module_id
         Attendance::create([
             'student_id' => $student->id,
             'class_session_id' => $session->id,
@@ -137,97 +129,117 @@ class StudentController extends Controller
         return redirect()->back()->with('success', '✅ Présence marquée avec succès !');
     }
 
-    // ========== LETTRES DE RECOMMANDATION ==========
-    public function letters()
-    {
-        $student = auth()->user()->student;
-        
-        // ✅ CHARGER ET MAPPER LES REQUÊTES AVEC has_letter
-        $requests = $student->recommendationRequests()
-            ->with('professor.user', 'letter')
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($request) {
-                return [
-                    'id' => $request->id,
-                    'status' => $request->status,
-                    'mention' => $request->mention,
-                    'rejection_reason' => $request->rejection_reason,
-                    'created_at' => $request->created_at,
-                    'professor' => [
-                        'id' => $request->professor->id,
-                        'user' => [
-                            'id' => $request->professor->user->id,
-                            'name' => $request->professor->user->name,
-                        ],
-                    ],
-                    'has_letter' => $request->letter !== null,  // ✅ AJOUTER CECI
-                    'letter' => $request->letter,
-                ];
-            });
-
-        // ✅ RÉCUPÉRER LES PROFESSEURS DE L'ÉTUDIANT
-        $professors = $student->modules()
-            ->with('professor.user')
-            ->get()
-            ->pluck('professor')
-            ->unique('id')
-            ->values();
-
-        return Inertia::render('Student/RequestLetter', [
-            'myRequests' => $requests,
-            'professors' => $professors,
-        ]);
-    }
-
-    public function requestLetter(Request $request)
-    {
-        $validated = $request->validate([
-            'professor_id' => 'required|exists:professors,id',
-            'mention' => 'required|string|max:255',
-        ]);
-
-        $student = auth()->user()->student;
-
-        // Vérifier que l'étudiant a suivi un cours avec ce professeur
-        $hasClass = $student->modules()
-            ->where('professor_id', $validated['professor_id'])
-            ->exists();
-
-        if (!$hasClass) {
-            return redirect()->back()->with('error', 'Vous n\'avez pas suivi de cours avec ce professeur.');
-        }
-
-        // Créer la demande
-        $student->recommendationRequests()->create([
-            'professor_id' => $validated['professor_id'],
-            'mention' => $validated['mention'],
-            'status' => 'pending',
-        ]);
-
-        return redirect()->back()->with('success', '✅ Demande de lettre envoyée !');
-    }
-
-    public function downloadLetter($requestId)
+// ========== LETTRES DE RECOMMANDATION ==========
+public function letters()
 {
     $student = auth()->user()->student;
-    $recommendationRequest = $student->recommendationRequests()->findOrFail($requestId);
-
-    if ($recommendationRequest->status !== 'accepted') {
-        return redirect()->back()->with('error', 'Cette demande n\'a pas encore été acceptée.');
-    }
-
-    $letter = $recommendationRequest->letter;
     
-    if (!$letter || !$letter->file_path) {
-        return redirect()->back()->with('error', 'Le PDF n\'est pas disponible.');
-    }
+    $requests = $student->recommendationRequests()
+        ->with('professor.user', 'letter', 'module')
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->map(function ($request) {
+            return [
+                'id' => $request->id,
+                'status' => $request->status,
+                'mention' => $request->mention,
+                'rejection_reason' => $request->rejection_reason,
+                'created_at' => $request->created_at,
+                'professor' => [
+                    'id' => $request->professor->id,
+                    'user' => [
+                        'id' => $request->professor->user->id,
+                        'name' => $request->professor->user->name,
+                    ],
+                ],
+                'module' => [
+                    'id' => $request->module->id,
+                    'name' => $request->module->name,
+                ],
+                'has_letter' => $request->letter !== null,
+                'letter' => $request->letter,
+            ];
+        });
 
-    // ✅ UTILISER LE DISQUE 'local' (pas 'private')
-    if (!Storage::disk('local')->exists($letter->file_path)) {
-        return redirect()->back()->with('error', 'Le fichier PDF n\'existe pas sur le serveur.');
-    }
+    // ✅ RÉCUPÉRER LES MODULES DE L'ÉTUDIANT AVEC LEURS MENTIONS
+    $modulesWithGrades = $student->modules()
+        ->with([
+            'professor.user',
+            'moduleGrades' => function ($query) use ($student) {
+                $query->where('student_id', $student->id);
+            }
+        ])
+        ->get()
+        ->map(fn($module) => [
+            'id' => $module->id,
+            'name' => $module->name,
+            'professor' => [
+                'id' => $module->professor->id,
+                'user' => [
+                    'id' => $module->professor->user->id,
+                    'name' => $module->professor->user->name,
+                ],
+            ],
+            'mention' => $module->moduleGrades->first()?->mention ?? 'Passable',
+        ]);
 
-    return Storage::disk('local')->download($letter->file_path, 'lettre_recommandation.pdf');
+    return Inertia::render('Student/RequestLetter', [
+        'myRequests' => $requests,
+        'modulesWithGrades' => $modulesWithGrades,
+    ]);
 }
+
+public function requestLetter(Request $request)
+{
+    $validated = $request->validate([
+        'module_id' => 'required|exists:modules,id',
+    ]);
+
+    $student = auth()->user()->student;
+    $module = Module::findOrFail($validated['module_id']);
+
+    // Vérifier que l'étudiant est inscrit à ce module
+    if (!$student->modules()->where('module_id', $module->id)->exists()) {
+        return redirect()->back()->with('error', 'Vous n\'êtes pas inscrit à ce module.');
+    }
+
+    // ✅ RÉCUPÉRER LA MENTION DU PROF POUR CE MODULE
+    $moduleGrade = $student->moduleGrades()
+        ->where('module_id', $module->id)
+        ->first();
+
+    $mention = $moduleGrade?->mention ?? 'Passable';
+
+    // Créer la demande
+    $student->recommendationRequests()->create([
+        'professor_id' => $module->professor_id,
+        'module_id' => $module->id,
+        'mention' => $mention,
+        'status' => 'pending',
+    ]);
+
+    return redirect()->back()->with('success', '✅ Demande de lettre envoyée !');
+}
+
+    public function downloadLetter($requestId)
+    {
+        $student = auth()->user()->student;
+        $recommendationRequest = $student->recommendationRequests()->findOrFail($requestId);
+
+        if ($recommendationRequest->status !== 'accepted') {
+            return redirect()->back()->with('error', 'Cette demande n\'a pas encore été acceptée.');
+        }
+
+        $letter = $recommendationRequest->letter;
+        
+        if (!$letter || !$letter->file_path) {
+            return redirect()->back()->with('error', 'Le PDF n\'est pas disponible.');
+        }
+
+        if (!Storage::disk('local')->exists($letter->file_path)) {
+            return redirect()->back()->with('error', 'Le fichier PDF n\'existe pas sur le serveur.');
+        }
+
+        return Storage::disk('local')->download($letter->file_path, 'lettre_recommandation.pdf');
+    }
 }

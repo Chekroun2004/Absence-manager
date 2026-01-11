@@ -37,24 +37,6 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <>
                                         <NavLink
                                             href={route(
-                                                'admin.pending-users'
-                                            )}
-                                            active={route().current(
-                                                'admin.pending-users'
-                                            )}
-                                        >
-                                            📋 Approbations
-                                        </NavLink>
-                                        <NavLink
-                                            href={route('admin.users.index')}
-                                            active={route().current(
-                                                'admin.users.index'
-                                            )}
-                                        >
-                                            👥 Utilisateurs
-                                        </NavLink>
-                                        <NavLink
-                                            href={route(
                                                 'admin.modules.index'
                                             )}
                                             active={route().current(
@@ -73,6 +55,30 @@ export default function AuthenticatedLayout({ header, children }) {
                                         >
                                             🎓 Gestion Classes
                                         </NavLink>
+                                        <NavLink 
+                                            href={route('admin.grades.index')} 
+                                            className="text-gray-600 hover:text-gray-900"
+                                        >
+                                            📊 Gestion Mentions
+                                        </NavLink>
+                                        <NavLink
+                                            href={route(
+                                                'admin.pending-users'
+                                            )}
+                                            active={route().current(
+                                                'admin.pending-users'
+                                            )}
+                                        >
+                                            📋 Approbations
+                                        </NavLink>
+                                        <NavLink
+                                            href={route('admin.users.index')}
+                                            active={route().current(
+                                                'admin.users.index'
+                                            )}
+                                        >
+                                            👥 Utilisateurs
+                                        </NavLink>
                                     </>
                                 )}
 
@@ -88,6 +94,12 @@ export default function AuthenticatedLayout({ header, children }) {
                                             )}
                                         >
                                             📚 Mes Séances
+                                        </NavLink>
+                                        <NavLink 
+                                            href={route('professor.grades.index')} 
+                                            className="text-gray-600 hover:text-gray-900"
+                                        >
+                                            📊 Gestion Mentions
                                         </NavLink>
                                         <NavLink
                                             href={route(

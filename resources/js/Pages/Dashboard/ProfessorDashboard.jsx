@@ -1,4 +1,19 @@
-export default function ProfessorDashboard({ stats, modules, recentSessions }) {
+import { router } from '@inertiajs/react';
+
+export default function ProfessorDashboard({ stats, modules, activeSessions, recentSessions }) {
+  const handleCloseSession = (sessionId) => {
+    if (confirm('Êtes-vous sûr de vouloir fermer cette séance ?')) {
+      router.post(route('professor.sessions.close', sessionId), {}, {
+        onSuccess: () => {
+          alert('✅ Séance fermée avec succès !');
+        },
+        onError: () => {
+          alert('❌ Erreur lors de la fermeture de la séance');
+        },
+      });
+    }
+  };
+
   return (
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -17,6 +32,41 @@ export default function ProfessorDashboard({ stats, modules, recentSessions }) {
             color="orange"
           />
         </div>
+
+        {/* SÉANCES ACTIVES */}
+        {activeSessions && activeSessions.length > 0 && (
+          <div className="bg-red-50 overflow-hidden shadow-sm sm:rounded-lg p-6 mb-8 border-l-4 border-red-500">
+            <h2 className="text-xl font-bold text-red-900 mb-4">
+              🔴 Séances Actives
+            </h2>
+            <div className="space-y-3">
+              {activeSessions.map((session) => (
+                <div
+                  key={session.id}
+                  className="flex justify-between items-center p-4 border border-red-300 rounded bg-white hover:bg-red-50"
+                >
+                  <div className="flex-1">
+                    <p className="font-semibold text-gray-900">
+                      {session.module_name}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Code PIN: <span className="font-bold text-red-600">{session.code}</span>
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Démarrée à {session.started_at}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleCloseSession(session.id)}
+                    className="ml-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition font-semibold"
+                  >
+                    ⏹️ Arrêter
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* SÉANCES RÉCENTES */}
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">

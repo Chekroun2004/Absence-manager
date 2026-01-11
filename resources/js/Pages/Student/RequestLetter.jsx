@@ -3,19 +3,18 @@ import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import { router } from '@inertiajs/react';
 
-export default function RequestLetter({ myRequests, professors, flash }) {
+export default function RequestLetter({ myRequests, modulesWithGrades, flash }) {
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({
-        professor_id: '',
-        mention: 'Bien',
+        module_id: '',
     });
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         
-        if (!formData.professor_id) {
-            alert('⚠️ Veuillez sélectionner un professeur');
+        if (!formData.module_id) {
+            alert('⚠️ Veuillez sélectionner un module');
             return;
         }
 
@@ -23,7 +22,7 @@ export default function RequestLetter({ myRequests, professors, flash }) {
         router.post(route('student.letters.request'), formData, {
             onSuccess: () => {
                 setShowModal(false);
-                setFormData({ professor_id: '', mention: 'Bien' });
+                setFormData({ module_id: '' });
                 setLoading(false);
             },
             onError: () => {
@@ -35,6 +34,11 @@ export default function RequestLetter({ myRequests, professors, flash }) {
     const handleDownload = (requestId) => {
         window.location.href = route('student.letters.download', requestId);
     };
+
+    // ✅ RÉCUPÉRER LES INFOS DU MODULE SÉLECTIONNÉ
+    const selectedModuleInfo = formData.module_id
+        ? modulesWithGrades.find(m => m.id === parseInt(formData.module_id))
+        : null;
 
     return (
         <AuthenticatedLayout>
@@ -72,40 +76,44 @@ export default function RequestLetter({ myRequests, professors, flash }) {
                                     <h2 className="text-xl font-bold mb-4">Demander une Lettre</h2>
                                     <form onSubmit={handleSubmit}>
                                         <div className="mb-4">
-                                            <label className="block text-sm font-semibold mb-2">Professeur :</label>
+                                            <label className="block text-sm font-semibold mb-2">Module :</label>
                                             <select
-                                                value={formData.professor_id}
-                                                onChange={(e) => setFormData({ ...formData, professor_id: e.target.value })}
+                                                value={formData.module_id}
+                                                onChange={(e) => setFormData({ ...formData, module_id: e.target.value })}
                                                 className="w-full p-2 border rounded-lg"
                                                 required
                                             >
                                                 <option value="">-- Sélectionner --</option>
-                                                {professors.map((prof) => (
-                                                    <option key={prof.id} value={prof.id}>
-                                                        {prof.user.name}
+                                                {modulesWithGrades.map((module) => (
+                                                    <option key={module.id} value={module.id}>
+                                                        {module.name} (Prof: {module.professor.user.name})
                                                     </option>
                                                 ))}
                                             </select>
                                         </div>
 
-                                        <div className="mb-4">
-                                            <label className="block text-sm font-semibold mb-2">Mention :</label>
-                                            <select
-                                                value={formData.mention}
-                                                onChange={(e) => setFormData({ ...formData, mention: e.target.value })}
-                                                className="w-full p-2 border rounded-lg"
-                                            >
-                                                <option>Très Bien</option>
-                                                <option>Bien</option>
-                                                <option>Assez Bien</option>
-                                                <option>Passable</option>
-                                            </select>
-                                        </div>
+                                        {/* ✅ AFFICHER LES INFOS DU MODULE ET LA MENTION */}
+                                        {selectedModuleInfo && (
+                                            <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                                <p className="text-sm text-gray-700 mb-2">
+                                                    <strong>Professeur :</strong> {selectedModuleInfo.professor.user.name}
+                                                </p>
+                                                <p className="text-sm text-gray-700">
+                                                    <strong>Mention :</strong>{' '}
+                                                    <span className="inline-block px-2 py-1 bg-green-100 text-green-800 rounded font-semibold">
+                                                        {selectedModuleInfo.mention}
+                                                    </span>
+                                                </p>
+                                                <p className="text-xs text-gray-500 mt-2">
+                                                    (Mention attribuée par le professeur pour ce module)
+                                                </p>
+                                            </div>
+                                        )}
 
                                         <div className="flex gap-2">
                                             <button
                                                 type="submit"
-                                                disabled={loading}
+                                                disabled={loading || !formData.module_id}
                                                 className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg disabled:opacity-50"
                                             >
                                                 Envoyer
@@ -147,6 +155,9 @@ export default function RequestLetter({ myRequests, professors, flash }) {
                                                     {req.status === 'accepted' && '✅ Acceptée - '}
                                                     {req.status === 'rejected' && '❌ Refusée - '}
                                                     {req.professor.user.name}
+                                                </p>
+                                                <p className="text-sm text-gray-600">
+                                                    Module : <span className="font-semibold">{req.module.name}</span>
                                                 </p>
                                                 <p className="text-sm text-gray-600">
                                                     Mention : <span className="font-semibold">{req.mention}</span>

@@ -44,7 +44,18 @@ class Student extends Model
     }
 
     public function modules()
-{
-    return $this->belongsToMany(Module::class, 'module_student');
-}
+    {
+        return $this->belongsToMany(Module::class, 'module_student');
+    }
+    public function moduleGrades()
+    {
+        return $this->hasMany(ModuleStudentGrade::class);
+    }
+
+    public function gradeForModule($moduleId)
+    {
+        return $this->moduleGrades()
+            ->where('module_id', $moduleId)
+            ->first()?->mention ?? 'Passable';
+    }
 }

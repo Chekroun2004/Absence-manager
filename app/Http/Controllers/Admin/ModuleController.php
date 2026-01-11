@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Module;
+use App\Models\ModuleStudentGrade;
 use App\Models\Professor;
 use App\Models\SchoolClass;
 use App\Models\Student;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ModuleController extends Controller
 {
@@ -58,15 +60,12 @@ class ModuleController extends Controller
         return redirect()->back()->with('success', 'Module supprimé');
     }
 
-    // ✅ NOUVELLE MÉTHODE : Afficher la page d'assignation
     public function showAssignForm(Module $module)
     {
-        // Récupérer les users approuvés avec role 'student'
         $approvedStudentUsers = User::where('role', 'student')
             ->where('is_approved', 1)
             ->get();
         
-        // Pour chaque user, créer/récupérer son entrée Student
         $students = $approvedStudentUsers->map(function($user) {
             $student = Student::firstOrCreate(
                 ['user_id' => $user->id]
@@ -81,18 +80,68 @@ class ModuleController extends Controller
         ]);
     }
 
-    // ✅ ASSIGNATION
     public function assignStudents(Request $request, Module $module)
     {
-       $validated = $request->validate([
-        'student_ids' => 'nullable|array',
-        'student_ids.*' => 'exists:students,id',
-    ]);
+        $validated = $request->validate([
+            'student_ids' => 'nullable|array',
+            'student_ids.*' => 'exists:students,id',
+        ]);
 
-    // ✅ Synchroniser la relation
-    $module->students()->sync($validated['student_ids'] ?? []);
+        $module->students()->sync($validated['student_ids'] ?? []);
 
-    return redirect('/admin/modules')->with('success', 'Étudiants assignés avec succès!');
-    
+        return redirect('/admin/modules')->with('success', 'Étudiants assignés avec succès!');
+    }
+
+    // ========== GESTION MENTIONS ==========
+    public function gradesIndex()
+    {
+        $schoolClasses = SchoolClass::with('modules')->get();
+        
+        return Inertia::render('Admin/StudentGrades', [
+            'schoolClasses' => $schoolClasses,
+        ]);
+    }
+
+    public function gradesModule(Module $module)
+    {
+        $students = $module->students()
+            ->with(['moduleGrades' => function ($query) use ($module) {
+                $query->where('module_id', $module->id);
+            }, 'user'])
+            ->get();
+
+        // ✅ DEBUG : Affiche ce qu'on reçoit
+        \Log::info('Students data:', $students->toArray());
+
+        $mappedStudents = $students->map(function($student) use ($module) {
+            $grade = $student->moduleGrades->first();
+            return [
+                'id' => $student->id,
+                'name' => $student->user->name,
+                'email' => $student->user->email,
+                'gradeId' => $grade?->id,  // ✅ Vérifie que c'est bien retourné
+                'mention' => $grade?->mention ?? 'Passable',
+            ];
+        });
+
+        return Inertia::render('Admin/StudentGradesEdit', [
+            'module' => [
+                'id' => $module->id,
+                'name' => $module->name,
+                'class' => $module->schoolClass->name,
+            ],
+            'students' => $mappedStudents,
+        ]);
+    }
+
+    public function updateGrade(ModuleStudentGrade $moduleStudentGrade, Request $request)
+    {
+        $validated = $request->validate([
+            'mention' => 'required|in:Très Bien,Bien,Assez Bien,Passable',
+        ]);
+
+        $moduleStudentGrade->update(['mention' => $validated['mention']]);
+
+        return redirect()->back()->with('success', '✅ Mention mise à jour !');
     }
 }

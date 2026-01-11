@@ -42,13 +42,36 @@ class DashboardController extends Controller
                 ->with('students')
                 ->get();
 
-            $totalStudents = $modules->sum(fn($m) => $m->students->count());
+            // ✅ COMPTER LES ÉTUDIANTS UNIQUES (pas de doublons)
+            $totalStudents = $modules
+                ->pluck('students')
+                ->flatten()
+                ->unique('id')
+                ->count();
+
             $totalSessions = \App\Models\ClassSession::whereIn('module_id', $modules->pluck('id'))->count();
+            
             $pendingJustifications = \App\Models\AbsenceJustification::whereHas('attendance', function ($q) use ($modules) {
                 $q->whereHas('classSession', function ($qq) use ($modules) {
                     $qq->whereIn('module_id', $modules->pluck('id'));
                 });
             })->where('status', 'pending')->count();
+
+            // ✅ SÉANCES ACTIVES (avec ended_at NULL)
+            $activeSessions = \App\Models\ClassSession::whereIn('module_id', $modules->pluck('id'))
+                ->where('status', 'active')
+                ->whereNull('ended_at')
+                ->with('module')
+                ->orderBy('started_at', 'desc')
+                ->get()
+                ->map(fn($s) => [
+                    'id' => $s->id,
+                    'module_name' => $s->module->name,
+                    'code' => $s->code,
+                    'started_at' => $s->started_at->format('d/m/Y H:i'),
+                    'expires_at' => $s->expires_at,
+                    'status' => $s->status,
+                ]);
 
             $recentSessions = \App\Models\ClassSession::whereIn('module_id', $modules->pluck('id'))
                 ->with('module')
@@ -71,6 +94,7 @@ class DashboardController extends Controller
                     'pending_justifications' => $pendingJustifications,
                 ],
                 'modules' => $modules,
+                'activeSessions' => $activeSessions,
                 'recentSessions' => $recentSessions,
             ]);
         }
@@ -97,7 +121,6 @@ class DashboardController extends Controller
                         ->where('class_session_id', $session->id)
                         ->first();
 
-                    // ✅ CHANGÉ: Utiliser 'status' au lieu de 'is_present'
                     $justification = null;
                     if ($attendance && $attendance->status !== 'present') {
                         $justification = \App\Models\AbsenceJustification::where('attendance_id', $attendance->id)
@@ -113,7 +136,7 @@ class DashboardController extends Controller
                         'status' => $session->status,
                         'attendance' => $attendance ? [
                             'id' => $attendance->id,
-                            'status' => $attendance->status,  // ✅ CHANGÉ: 'status' au lieu de 'is_present'
+                            'status' => $attendance->status,
                             'marked_at' => $attendance->marked_at,
                         ] : null,
                         'justification' => $justification ? [
@@ -127,7 +150,6 @@ class DashboardController extends Controller
                 ->toArray();
 
             $totalSessions = count($sessions);
-            // ✅ CHANGÉ: Utiliser 'status === present' au lieu de 'is_present'
             $presentCount = count(array_filter($sessions, fn($s) => $s['attendance'] && $s['attendance']['status'] === 'present'));
             $justifiedCount = count(array_filter($sessions, fn($s) => $s['justification'] && $s['justification']['status'] === 'approved'));
             $absentCount = $totalSessions - $presentCount - $justifiedCount;

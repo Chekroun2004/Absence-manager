@@ -7,7 +7,9 @@ use App\Models\Attendance;
 use App\Models\ClassSession;
 use App\Models\Module;
 use App\Models\Professor;
+use App\Models\ModuleStudentGrade;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class SessionController extends Controller
@@ -38,8 +40,17 @@ class SessionController extends Controller
                 ]),
             ]);
 
+        $allStudents = $professor->modules()
+            ->with('students')
+            ->get()
+            ->pluck('students')
+            ->flatten()
+            ->unique('id')
+            ->count();
+
         return Inertia::render('Professor/TeachingSessions', [
             'modules' => $modules,
+            'total_unique_students' => $allStudents,
         ]);
     }
 
@@ -52,14 +63,12 @@ class SessionController extends Controller
             abort(403, 'Non autorisé.');
         }
 
-        // Générer un code PIN aléatoire (6 caractères)
         $code = strtoupper(substr(
             str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'),
             0,
             6
         ));
 
-        // Créer la séance
         $session = ClassSession::create([
             'module_id' => $module->id,
             'professor_id' => $professor->id,
@@ -81,7 +90,6 @@ class SessionController extends Controller
             abort(403, 'Non autorisé.');
         }
 
-        // Récupérer les étudiants du module
         $students = $session->module->students()
             ->with('user')
             ->get()
@@ -94,7 +102,7 @@ class SessionController extends Controller
                     'id' => $student->id,
                     'name' => $student->user->name,
                     'email' => $student->user->email,
-                    'is_present' => $attendance && $attendance->status === 'present' ? true : false,  // ✅ FIXÉ
+                    'is_present' => $attendance && $attendance->status === 'present' ? true : false,
                     'marked_at' => $attendance ? $attendance->marked_at : null,
                 ];
             });
@@ -112,40 +120,34 @@ class SessionController extends Controller
     }
 
     public function close(ClassSession $session)
-{
-    // Vérifier autorisation
-    if ($session->professor_id !== auth()->user()->professor->id) {
-        abort(403, 'Non autorisé');
-    }
-
-    // Récupérer les étudiants du module
-    $students = $session->module->students()->pluck('students.id');
-
-    // Parcourir TOUS les étudiants
-    foreach ($students as $student_id) {
-        // Vérifier si l'étudiant a marqué sa présence
-        $attendance = Attendance::where('class_session_id', $session->id)
-            ->where('student_id', $student_id)
-            ->first();
-
-        // ✅ Si pas d'attendance, créer une absence
-        if (!$attendance) {
-            Attendance::create([
-                'student_id' => $student_id,
-                'module_id' => $session->module_id,
-                'class_session_id' => $session->id,
-                'date' => $session->started_at->toDateString(),
-                'status' => 'absent',  // ✅ Marquer comme absent
-                'marked_at' => now(),
-            ]);
+    {
+        if ($session->professor_id !== auth()->user()->professor->id) {
+            abort(403, 'Non autorisé');
         }
+
+        $students = $session->module->students()->pluck('students.id');
+
+        foreach ($students as $student_id) {
+            $attendance = Attendance::where('class_session_id', $session->id)
+                ->where('student_id', $student_id)
+                ->first();
+
+            if (!$attendance) {
+                Attendance::create([
+                    'student_id' => $student_id,
+                    'module_id' => $session->module_id,
+                    'class_session_id' => $session->id,
+                    'date' => $session->started_at->toDateString(),
+                    'status' => 'absent',
+                    'marked_at' => now(),
+                ]);
+            }
+        }
+
+        $session->update(['status' => 'closed', 'ended_at' => now()]);
+
+        return redirect()->back()->with('success', '✅ Séance clôturée !');
     }
-
-    // Clôturer la séance
-    $session->update(['status' => 'closed']);
-
-    return redirect()->back()->with('success', '✅ Séance clôturée !');
-}
 
     public function stats(ClassSession $session)
     {
@@ -157,7 +159,7 @@ class SessionController extends Controller
         }
 
         $present = Attendance::where('class_session_id', $session->id)
-            ->where('status', 'present')  // ✅ FIXÉ
+            ->where('status', 'present')
             ->count();
         $total = $session->module->students()->count();
         $absent = $total - $present;
@@ -174,44 +176,107 @@ class SessionController extends Controller
         ]);
     }
 
-    // ✅ API ENDPOINT pour le polling
-    // ✅ API ENDPOINT pour le polling
-// ✅ API ENDPOINT pour le polling
-   public function getAttendances(ClassSession $session)
-{
-    $user = Auth::user();
-    $professor = Professor::where('user_id', $user->id)->first();
+    public function getAttendances(ClassSession $session)
+    {
+        $user = Auth::user();
+        $professor = Professor::where('user_id', $user->id)->first();
 
-    if (!$professor || $session->professor_id !== $professor->id) {
-        abort(403, 'Non autorisé.');
+        if (!$professor || $session->professor_id !== $professor->id) {
+            abort(403, 'Non autorisé.');
+        }
+
+        $attendances = Attendance::where('class_session_id', $session->id)
+            ->select('id', 'student_id', 'status', 'marked_at', 'date')
+            ->with('student.user:id,name,email')
+            ->get()
+            ->map(function ($attendance) {
+                return [
+                    'id' => $attendance->id,
+                    'student_id' => $attendance->student_id,
+                    'status' => $attendance->status,
+                    'marked_at' => $attendance->marked_at,
+                    'date' => $attendance->date,
+                    'student_name' => $attendance->student->user->name,
+                    'student_email' => $attendance->student->user->email,
+                ];
+            });
+
+        \Log::info('🔍 getAttendances - Session: ' . $session->id);
+        \Log::info('🔍 Nombre d\'attendances: ' . $attendances->count());
+        \Log::info('🔍 Présents: ' . $attendances->where('status', 'present')->count());
+
+        return response()->json([
+            'attendances' => $attendances,
+            'session_expired' => now() > $session->expires_at,
+        ]);
     }
 
-    // ✅ RÉCUPÉRER LES PRÉSENCES AVEC LES BONNES COLONNES
-    $attendances = Attendance::where('class_session_id', $session->id)
-        ->select('id', 'student_id', 'status', 'marked_at', 'date')
-        ->with('student.user:id,name,email')
-        ->get()
-        ->map(function ($attendance) {
-            return [
-                'id' => $attendance->id,
-                'student_id' => $attendance->student_id,
-                'status' => $attendance->status,  // ✅ 'present', 'absent', 'late'
-                'marked_at' => $attendance->marked_at,
-                'date' => $attendance->date,
-                'student_name' => $attendance->student->user->name,
-                'student_email' => $attendance->student->user->email,
-            ];
-        });
+    // ========== GESTION MENTIONS (PROPRES MODULES) ==========
+    public function gradesIndex()
+    {
+        $professor = auth()->user()->professor;
+        $modules = $professor->modules()
+            ->with('schoolClass')
+            ->get()
+            ->map(fn($module) => [
+                'id' => $module->id,
+                'name' => $module->name,
+                'schoolClass' => [
+                    'name' => $module->schoolClass->name,
+                ],
+            ]);
 
-    // ✅ LOGS DE DEBUG
-    \Log::info('🔍 getAttendances - Session: ' . $session->id);
-    \Log::info('🔍 Nombre d\'attendances: ' . $attendances->count());
-    \Log::info('🔍 Présents: ' . $attendances->where('status', 'present')->count());
-    \Log::info('🔍 Data: ' . json_encode($attendances));
+        return Inertia::render('Professor/StudentGrades', [
+            'modules' => $modules,
+        ]);
+    }
 
-    return response()->json([
-        'attendances' => $attendances,
-        'session_expired' => now() > $session->expires_at,
-    ]);
-}
+    public function gradesModule(Module $module)
+    {
+        $professor = auth()->user()->professor;
+
+        if ($module->professor_id !== $professor->id) {
+            abort(403, 'Non autorisé');
+        }
+
+        $students = $module->students()
+            ->with(['moduleGrades' => function ($query) use ($module) {
+                $query->where('module_id', $module->id);
+            }, 'user'])
+            ->get()
+            ->map(fn($student) => [
+                'id' => $student->id,
+                'name' => $student->user->name,
+                'email' => $student->user->email,
+                'gradeId' => $student->moduleGrades->first()?->id,
+                'mention' => $student->moduleGrades->first()?->mention ?? 'Passable',
+            ]);
+
+        return Inertia::render('Professor/StudentGradesEdit', [
+            'module' => [
+                'id' => $module->id,
+                'name' => $module->name,
+                'class' => $module->schoolClass->name,
+            ],
+            'students' => $students,
+        ]);
+    }
+
+    public function updateGrade(ModuleStudentGrade $moduleStudentGrade, Request $request)
+    {
+        $professor = auth()->user()->professor;
+        $module = $moduleStudentGrade->module;
+
+        if ($module->professor_id !== $professor->id) {
+            abort(403, 'Non autorisé');
+        }
+
+        $validated = $request->validate([
+            'mention' => 'required|in:Très Bien,Bien,Assez Bien,Passable',
+        ]);
+
+        $moduleStudentGrade->update(['mention' => $validated['mention']]);
+
+        return redirect()->back()->with('success', '✅ Mention mise à jour !');
+    }
 }

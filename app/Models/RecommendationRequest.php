@@ -14,6 +14,7 @@ class RecommendationRequest extends Model
     protected $fillable = [ 
         'student_id',
         'professor_id',
+        'module_id',
         'mention',
         'status',
         'rejection_reason',
@@ -32,6 +33,11 @@ class RecommendationRequest extends Model
     public function professor(): BelongsTo
     {
         return $this->belongsTo(Professor::class);
+    }
+
+    public function module(): BelongsTo
+    {
+        return $this->belongsTo(Module::class);
     }
 
     // ✅ CORRIGER : Spécifier la clé étrangère exacte

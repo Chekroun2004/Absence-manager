@@ -59,6 +59,11 @@ Route::middleware(['auth', 'verified', 'approved', 'role:admin'])
         Route::get('/pending-users', [UserApprovalController::class, 'index'])->name('pending-users');
         Route::post('/users/{user}/approve', [UserApprovalController::class, 'approve'])->name('users.approve');
         Route::post('/users/{user}/reject', [UserApprovalController::class, 'reject'])->name('users.reject');
+
+        // ========== GESTION MENTIONS ÉTUDIANTS ==========
+        Route::get('/grades', [ModuleController::class, 'gradesIndex'])->name('grades.index');
+        Route::get('/grades/module/{module}', [ModuleController::class, 'gradesModule'])->name('grades.module');
+        Route::post('/grades/{moduleStudentGrade}/update', [ModuleController::class, 'updateGrade'])->name('grades.update');
     });
 
 // ========== ROUTES PROFESSEUR ==========
@@ -85,6 +90,11 @@ Route::middleware(['auth', 'verified', 'approved', 'role:professor'])
         Route::post('/recommendations/{request}/accept', [RecommendationController::class, 'accept'])->name('recommendations.accept');
         Route::post('/recommendations/{request}/reject', [RecommendationController::class, 'reject'])->name('recommendations.reject');
         Route::get('/recommendations/{request}/download', [RecommendationController::class, 'downloadLetter'])->name('recommendations.download');
+
+        // ========== GESTION MENTIONS (PROPRES MODULES) ==========
+        Route::get('/grades', [ProfessorSessionController::class, 'gradesIndex'])->name('grades.index');
+        Route::get('/grades/module/{module}', [ProfessorSessionController::class, 'gradesModule'])->name('grades.module');
+        Route::post('/grades/{moduleStudentGrade}/update', [ProfessorSessionController::class, 'updateGrade'])->name('grades.update');
     });
 
 // ========== ROUTES ÉTUDIANT ==========
