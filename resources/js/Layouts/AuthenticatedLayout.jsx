@@ -19,13 +19,13 @@ export default function AuthenticatedLayout({ header, children }) {
                         <div className="flex items-center gap-3">
                             <Link href="/">
                                 <div className="flex items-center gap-2">
-                                    {/* LOGO FSR SIMPLIFIÉ - CERCLE AVEC INITIALES */}
+                                    {/* LOGO UMV SIMPLIFIÉ - CERCLE AVEC INITIALES */}
                                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-                                        <span className="text-white font-bold text-xs text-center">FSR</span>
+                                        <span className="text-white font-bold text-xs text-center">UMV</span>
                                     </div>
                                     <div className="hidden sm:block">
-                                        <p className="text-white font-bold text-sm">Faculté des Sciences</p>
-                                        <p className="text-blue-300 text-xs">Rabat - Gestion Absences</p>
+                                        <p className="text-white font-bold text-sm">Université Mohamed V</p>
+                                        <p className="text-blue-300 text-xs">Gestion des Absences</p>
                                     </div>
                                 </div>
                             </Link>
@@ -36,7 +36,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             <NavLink
                                 href={route('dashboard')}
                                 active={route().current('dashboard')}
-                                className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                             >
                                 Dashboard
                             </NavLink>
@@ -47,35 +47,35 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <NavLink
                                         href={route('admin.modules.index')}
                                         active={route().current('admin.modules.index')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Modules
                                     </NavLink>
                                     <NavLink
                                         href={route('admin.school-classes.index')}
                                         active={route().current('admin.school-classes.index')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Classes
                                     </NavLink>
                                     <NavLink 
                                         href={route('admin.grades.index')}
                                         active={route().current('admin.grades.index')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Mentions
                                     </NavLink>
                                     <NavLink
                                         href={route('admin.pending-users')}
                                         active={route().current('admin.pending-users')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Approbations
                                     </NavLink>
                                     <NavLink
                                         href={route('admin.users.index')}
                                         active={route().current('admin.users.index')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Utilisateurs
                                     </NavLink>
@@ -88,28 +88,28 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <NavLink
                                         href={route('professor.sessions')}
                                         active={route().current('professor.sessions')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Mes Séances
                                     </NavLink>
                                     <NavLink 
                                         href={route('professor.grades.index')}
                                         active={route().current('professor.grades.index')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Mentions
                                     </NavLink>
                                     <NavLink
                                         href={route('professor.absences.justifications')}
                                         active={route().current('professor.absences.justifications')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Justifications
                                     </NavLink>
                                     <NavLink
                                         href={route('professor.recommendations')}
                                         active={route().current('professor.recommendations')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Recommandations
                                     </NavLink>
@@ -122,21 +122,21 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <NavLink
                                         href={route('student.modules')}
                                         active={route().current('student.modules')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Mes Modules
                                     </NavLink>
                                     <NavLink
                                         href={route('student.mark-presence')}
                                         active={route().current('student.mark-presence')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Marquer Présence
                                     </NavLink>
                                     <NavLink
                                         href={route('student.letters')}
                                         active={route().current('student.letters')}
-                                        className="!text-gray-300 !hover:text-white !px-3 !py-2 !text-sm"
+                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Mes Lettres
                                     </NavLink>
@@ -256,28 +256,28 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <ResponsiveNavLink
                                     href={route('admin.pending-users')}
                                     active={route().current('admin.pending-users')}
-                                    className="!text-gray-300 !hover:text-white"
+                                    className="!text-white !hover:text-blue-200"
                                 >
                                     Approbations
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink
                                     href={route('admin.users.index')}
                                     active={route().current('admin.users.index')}
-                                    className="!text-gray-300 !hover:text-white"
+                                    className="!text-white !hover:text-blue-200"
                                 >
                                     Utilisateurs
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink
                                     href={route('admin.modules.index')}
                                     active={route().current('admin.modules.index')}
-                                    className="!text-gray-300 !hover:text-white"
+                                    className="!text-white !hover:text-blue-200"
                                 >
                                     Modules
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink
                                     href={route('admin.school-classes.index')}
                                     active={route().current('admin.school-classes.index')}
-                                    className="!text-gray-300 !hover:text-white"
+                                    className="!text-white !hover:text-blue-200"
                                 >
                                     Classes
                                 </ResponsiveNavLink>
@@ -290,21 +290,21 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <ResponsiveNavLink
                                     href={route('professor.sessions')}
                                     active={route().current('professor.sessions')}
-                                    className="!text-gray-300 !hover:text-white"
+                                    className="!text-white !hover:text-blue-200"
                                 >
                                     Mes Séances
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink
                                     href={route('professor.absences.justifications')}
                                     active={route().current('professor.absences.justifications')}
-                                    className="!text-gray-300 !hover:text-white"
+                                    className="!text-white !hover:text-blue-200"
                                 >
                                     Justifications
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink
                                     href={route('professor.recommendations')}
                                     active={route().current('professor.recommendations')}
-                                    className="!text-gray-300 !hover:text-white"
+                                    className="!text-white !hover:text-blue-200"
                                 >
                                     Recommandations
                                 </ResponsiveNavLink>
@@ -317,21 +317,21 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <ResponsiveNavLink
                                     href={route('student.modules')}
                                     active={route().current('student.modules')}
-                                    className="!text-gray-300 !hover:text-white"
+                                    className="!text-white !hover:text-blue-200"
                                 >
                                     Mes Modules
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink
                                     href={route('student.mark-presence')}
                                     active={route().current('student.mark-presence')}
-                                    className="!text-gray-300 !hover:text-white"
+                                    className="!text-white !hover:text-blue-200"
                                 >
                                     Marquer Présence
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink
                                     href={route('student.letters')}
                                     active={route().current('student.letters')}
-                                    className="!text-gray-300 !hover:text-white"
+                                    className="!text-white !hover:text-blue-200"
                                 >
                                     Mes Lettres
                                 </ResponsiveNavLink>
