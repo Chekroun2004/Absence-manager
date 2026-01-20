@@ -59,16 +59,18 @@ export default function UserManagement({ users }) {
     <AuthenticatedLayout>
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold mb-8">
-            👥 Gestion des Utilisateurs
-          </h1>
+          {/* HEADER GRADIENT */}
+          <div className="mb-8 rounded-lg bg-gradient-to-r from-red-900 to-red-700 shadow-lg px-6 py-6">
+            <h1 className="text-3xl font-bold text-white">Gestion des Utilisateurs</h1>
+            <p className="text-red-100 mt-2">Gérer les comptes utilisateurs du système</p>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* AJOUTER/MODIFIER UTILISATEUR */}
-            <div className="bg-white shadow rounded p-6">
+            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">
-                  {editingUser ? '✏️ Modifier' : '➕ Ajouter'}
+                <h2 className="text-xl font-bold text-red-700">
+                  {editingUser ? 'Modifier' : 'Ajouter'}
                 </h2>
                 <button
                   onClick={() => {
@@ -97,7 +99,7 @@ export default function UserManagement({ users }) {
                       onChange={(e) =>
                         setData('name', e.target.value)
                       }
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                       required
                     />
                     {errors.name && (
@@ -117,7 +119,7 @@ export default function UserManagement({ users }) {
                       onChange={(e) =>
                         setData('email', e.target.value)
                       }
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                       required
                     />
                     {errors.email && (
@@ -143,7 +145,7 @@ export default function UserManagement({ users }) {
                       onChange={(e) =>
                         setData('password', e.target.value)
                       }
-                      className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                       required={!editingUser}
                     />
                     {errors.password && (
@@ -163,13 +165,13 @@ export default function UserManagement({ users }) {
                         onChange={(e) =>
                           setData('role', e.target.value)
                         }
-                        className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                       >
                         <option value="student">
-                          👨🎓 Étudiant
+                          Étudiant
                         </option>
                         <option value="professor">
-                          👨🏫 Professeur
+                          Professeur
                         </option>
                       </select>
                     </div>
@@ -177,18 +179,29 @@ export default function UserManagement({ users }) {
 
                   <button
                     type="submit"
-                    className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-semibold"
+                    className="w-full rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700 transition shadow-md font-semibold"
                   >
                     {editingUser ? 'Modifier' : 'Créer'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowForm(false);
+                      setEditingUser(null);
+                      reset();
+                    }}
+                    className="w-full rounded-lg bg-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-400 transition"
+                  >
+                    Annuler
                   </button>
                 </form>
               )}
             </div>
 
             {/* PROFESSEURS */}
-            <div className="bg-white shadow rounded p-6">
-              <h2 className="text-xl font-bold mb-4">
-                👨🏫 Professeurs ({professors.length})
+            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
+              <h2 className="text-xl font-bold mb-4 text-red-700">
+                Professeurs ({professors.length})
               </h2>
               <div className="space-y-3">
                 {professors.length === 0 ? (
@@ -210,15 +223,15 @@ export default function UserManagement({ users }) {
                       <div className="mt-2 flex gap-2">
                         <button
                           onClick={() => handleEdit(user)}
-                          className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded hover:bg-blue-200"
+                          className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 font-medium transition"
                         >
-                          ✏️ Modifier
+                          Modifier
                         </button>
                         <button
                           onClick={() => handleDelete(user)}
-                          className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded hover:bg-red-200"
+                          className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded hover:bg-red-300 font-medium transition"
                         >
-                          🗑️ Supprimer
+                          Supprimer
                         </button>
                       </div>
                     </div>
@@ -228,9 +241,9 @@ export default function UserManagement({ users }) {
             </div>
 
             {/* ÉTUDIANTS */}
-            <div className="bg-white shadow rounded p-6">
-              <h2 className="text-xl font-bold mb-4">
-                👨🎓 Étudiants ({students.length})
+            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
+              <h2 className="text-xl font-bold mb-4 text-red-700">
+                Étudiants ({students.length})
               </h2>
               <div className="space-y-3">
                 {students.length === 0 ? (
@@ -252,15 +265,15 @@ export default function UserManagement({ users }) {
                       <div className="mt-2 flex gap-2">
                         <button
                           onClick={() => handleEdit(user)}
-                          className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded hover:bg-blue-200"
+                          className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 font-medium transition"
                         >
-                          ✏️ Modifier
+                          Modifier
                         </button>
                         <button
                           onClick={() => handleDelete(user)}
-                          className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded hover:bg-red-200"
+                          className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded hover:bg-red-300 font-medium transition"
                         >
-                          🗑️ Supprimer
+                          Supprimer
                         </button>
                       </div>
                     </div>
