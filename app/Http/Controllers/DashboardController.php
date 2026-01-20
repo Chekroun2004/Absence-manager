@@ -119,7 +119,14 @@ class DashboardController extends Controller
 
         // ========== DASHBOARD ÉTUDIANT ==========
         if ($user->role === 'student') {
+            // ✅ Créer automatiquement le record Student s'il n'existe pas
             $student = $user->student;
+            if (!$student) {
+                $student = \App\Models\Student::create([
+                    'user_id' => $user->id,
+                ]);
+            }
+            
             $modules = $student->modules()->pluck('modules.id');
             
             $sessions = \App\Models\ClassSession::whereIn('module_id', $modules)
@@ -175,10 +182,12 @@ class DashboardController extends Controller
 
             // ✅ VÉRIFIER SI ÉTUDIANT A +3 ABSENCES (exclure les justifications approuvées)
             $totalAbsences = Attendance::where('student_id', $student->id)
-                ->where('status', '!=', 'present')
-                ->doesntHave('justification', 'or', function ($query) {
-                    $query->where('status', '!=', 'approved');
+                ->where('status', 'absent')
+                ->where(function ($query) {
+                    $query->doesntHave('justification')
+                          ->orWhereHas('justification', fn($q) => $q->where('status', '!=', 'approved'));
                 })
+                ->distinct('class_session_id')
                 ->count();
             $hasHighAbsence = $totalAbsences >= 3;
 
