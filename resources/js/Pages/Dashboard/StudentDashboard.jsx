@@ -80,32 +80,28 @@ export default function StudentDashboard({ stats, sessions }) {
   return (
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        {/* HEADER */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            👨🎓 Mon Historique de Présence
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Consultez vos présences, absences et justifications
-          </p>
+        {/* HEADER GRADIENT */}
+        <div className="mb-8 rounded-lg bg-gradient-to-r from-green-900 to-green-700 shadow-lg px-6 py-8">
+          <h1 className="text-4xl font-bold text-white">Mon Historique de Présence</h1>
+          <p className="text-green-100 mt-2">Consultez vos présences, absences et justifications</p>
         </div>
 
         {/* STATISTIQUES */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <StatCard
             title="Total Séances"
             value={stats.total_sessions}
-            color="blue"
+            color="green"
           />
           <StatCard
             title="Présences"
             value={stats.present_count}
-            color="green"
+            color="emerald"
           />
           <StatCard
             title="Justifiées"
             value={stats.justified_count}
-            color="cyan"
+            color="lime"
           />
           <StatCard
             title="Absences"
@@ -115,28 +111,27 @@ export default function StudentDashboard({ stats, sessions }) {
           <StatCard
             title="Taux Présence"
             value={`${stats.attendance_rate}%`}
-            color="purple"
-            span="md:col-span-4"
+            color="teal"
           />
         </div>
 
         {/* FILTRES */}
-        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
+        <div className="bg-white overflow-hidden shadow-md sm:rounded-lg p-6 mb-6 border-l-4 border-green-500">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Filtres</h3>
           <div className="flex gap-2 flex-wrap">
             {[
               { value: 'all', label: 'Tous', icon: '📋' },
-              { value: 'present', label: '✅ Présences', icon: '✅' },
-              { value: 'justified', label: '✓ Justifiées', icon: '✓' },
-              { value: 'absent', label: '❌ Absences', icon: '❌' },
+              { value: 'present', label: 'Présences', icon: '✓' },
+              { value: 'justified', label: 'Justifiées', icon: '✓' },
+              { value: 'absent', label: 'Absences', icon: 'X' },
             ].map((btn) => (
               <button
                 key={btn.value}
                 onClick={() => setFilter(btn.value)}
                 className={`px-4 py-2 rounded font-medium transition ${
                   filter === btn.value
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-green-600 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-700 hover:bg-green-50 hover:text-green-700 border border-gray-200'
                 }`}
               >
                 {btn.label}
@@ -146,24 +141,24 @@ export default function StudentDashboard({ stats, sessions }) {
         </div>
 
         {/* TABLEAU SÉANCES */}
-        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div className="bg-white overflow-hidden shadow-md sm:rounded-lg border-l-4 border-green-500">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+              <thead className="bg-green-50 border-b-2 border-green-500">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
                     Module
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
                     Professeur
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
                     Date & Heure
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
                     Statut
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -173,15 +168,15 @@ export default function StudentDashboard({ stats, sessions }) {
                   filteredSessions.map((session) => (
                     <tr
                       key={session.id}
-                      className="hover:bg-gray-50 transition"
+                      className="hover:bg-green-50 transition"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                         {session.module_name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                         {session.professor_name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                         {session.started_at}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -195,9 +190,9 @@ export default function StudentDashboard({ stats, sessions }) {
                             !session.justification && (
                               <button
                                 onClick={() => handleJustifyClick(session)}
-                                className="text-indigo-600 hover:text-indigo-900 font-medium transition"
+                                className="text-green-600 hover:text-green-900 font-medium transition hover:underline"
                               >
-                                📝 Justifier
+                                Justifier
                               </button>
                             )}
 
@@ -205,9 +200,9 @@ export default function StudentDashboard({ stats, sessions }) {
                           {session.justification && (
                             <button
                               onClick={() => setSelectedSession(session)}
-                              className="text-blue-600 hover:text-blue-900 font-medium transition"
+                              className="text-green-600 hover:text-green-900 font-medium transition hover:underline"
                             >
-                              👁️ Détails
+                              Détails
                             </button>
                           )}
                         </div>
@@ -218,7 +213,7 @@ export default function StudentDashboard({ stats, sessions }) {
                   <tr>
                     <td
                       colSpan="5"
-                      className="px-6 py-8 text-center text-gray-500"
+                      className="px-6 py-8 text-center text-gray-500 font-medium"
                     >
                       Aucune séance trouvée
                     </td>
@@ -252,19 +247,44 @@ export default function StudentDashboard({ stats, sessions }) {
 
 function StatCard({ title, value, color, span = 'col-span-1' }) {
   const colors = {
-    blue: 'bg-blue-50 border-blue-500 text-blue-600',
-    green: 'bg-green-50 border-green-500 text-green-600',
-    red: 'bg-red-50 border-red-500 text-red-600',
-    purple: 'bg-purple-50 border-purple-500 text-purple-600',
-    cyan: 'bg-cyan-50 border-cyan-500 text-cyan-600',
+    green: {
+      bg: 'bg-green-50',
+      border: 'border-green-500',
+      text: 'text-green-700',
+      hover: 'hover:shadow-lg hover:bg-green-100'
+    },
+    emerald: {
+      bg: 'bg-emerald-50',
+      border: 'border-emerald-500',
+      text: 'text-emerald-700',
+      hover: 'hover:shadow-lg hover:bg-emerald-100'
+    },
+    lime: {
+      bg: 'bg-lime-50',
+      border: 'border-lime-500',
+      text: 'text-lime-700',
+      hover: 'hover:shadow-lg hover:bg-lime-100'
+    },
+    red: {
+      bg: 'bg-red-50',
+      border: 'border-red-500',
+      text: 'text-red-700',
+      hover: 'hover:shadow-lg hover:bg-red-100'
+    },
+    teal: {
+      bg: 'bg-teal-50',
+      border: 'border-teal-500',
+      text: 'text-teal-700',
+      hover: 'hover:shadow-lg hover:bg-teal-100'
+    },
   };
 
+  const colorClass = colors[color];
+
   return (
-    <div
-      className={`${colors[color]} overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 ${span}`}
-    >
-      <div className="text-sm font-semibold">{title}</div>
-      <div className="text-3xl font-bold mt-2">{value}</div>
+    <div className={`${colorClass.bg} ${colorClass.hover} overflow-hidden shadow-md sm:rounded-lg p-6 border-l-4 ${colorClass.border} transition transform hover:scale-105 ${span}`}>
+      <div className={`text-sm font-semibold ${colorClass.text}`}>{title}</div>
+      <div className={`text-4xl font-bold mt-3 ${colorClass.text}`}>{value}</div>
     </div>
   );
 }
@@ -278,7 +298,7 @@ function JustificationDetailsModal({ session, onClose }) {
         headerClass: 'bg-gradient-to-r from-green-600 to-green-700',
         badgeClass: 'bg-green-50 border-green-200',
         textClass: 'text-green-900',
-        icon: '✅',
+        icon: '✓',
         label: 'Approuvée',
       };
     }
@@ -287,14 +307,14 @@ function JustificationDetailsModal({ session, onClose }) {
         headerClass: 'bg-gradient-to-r from-red-600 to-red-700',
         badgeClass: 'bg-red-50 border-red-200',
         textClass: 'text-red-900',
-        icon: '❌',
+        icon: 'X',
         label: 'Rejetée',
       };
     }
     return {
-      headerClass: 'bg-gradient-to-r from-yellow-600 to-yellow-700',
-      badgeClass: 'bg-yellow-50 border-yellow-200',
-      textClass: 'text-yellow-900',
+      headerClass: 'bg-gradient-to-r from-amber-600 to-amber-700',
+      badgeClass: 'bg-amber-50 border-amber-200',
+      textClass: 'text-amber-900',
       icon: '⏳',
       label: 'En attente',
     };
@@ -310,7 +330,7 @@ function JustificationDetailsModal({ session, onClose }) {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-white">
-                {statusInfo.icon} Détails de la Justification
+                Détails de la Justification
               </h2>
               <p className="text-white text-opacity-90 text-sm mt-1">
                 {session.module_name}
@@ -318,9 +338,9 @@ function JustificationDetailsModal({ session, onClose }) {
             </div>
             <button
               onClick={onClose}
-              className="text-white hover:text-gray-100 text-2xl transition"
+              className="text-white hover:text-gray-100 text-2xl transition font-bold"
             >
-              ✕
+              ×
             </button>
           </div>
         </div>
@@ -328,22 +348,22 @@ function JustificationDetailsModal({ session, onClose }) {
         {/* CONTENU */}
         <div className="p-6 space-y-6">
           {/* STATUT */}
-          <div className={`${statusInfo.badgeClass} p-4 rounded border`}>
+          <div className={`${statusInfo.badgeClass} p-4 rounded-lg border`}>
             <p className={`${statusInfo.textClass} font-semibold`}>
-              {statusInfo.icon} Statut: {statusInfo.label}
+              Statut: {statusInfo.label}
             </p>
           </div>
 
           {/* MODULE & DATE */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">
+              <h3 className="text-sm font-semibold text-gray-700 uppercase mb-2">
                 Module
               </h3>
               <p className="text-gray-900 font-medium">{session.module_name}</p>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">
+              <h3 className="text-sm font-semibold text-gray-700 uppercase mb-2">
                 Date Séance
               </h3>
               <p className="text-gray-900 font-medium">{session.started_at}</p>
@@ -352,10 +372,10 @@ function JustificationDetailsModal({ session, onClose }) {
 
           {/* RAISON */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">
+            <h3 className="text-sm font-semibold text-gray-700 uppercase mb-2">
               Raison de l'absence
             </h3>
-            <div className="bg-gray-50 p-4 rounded border border-gray-200">
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
               <p className="text-gray-900 whitespace-pre-wrap">
                 {justification.reason}
               </p>
@@ -365,10 +385,10 @@ function JustificationDetailsModal({ session, onClose }) {
           {/* MOTIF REJET */}
           {justification.status === 'rejected' && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">
-                ❌ Motif du Rejet
+              <h3 className="text-sm font-semibold text-gray-700 uppercase mb-2">
+                Motif du Rejet
               </h3>
-              <div className="bg-red-50 p-4 rounded border border-red-200">
+              <div className="bg-red-50 p-4 rounded-lg border border-red-200">
                 <p className="text-red-900 whitespace-pre-wrap">
                   {justification.rejection_reason}
                 </p>
@@ -381,7 +401,7 @@ function JustificationDetailsModal({ session, onClose }) {
         <div className="bg-gray-50 px-6 py-4 border-t text-right">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
+            className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition shadow-md"
           >
             Fermer
           </button>
