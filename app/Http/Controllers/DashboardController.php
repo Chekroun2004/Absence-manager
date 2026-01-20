@@ -176,11 +176,8 @@ class DashboardController extends Controller
             // ✅ VÉRIFIER SI ÉTUDIANT A +3 ABSENCES (exclure les justifications approuvées)
             $totalAbsences = Attendance::where('student_id', $student->id)
                 ->where('status', '!=', 'present')
-                ->whereDoesntHave('session', function ($query) {
-                    $query->whereHas('justifications', function ($subQuery) {
-                        $subQuery->where('student_id', auth()->id())
-                                 ->where('status', 'approved');
-                    });
+                ->doesntHave('justification', 'or', function ($query) {
+                    $query->where('status', '!=', 'approved');
                 })
                 ->count();
             $hasHighAbsence = $totalAbsences >= 3;
