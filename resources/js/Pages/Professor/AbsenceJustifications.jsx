@@ -62,36 +62,34 @@ export default function AbsenceJustifications({ justifications, pagination }) {
     <AuthenticatedLayout>
       <Head title="Justifications d'Absences" />
 
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          {/* HEADER */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">
-              📝 Justifications d'Absences
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Gérez les justifications d'absences des étudiants de vos modules
-            </p>
+      <div className="min-h-screen" style={{ backgroundColor: '#f8fafc' }}>
+        {/* HEADER */}
+        <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-8">
+          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <h1 className="text-4xl font-bold">Justifications d'absences</h1>
+            <p className="text-blue-100 mt-2">Examinez et approuvez les demandes</p>
           </div>
+        </div>
 
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-12">
           {/* FILTRES */}
-          <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Filtres</h3>
-            <div className="flex gap-2 flex-wrap">
+          <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6 mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Filtrer par statut</h3>
+            <div className="flex gap-3 flex-wrap">
               {[
-                { value: 'all', label: 'Toutes', color: 'indigo' },
-                { value: 'pending', label: '⏳ En attente', color: 'yellow' },
-                { value: 'approved', label: '✅ Approuvées', color: 'green' },
-                { value: 'rejected', label: '❌ Rejetées', color: 'red' },
+                { value: 'all', label: 'Toutes', color: '#1e40af' },
+                { value: 'pending', label: 'En attente', color: '#d97706' },
+                { value: 'approved', label: 'Approuvées', color: '#059669' },
+                { value: 'rejected', label: 'Rejetées', color: '#dc2626' },
               ].map((btn) => (
                 <button
                   key={btn.value}
                   onClick={() => setFilter(btn.value)}
-                  className={`px-4 py-2 rounded font-medium transition ${
-                    filter === btn.value
-                      ? `bg-${btn.color}-600 text-white`
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
+                  style={{
+                    backgroundColor: filter === btn.value ? btn.color : '#e2e8f0',
+                    color: filter === btn.value ? 'white' : '#64748b',
+                  }}
+                  className="px-4 py-2 rounded font-medium transition hover:shadow-md"
                 >
                   {btn.label}
                 </button>
@@ -100,39 +98,27 @@ export default function AbsenceJustifications({ justifications, pagination }) {
           </div>
 
           {/* TABLEAU */}
-          <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+          <div className="bg-white rounded-lg shadow-md border border-gray-200">
             {filteredJustifications.length > 0 ? (
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Étudiant
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Module
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Date Séance
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Raison & Document
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Statut
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                        Actions
-                      </th>
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gradient-to-r from-gray-800 to-gray-700">
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Étudiant</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Module</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Date</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Raison</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Statut</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="divide-y divide-gray-200">
                     {filteredJustifications.map((justification) => (
                       <tr
                         key={justification.id}
                         className="hover:bg-gray-50 transition"
                       >
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 py-4">
                           <div>
                             <p className="font-medium text-gray-900">
                               {justification.student_name}
@@ -142,66 +128,48 @@ export default function AbsenceJustifications({ justifications, pagination }) {
                             </p>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
                           {justification.module_name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        <td className="px-6 py-4 text-sm text-gray-600">
                           {justification.session_date}
                         </td>
-                        {/* ✅ COLONNE AMÉLIORÉE : Raison + Document */}
                         <td className="px-6 py-4 text-sm text-gray-600">
                           <div className="space-y-2">
                             <p className="max-w-xs truncate font-medium text-gray-900">
                               {justification.reason}
                             </p>
                             {justification.document_path && (
-                              <a
-                                href={route(
-                                  'professor.absences.justifications.download',
-                                  justification.id
-                                )}
-                                className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-900 font-medium text-xs bg-indigo-50 px-3 py-1 rounded hover:bg-indigo-100 transition"
-                              >
-                                📎 Télécharger document
-                              </a>
+                              <p className="text-xs text-blue-600">Document joint</p>
                             )}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {getStatusBadge(justification.status)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm space-y-2">
-                          <div className="flex gap-2 flex-wrap">
-                            {/* BOUTON VOIR DÉTAILS */}
+                        <td className="px-6 py-4 text-sm">
+                          <div className="flex gap-2">
                             <button
                               onClick={() => setSelectedJustification(justification)}
                               className="text-blue-600 hover:text-blue-900 font-medium transition"
                             >
-                              👁️ Voir
+                              Voir
                             </button>
-
-                            {/* BOUTON APPROUVER (si pending) */}
                             {justification.status === 'pending' && (
-                              <button
-                                onClick={() =>
-                                  handleApprove(justification.id)
-                                }
-                                className="text-green-600 hover:text-green-900 font-medium transition"
-                              >
-                                ✅ Approuver
-                              </button>
-                            )}
-
-                            {/* BOUTON REJETER (si pending) */}
-                            {justification.status === 'pending' && (
-                              <button
-                                onClick={() =>
-                                  handleOpenRejectModal(justification)
-                                }
-                                className="text-red-600 hover:text-red-900 font-medium transition"
-                              >
-                                ❌ Rejeter
-                              </button>
+                              <>
+                                <button
+                                  onClick={() => handleApprove(justification.id)}
+                                  className="text-green-600 hover:text-green-900 font-medium transition"
+                                >
+                                  Approuver
+                                </button>
+                                <button
+                                  onClick={() => handleOpenRejectModal(justification)}
+                                  className="text-red-600 hover:text-red-900 font-medium transition"
+                                >
+                                  Rejeter
+                                </button>
+                              </>
                             )}
                           </div>
                         </td>
@@ -211,8 +179,8 @@ export default function AbsenceJustifications({ justifications, pagination }) {
                 </table>
               </div>
             ) : (
-              <div className="p-6 text-center text-gray-500">
-                Aucune justification à afficher
+              <div className="p-12 text-center">
+                <p className="text-gray-500">Aucune justification à afficher</p>
               </div>
             )}
           </div>

@@ -128,85 +128,78 @@ export default function ActiveSession({ session, students: initialStudents }) {
     <AuthenticatedLayout>
       <Head title={`Séance Active - ${session.module_name}`} />
 
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          {/* CODE PIN AFFICHAGE */}
-          <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-            <div className="p-8 text-center">
-              <h1 className="text-3xl font-bold mb-2">🚀 Séance Lancée !</h1>
-              <p className="text-gray-600 mb-6">{session.module_name}</p>
+      <div className="min-h-screen" style={{ backgroundColor: '#f8fafc' }}>
+        {/* HEADER */}
+        <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-8">
+          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <h1 className="text-4xl font-bold">{session.module_name}</h1>
+            <p className="text-blue-100 mt-2">Séance en cours</p>
+          </div>
+        </div>
 
-              {/* CODE PIN EN GROS */}
-              <div className={`rounded-lg p-8 mb-6 text-white ${
-                timeLeft <= 0
-                  ? 'bg-gradient-to-r from-gray-500 to-gray-600'
-                  : 'bg-gradient-to-r from-blue-500 to-blue-600'
-              }`}>
-                <p className="text-sm mb-2">Code PIN</p>
-                <p className="text-6xl font-bold font-mono tracking-widest mb-4">
-                  {timeLeft <= 0 ? '⏹️ EXPIRÉ' : session.code}
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-12">
+          {/* CODE PIN - SECTION PRINCIPALE */}
+          <div className="bg-white rounded-lg shadow-lg border border-gray-200 mb-8 overflow-hidden">
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-12 text-center border-b border-gray-200">
+              <p className="text-sm font-semibold text-gray-600 uppercase mb-4">Code PIN à communiquer</p>
+              <div style={{ backgroundColor: '#1e40af' }} className="w-48 mx-auto rounded-lg p-8 text-white">
+                <p className="text-6xl font-bold font-mono tracking-widest">
+                  {timeLeft <= 0 ? 'EXPIRÉ' : session.code}
                 </p>
-                <button
-                  onClick={copyCode}
-                  disabled={timeLeft <= 0}
-                  className={`${
-                    timeLeft <= 0
-                      ? 'bg-gray-400 cursor-not-allowed'
-                      : 'bg-white hover:bg-gray-100'
-                  } text-blue-600 px-6 py-2 rounded font-semibold`}
-                >
-                  {copied ? '✅ Copié !' : '📋 Copier'}
-                </button>
               </div>
+              <p style={{ color: timeLeft <= 0 ? '#dc2626' : '#059669' }} className="text-5xl font-bold font-mono mt-6">
+                {timeLeft}s
+              </p>
+              <p className="text-gray-600 text-sm mt-2">Temps restant</p>
 
-              {/* ⚠️ ALERTE SI SÉANCE OUBLIÉE */}
-              {session.is_forgotten && (
-                <div className="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded">
-                  <p className="text-sm text-yellow-800 font-semibold">
-                    ⚠️ Cette séance a été lancée il y a longtemps. N'oublie pas de la terminer!
-                  </p>
-                </div>
-              )}
-
-              {/* TIMER */}
-              <div
-                className={`text-5xl font-bold font-mono ${
-                  timeLeft <= 0
-                    ? 'text-gray-600'
-                    : timeLeft <= 5
-                      ? 'text-red-600'
-                      : 'text-green-600'
-                }`}
+              <button
+                onClick={copyCode}
+                disabled={timeLeft <= 0}
+                style={{ backgroundColor: timeLeft <= 0 ? '#9ca3af' : '#1e40af' }}
+                className="mt-6 text-white px-6 py-2 rounded font-medium hover:opacity-90 transition disabled:cursor-not-allowed"
               >
-                ⏱️ {timeLeft}s
+                {copied ? 'Copié' : 'Copier le code'}
+              </button>
+            </div>
+
+            {/* ALERTE SESSION OUBLIÉE */}
+            {session.is_forgotten && (
+              <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-0">
+                <p className="text-sm text-amber-900 font-medium">
+                  Cette séance a été lancée il y a plus de 20 minutes
+                </p>
               </div>
-              <p className="text-gray-600 mt-2">
-                {timeLeft <= 0 ? '❌ Séance terminée' : 'Temps restant'}
+            )}
+          </div>
+
+          {/* STATS */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+              <p className="text-sm font-medium text-gray-600">Présents</p>
+              <p className="text-4xl font-bold text-green-600 mt-2">{presentCount}</p>
+              <p className="text-xs text-gray-500 mt-2">sur {totalCount}</p>
+            </div>
+            <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+              <p className="text-sm font-medium text-gray-600">Taux</p>
+              <p className="text-4xl font-bold text-blue-900 mt-2">{totalCount > 0 ? Math.round((presentCount / totalCount) * 100) : 0}%</p>
+            </div>
+            <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+              <p className="text-sm font-medium text-gray-600">Polling</p>
+              <p className="text-sm text-gray-600 mt-2">
+                {timeLeft > 0 ? 'Actif (2s)' : 'Arrêté'}
               </p>
             </div>
           </div>
 
-          {/* ÉTUDIANTS PRÉSENTS */}
-          <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+          {/* LISTE ÉTUDIANTS */}
+          <div className="bg-white rounded-lg shadow-md border border-gray-200">
+            <div className="bg-gradient-to-r from-gray-800 to-gray-700 px-6 py-4">
+              <h2 className="text-xl font-semibold text-white">Étudiants ({presentCount}/{totalCount})</h2>
+            </div>
             <div className="p-6">
-              <h2 className="text-2xl font-bold mb-4">
-                👥 Étudiants ({presentCount}/{totalCount})
-              </h2>
-
-              {/* 🔄 Indicateur de synchronisation */}
-              {timeLeft > 0 ? (
-                <div className="mb-4 p-3 bg-blue-50 rounded text-sm text-blue-700">
-                  🔄 Mise à jour automatique en cours... (toutes les 2s)
-                </div>
-              ) : (
-                <div className="mb-4 p-3 bg-red-50 rounded text-sm text-red-700">
-                  ⏹️ Séance terminée - Polling arrêté
-                </div>
-              )}
-
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {students.length === 0 ? (
-                  <p className="text-gray-500">Aucun étudiant assigné.</p>
+                  <p className="text-gray-500 text-center py-8">Aucun étudiant</p>
                 ) : (
                   students.map((student) => (
                     <div
@@ -217,62 +210,53 @@ export default function ActiveSession({ session, students: initialStudents }) {
                           : 'bg-gray-50 border-gray-300'
                       }`}
                     >
-                      <div className="flex-1">
-                        <p className="font-semibold">{student.name}</p>
-                        <p className="text-sm text-gray-600">
-                          {student.email}
-                        </p>
+                      <div>
+                        <p className="font-medium text-gray-900">{student.name}</p>
+                        <p className="text-sm text-gray-600">{student.email}</p>
                       </div>
-
-                      {student.is_present ? (
-                        <div className="text-right">
-                          <p className="text-green-600 font-semibold">
-                            ✅ Présent
-                          </p>
-                          <p className="text-xs text-gray-600">
-                            {student.marked_at
-                              ? new Date(
-                                  student.marked_at
-                                ).toLocaleTimeString('fr-FR')
-                              : ''}
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="text-right">
-                          <p className="text-gray-500">⏳ En attente</p>
-                        </div>
-                      )}
+                      <div className="text-right">
+                        {student.is_present ? (
+                          <div>
+                            <p className="text-green-600 font-semibold text-sm">Présent</p>
+                            <p className="text-xs text-gray-500">
+                              {student.marked_at ? new Date(student.marked_at).toLocaleTimeString('fr-FR') : ''}
+                            </p>
+                          </div>
+                        ) : (
+                          <p className="text-gray-500 text-sm">En attente</p>
+                        )}
+                      </div>
                     </div>
                   ))
                 )}
               </div>
-
-              {/* ✅ BOUTONS D'ACTIONS */}
-              <div className="flex gap-3 mt-6">
-                <button
-                  onClick={handleResumeSession}
-                  disabled={isResuming}
-                  className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isResuming ? '⏳ Réactivation...' : '🔄 Réactiver le code'}
-                </button>
-
-                <button
-                  onClick={handleCloseSession}
-                  disabled={isClosing}
-                  className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isClosing ? '⏳ Arrêt en cours...' : '⛔ Arrêter la séance'}
-                </button>
-                
-                <button
-                  onClick={() => router.visit(route('professor.sessions'))}
-                  className="flex-1 bg-gray-600 text-white py-2 rounded hover:bg-gray-700 font-semibold"
-                >
-                  ← Retour aux séances
-                </button>
-              </div>
             </div>
+          </div>
+
+          {/* ACTIONS */}
+          <div className="flex gap-4 mt-8">
+            <button
+              onClick={handleResumeSession}
+              disabled={isResuming}
+              style={{ backgroundColor: '#059669' }}
+              className="flex-1 text-white px-6 py-3 rounded font-medium hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isResuming ? 'Réactivation...' : 'Nouveau code'}
+            </button>
+            <button
+              onClick={handleCloseSession}
+              disabled={isClosing}
+              style={{ backgroundColor: '#dc2626' }}
+              className="flex-1 text-white px-6 py-3 rounded font-medium hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isClosing ? 'Fermeture...' : 'Fermer'}
+            </button>
+            <button
+              onClick={() => router.visit(route('professor.sessions'))}
+              className="flex-1 bg-gray-600 text-white px-6 py-3 rounded font-medium hover:bg-gray-700 transition"
+            >
+              Retour
+            </button>
           </div>
         </div>
       </div>
