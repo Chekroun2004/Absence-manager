@@ -44,8 +44,24 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
         <AuthenticatedLayout>
             <Head title="Mes Lettres de Recommandation" />
 
+            {/* HEADER - FULL WIDTH */}
+            <div className="bg-gradient-to-r from-green-900 to-green-700 text-white py-8">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-between items-center">
+                    <div>
+                        <h1 className="text-4xl font-bold">Mes Lettres de Recommandation</h1>
+                        <p className="text-green-100 mt-2">Demander et télécharger vos lettres de recommandation</p>
+                    </div>
+                    <button
+                        onClick={() => setShowModal(true)}
+                        className="px-6 py-3 bg-white text-green-700 font-semibold rounded-lg hover:bg-green-50 transition shadow-md"
+                    >
+                        + Nouvelle Demande
+                    </button>
+                </div>
+            </div>
+
             <div className="py-12">
-                <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     {/* Messages Flash */}
                     {flash?.success && (
                         <div className="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-800 rounded-lg font-medium">
@@ -59,20 +75,6 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                     )}
 
                     <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-                        {/* HEADER GRADIENT */}
-                        <div className="bg-gradient-to-r from-green-900 to-green-700 px-6 py-6">
-                            <div className="flex justify-between items-center">
-                                <h1 className="text-3xl font-bold text-white">Mes Lettres de Recommandation</h1>
-                                <button
-                                    onClick={() => setShowModal(true)}
-                                    className="px-4 py-2 bg-white text-green-700 font-semibold rounded-lg hover:bg-green-50 transition shadow-md"
-                                >
-                                    + Nouvelle Demande
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="p-6">
 
                         {/* MODAL NOUVELLE DEMANDE */}
                         {showModal && (
@@ -198,7 +200,6 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                                 ))}
                             </div>
                         )}
-                        </div>
                     </div>
                 </div>
             </div>

@@ -63,15 +63,16 @@ export default function MarkSessionPresence() {
     };
 
     return (
-        <AuthenticatedLayout
-            header={
-                <div className="bg-gradient-to-r from-green-900 to-green-700 text-white px-6 py-8 rounded-lg shadow-lg">
-                    <h1 className="text-3xl font-bold">Marquer ma présence</h1>
+        <AuthenticatedLayout>
+            <Head title="Marquer ma Présence" />
+
+            {/* HEADER - FULL WIDTH */}
+            <div className="bg-gradient-to-r from-green-900 to-green-700 text-white py-8">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <h1 className="text-4xl font-bold">Marquer ma présence</h1>
                     <p className="text-green-100 mt-2">Entrez le code PIN donné par le professeur</p>
                 </div>
-            }
-        >
-            <Head title="Marquer ma Présence" />
+            </div>
 
             <div className="py-12">
                 <div className="max-w-md mx-auto sm:px-6 lg:px-8">

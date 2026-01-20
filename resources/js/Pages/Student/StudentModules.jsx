@@ -3,14 +3,16 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 export default function StudentModules({ modules }) {
   return (
     <AuthenticatedLayout>
+      {/* HEADER - FULL WIDTH */}
+      <div className="bg-gradient-to-r from-green-900 to-green-700 text-white py-8">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <h1 className="text-4xl font-bold">Mes Modules</h1>
+          <p className="text-green-100 mt-2">Consulter vos modules assignés</p>
+        </div>
+      </div>
+
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          {/* HEADER GRADIENT */}
-          <div className="mb-8 rounded-lg bg-gradient-to-r from-green-900 to-green-700 shadow-lg px-6 py-8">
-            <h1 className="text-4xl font-bold text-white">Mes Modules</h1>
-            <p className="text-green-100 mt-2">Consulter vos modules assignés</p>
-          </div>
-
           {modules.length === 0 ? (
             <div className="bg-white shadow-md rounded-lg p-12 border border-gray-200">
               <p className="text-gray-600 text-center text-lg">Aucun module assigné</p>

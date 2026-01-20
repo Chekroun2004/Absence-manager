@@ -15,18 +15,19 @@ export default function StudentGrades({ schoolClasses }) {
     };
 
     return (
-        <AuthenticatedLayout
-            header={
-                <div className="bg-gradient-to-r from-red-900 to-red-700 text-white px-6 py-8 rounded-lg shadow-lg">
-                    <h1 className="text-3xl font-bold">Gestion des Mentions</h1>
-                    <p className="text-red-100 mt-2">Consultez et modifiez les mentions par étudiant</p>
-                </div>
-            }
-        >
+        <AuthenticatedLayout>
             <Head title="Gestion des Mentions - Admin" />
 
+            {/* HEADER - FULL WIDTH */}
+            <div className="bg-gradient-to-r from-red-900 to-red-700 text-white py-8">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <h1 className="text-4xl font-bold">Gestion des Mentions</h1>
+                    <p className="text-red-100 mt-2">Consultez et modifiez les mentions par étudiant</p>
+                </div>
+            </div>
+
             <div className="py-12">
-                <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* SÉLECTIONNER LA CLASSE */}
                         <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">

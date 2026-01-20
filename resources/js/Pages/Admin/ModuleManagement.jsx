@@ -63,13 +63,16 @@ export default function ModuleManagement({
 
   return (
     <AuthenticatedLayout>
+      {/* HEADER - FULL WIDTH */}
+      <div className="bg-gradient-to-r from-red-900 to-red-700 text-white py-8">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <h1 className="text-4xl font-bold">Gestion des Modules</h1>
+          <p className="text-red-100 mt-2">Gérer les modules et leurs affectations</p>
+        </div>
+      </div>
+
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          {/* HEADER GRADIENT */}
-          <div className="mb-8 rounded-lg bg-gradient-to-r from-red-900 to-red-700 shadow-lg px-6 py-6">
-            <h1 className="text-3xl font-bold text-white">Gestion des Modules</h1>
-            <p className="text-red-100 mt-2">Gérer les modules et leurs affectations</p>
-          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* CRÉER/MODIFIER */}

@@ -51,14 +51,19 @@ export default function StudentGradesEdit({ module, students, flash }) {
     };
 
     return (
-        <AuthenticatedLayout
-            header={
-                <div className="bg-gradient-to-r from-red-900 to-red-700 text-white px-6 py-8 rounded-lg shadow-lg">
-                    <h1 className="text-3xl font-bold">{module.name}</h1>
+        <AuthenticatedLayout>
+            <Head title={`Modifier mentions - ${module.name}`} />
+
+            {/* HEADER - FULL WIDTH */}
+            <div className="bg-gradient-to-r from-red-900 to-red-700 text-white py-8">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <h1 className="text-4xl font-bold">{module.name}</h1>
                     <p className="text-red-100 mt-2">Modifier les mentions des étudiants</p>
                 </div>
-            }
-        >
+            </div>
+
+            <div className="py-12">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <Head title={`Mentions - ${module.name}`} />
 
             <div className="py-12">

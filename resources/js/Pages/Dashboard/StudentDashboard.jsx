@@ -77,168 +77,171 @@ export default function StudentDashboard({ stats, sessions }) {
   };
 
   return (
-    <div className="py-12">
-      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        {/* HEADER GRADIENT */}
-        <div className="mb-8 rounded-lg bg-gradient-to-r from-green-900 to-green-700 shadow-lg px-6 py-8">
-          <h1 className="text-4xl font-bold text-white">Mon Historique de Présence</h1>
+    <>
+      {/* HEADER - FULL WIDTH */}
+      <div className="bg-gradient-to-r from-green-900 to-green-700 text-white py-8">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <h1 className="text-4xl font-bold">Mon Historique de Présence</h1>
           <p className="text-green-100 mt-2">Consultez vos présences, absences et justifications</p>
         </div>
+      </div>
 
-        {/* ALERTE ABSENCES ÉLEVÉES */}
-        {stats.has_high_absence && (
-          <div className="mb-8 bg-red-50 border-l-4 border-red-600 p-6 rounded-lg shadow-md">
-            <div className="flex items-start gap-4">
-              <div className="text-4xl">🚨</div>
-              <div className="flex-1">
-                <h2 className="text-xl font-bold text-red-800 mb-2">Alerte: Vous avez dépassé 3 absences</h2>
-                <p className="text-red-700">
-                  Vous avez actuellement <span className="font-bold">{stats.total_absences} absences</span>. 
-                  Veuillez justifier vos absences au plus tôt pour éviter des mesures disciplinaires.
-                </p>
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          {/* ALERTE ABSENCES ÉLEVÉES */}
+          {stats.has_high_absence && (
+            <div className="mb-8 bg-red-50 border-l-4 border-red-600 p-6 rounded-lg shadow-md">
+              <div className="flex items-start gap-4">
+                <div className="text-4xl">🚨</div>
+                <div className="flex-1">
+                  <h2 className="text-xl font-bold text-red-800 mb-2">Alerte: Vous avez dépassé 3 absences</h2>
+                  <p className="text-red-700">
+                    Vous avez actuellement <span className="font-bold">{stats.total_absences} absences</span>. 
+                    Veuillez justifier vos absences au plus tôt pour éviter des mesures disciplinaires.
+                  </p>
+                </div>
               </div>
             </div>
+          )}
+
+          {/* STATISTICHE */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+            <StatCard
+              title="Total Séances"
+              value={stats.total_sessions}
+              color="green"
+            />
+            <StatCard
+              title="Présences"
+              value={stats.present_count}
+              color="emerald"
+            />
+            <StatCard
+              title="Justifiées"
+              value={stats.justified_count}
+              color="lime"
+            />
+            <StatCard
+              title="Absences"
+              value={stats.absent_count}
+              color="red"
+            />
+            <StatCard
+              title="Taux Présence"
+              value={`${stats.attendance_rate}%`}
+              color="teal"
+            />
           </div>
-        )}
 
-        {/* STATISTIQUES */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-          <StatCard
-            title="Total Séances"
-            value={stats.total_sessions}
-            color="green"
-          />
-          <StatCard
-            title="Présences"
-            value={stats.present_count}
-            color="emerald"
-          />
-          <StatCard
-            title="Justifiées"
-            value={stats.justified_count}
-            color="lime"
-          />
-          <StatCard
-            title="Absences"
-            value={stats.absent_count}
-            color="red"
-          />
-          <StatCard
-            title="Taux Présence"
-            value={`${stats.attendance_rate}%`}
-            color="teal"
-          />
-        </div>
-
-        {/* FILTRES */}
-        <div className="bg-white overflow-hidden shadow-md sm:rounded-lg p-6 mb-6 border-l-4 border-green-500">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Filtres</h3>
-          <div className="flex gap-2 flex-wrap">
-            {[
-              { value: 'all', label: 'Tous', icon: '📋' },
-              { value: 'present', label: 'Présences', icon: '✓' },
-              { value: 'justified', label: 'Justifiées', icon: '✓' },
-              { value: 'absent', label: 'Absences', icon: 'X' },
-            ].map((btn) => (
-              <button
-                key={btn.value}
-                onClick={() => setFilter(btn.value)}
-                className={`px-4 py-2 rounded font-medium transition ${
-                  filter === btn.value
-                    ? 'bg-green-600 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-green-50 hover:text-green-700 border border-gray-200'
-                }`}
-              >
-                {btn.label}
-              </button>
-            ))}
+          {/* FILTRES */}
+          <div className="bg-white overflow-hidden shadow-md sm:rounded-lg p-6 mb-6 border-l-4 border-green-500">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Filtres</h3>
+            <div className="flex gap-2 flex-wrap">
+              {[
+                { value: 'all', label: 'Tous', icon: '📋' },
+                { value: 'present', label: 'Présences', icon: '✓' },
+                { value: 'justified', label: 'Justifiées', icon: '✓' },
+                { value: 'absent', label: 'Absences', icon: 'X' },
+              ].map((btn) => (
+                <button
+                  key={btn.value}
+                  onClick={() => setFilter(btn.value)}
+                  className={`px-4 py-2 rounded font-medium transition ${
+                    filter === btn.value
+                      ? 'bg-green-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-green-50 hover:text-green-700 border border-gray-200'
+                  }`}
+                >
+                  {btn.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* TABLEAU SÉANCES */}
-        <div className="bg-white overflow-hidden shadow-md sm:rounded-lg border-l-4 border-green-500">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-green-50 border-b-2 border-green-500">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
-                    Module
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
-                    Professeur
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
-                    Date & Heure
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
-                    Statut
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredSessions.length > 0 ? (
-                  filteredSessions.map((session) => (
-                    <tr
-                      key={session.id}
-                      className="hover:bg-green-50 transition"
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                        {session.module_name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                        {session.professor_name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                        {session.started_at}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {getStatusBadge(session)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm space-y-2">
-                        <div className="flex gap-2 flex-wrap">
-                          {/* JUSTIFIER (si absent et pas de justification) */}
-                          {(!session.attendance ||
-                            session.attendance.status !== 'present') &&
-                            !session.justification && (
+          {/* TABLEAU SÉANCES */}
+          <div className="bg-white overflow-hidden shadow-md sm:rounded-lg border-l-4 border-green-500">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-green-50 border-b-2 border-green-500">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
+                      Module
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
+                      Professeur
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
+                      Date & Heure
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
+                      Statut
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredSessions.length > 0 ? (
+                    filteredSessions.map((session) => (
+                      <tr
+                        key={session.id}
+                        className="hover:bg-green-50 transition"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                          {session.module_name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                          {session.professor_name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                          {session.started_at}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {getStatusBadge(session)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm space-y-2">
+                          <div className="flex gap-2 flex-wrap">
+                            {/* JUSTIFIER (si absent et pas de justification) */}
+                            {(!session.attendance ||
+                              session.attendance.status !== 'present') &&
+                              !session.justification && (
+                                <button
+                                  onClick={() => handleJustifyClick(session)}
+                                  className="text-green-600 hover:text-green-900 font-medium transition hover:underline"
+                                >
+                                  Justifier
+                                </button>
+                              )}
+
+                            {/* VOIR JUSTIFICATION */}
+                            {session.justification && (
                               <button
-                                onClick={() => handleJustifyClick(session)}
+                                onClick={() => setSelectedSession(session)}
                                 className="text-green-600 hover:text-green-900 font-medium transition hover:underline"
                               >
-                                Justifier
+                                Détails
                               </button>
                             )}
-
-                          {/* VOIR JUSTIFICATION */}
-                          {session.justification && (
-                            <button
-                              onClick={() => setSelectedSession(session)}
-                              className="text-green-600 hover:text-green-900 font-medium transition hover:underline"
-                            >
-                              Détails
-                            </button>
-                          )}
-                        </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="5"
+                        className="px-6 py-8 text-center text-gray-500 font-medium"
+                      >
+                        Aucune séance trouvée
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="5"
-                      className="px-6 py-8 text-center text-gray-500 font-medium"
-                    >
-                      Aucune séance trouvée
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
 
       {/* MODAL JUSTIFICATION */}
       <JustifyAbsenceModal
@@ -246,17 +249,8 @@ export default function StudentDashboard({ stats, sessions }) {
         session={selectedSession}
         onClose={() => setShowJustifyModal(false)}
       />
-
-      {/* MODAL DÉTAILS JUSTIFICATION */}
-      {selectedSession &&
-        selectedSession.justification &&
-        !showJustifyModal && (
-          <JustificationDetailsModal
-            session={selectedSession}
-            onClose={() => setSelectedSession(null)}
-          />
-        )}
-    </div>
+      </div>
+    </>
   );
 }
 

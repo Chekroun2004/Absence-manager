@@ -17,15 +17,16 @@ export default function PendingUsers({ users }) {
   };
 
   return (
-    <AuthenticatedLayout
-      header={
-        <div className="bg-gradient-to-r from-red-900 to-red-700 text-white px-6 py-8 rounded-lg shadow-lg">
-          <h1 className="text-3xl font-bold">Utilisateurs en Attente</h1>
+    <AuthenticatedLayout>
+      <Head title="Utilisateurs en attente" />
+
+      {/* HEADER - FULL WIDTH */}
+      <div className="bg-gradient-to-r from-red-900 to-red-700 text-white py-8">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <h1 className="text-4xl font-bold">Utilisateurs en Attente</h1>
           <p className="text-red-100 mt-2">Gérez les demandes d'inscription</p>
         </div>
-      }
-    >
-      <Head title="Utilisateurs en attente" />
+      </div>
 
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">

@@ -53,14 +53,15 @@ export default function SchoolClassManagement({ schoolClasses }) {
   };
 
   return (
-    <AuthenticatedLayout
-      header={
-        <div className="bg-gradient-to-r from-red-900 to-red-700 text-white px-6 py-8 rounded-lg shadow-lg">
-          <h1 className="text-3xl font-bold">Gestion des Classes</h1>
+    <AuthenticatedLayout>
+      {/* HEADER - FULL WIDTH */}
+      <div className="bg-gradient-to-r from-red-900 to-red-700 text-white py-8">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <h1 className="text-4xl font-bold">Gestion des Classes</h1>
           <p className="text-red-100 mt-2">Créez et gérez les classes de l'établissement</p>
         </div>
-      }
-    >
+      </div>
+
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="bg-white shadow-md rounded-lg p-8 border-l-4 border-red-500">

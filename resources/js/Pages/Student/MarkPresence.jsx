@@ -27,15 +27,16 @@ export default function MarkPresence() {
 
   return (
     <AuthenticatedLayout>
+      {/* HEADER - FULL WIDTH */}
+      <div className="bg-gradient-to-r from-green-900 to-green-700 text-white py-8">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <h1 className="text-4xl font-bold">Marquer Présence</h1>
+          <p className="text-green-100 mt-2">Entrez le code PIN pour marquer votre présence</p>
+        </div>
+      </div>
+
       <div className="py-12">
         <div className="mx-auto max-w-md sm:px-6 lg:px-8">
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-            {/* HEADER GRADIENT */}
-            <div className="bg-gradient-to-r from-green-900 to-green-700 px-6 py-6">
-              <h1 className="text-3xl font-bold text-white text-center">Marquer Présence</h1>
-            </div>
-
-            <div className="p-8">
               {message && (
                 <div
                   className={`mb-6 p-4 rounded-lg font-medium ${
@@ -93,5 +94,4 @@ export default function MarkPresence() {
         </div>
       </div>
     </AuthenticatedLayout>
-  );
 }
