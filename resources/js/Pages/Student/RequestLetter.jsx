@@ -167,7 +167,7 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                                                 </p>
                                                 <div className="space-y-1 text-sm">
                                                     <p className="text-gray-700">
-                                                        <strong className="text-gray-900">Module :</strong> {req.module.name}
+                                                        <strong className="text-gray-900">Module :</strong> {req.module ? req.module.name : 'Module supprimé'}
                                                     </p>
                                                     <p className="text-gray-700">
                                                         <strong className="text-gray-900">Mention :</strong> <span className="inline-block px-2 py-0.5 bg-green-100 text-green-800 rounded font-semibold text-xs">{req.mention}</span>
