@@ -86,6 +86,28 @@ export default function StudentDashboard({ stats, sessions }) {
           <p className="text-green-100 mt-2">Consultez vos présences, absences et justifications</p>
         </div>
 
+        {/* ALERTE ABSENCES ÉLEVÉES */}
+        {stats.has_high_absence && (
+          <div className="mb-8 bg-red-50 border-l-4 border-red-600 p-6 rounded-lg shadow-md">
+            <div className="flex items-start gap-4">
+              <div className="text-4xl">🚨</div>
+              <div className="flex-1">
+                <h2 className="text-xl font-bold text-red-800 mb-2">Alerte: Vous avez dépassé 3 absences</h2>
+                <p className="text-red-700 mb-4">
+                  Vous avez actuellement <span className="font-bold">{stats.total_absences} absences</span>. 
+                  Veuillez justifier vos absences au plus tôt pour éviter des mesures disciplinaires.
+                </p>
+                <Link 
+                  href="/student/letters"
+                  className="inline-block px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition"
+                >
+                  Justifier mes absences
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* STATISTIQUES */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <StatCard

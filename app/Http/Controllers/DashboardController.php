@@ -22,6 +22,28 @@ class DashboardController extends Controller
             $totalModules = \App\Models\Module::count();
             $pendingApprovals = \App\Models\User::where('is_approved', false)->count();
 
+            // ✅ ÉTUDIANTS AVEC +3 ABSENCES
+            $studentsWithHighAbsence = \App\Models\Student::with('user', 'attendances')
+                ->get()
+                ->filter(function ($student) {
+                    $absenceCount = $student->attendances
+                        ->where('status', '!=', 'present')
+                        ->count();
+                    return $absenceCount >= 3;
+                })
+                ->map(function ($student) {
+                    $absenceCount = $student->attendances
+                        ->where('status', '!=', 'present')
+                        ->count();
+                    return [
+                        'id' => $student->id,
+                        'name' => $student->user->name,
+                        'email' => $student->user->email,
+                        'absence_count' => $absenceCount,
+                    ];
+                })
+                ->values();
+
             return Inertia::render('Dashboard', [
                 'role' => 'admin',
                 'stats' => [
@@ -31,6 +53,7 @@ class DashboardController extends Controller
                     'total_modules' => $totalModules,
                     'pending_approvals' => $pendingApprovals,
                 ],
+                'studentsWithHighAbsence' => $studentsWithHighAbsence,
             ]);
         }
 
@@ -155,6 +178,12 @@ class DashboardController extends Controller
             $absentCount = $totalSessions - $presentCount - $justifiedCount;
             $attendanceRate = $totalSessions > 0 ? round((($presentCount + $justifiedCount) / $totalSessions) * 100, 2) : 0;
 
+            // ✅ VÉRIFIER SI ÉTUDIANT A +3 ABSENCES
+            $totalAbsences = Attendance::where('student_id', $student->id)
+                ->where('status', '!=', 'present')
+                ->count();
+            $hasHighAbsence = $totalAbsences >= 3;
+
             return Inertia::render('Dashboard', [
                 'role' => 'student',
                 'stats' => [
@@ -163,6 +192,8 @@ class DashboardController extends Controller
                     'justified_count' => $justifiedCount,
                     'absent_count' => $absentCount,
                     'attendance_rate' => $attendanceRate,
+                    'total_absences' => $totalAbsences,
+                    'has_high_absence' => $hasHighAbsence,
                 ],
                 'sessions' => $sessions,
             ]);
