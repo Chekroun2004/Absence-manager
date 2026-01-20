@@ -6,20 +6,22 @@ use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\RecommendationRequestController;
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['web'])->group(function () {
+    // Présences
+    Route::post('/attendance/mark-present', [AttendanceController::class, 'markPresent']);
+    Route::get('/attendance/active-sessions', [AttendanceController::class, 'activeSessions']);
+    Route::post('/attendance/mark-by-code', [AttendanceController::class, 'markPresentByCode']);
+    Route::post('/attendance/{id}/justify', [AttendanceController::class, 'addJustification']);
+    Route::get('/attendance/history', [AttendanceController::class, 'studentHistory']);
+    Route::get('/modules/{moduleId}/absences', [AttendanceController::class, 'moduleAbsences']);
+    Route::get('/students/{studentId}/absence-count', [AttendanceController::class, 'absenceCount']);
+
     // Leçons
     Route::post('/lessons', [LessonController::class, 'store']);
     Route::post('/lessons/{id}/activate', [LessonController::class, 'activate']);
     Route::post('/lessons/{id}/close', [LessonController::class, 'close']);
     Route::get('/lessons/{id}', [LessonController::class, 'show']);
     Route::get('/modules/{moduleId}/lessons', [LessonController::class, 'byModule']);
-
-    // Présences
-    Route::post('/attendance/mark-present', [AttendanceController::class, 'markPresent']);
-    Route::post('/attendance/{id}/justify', [AttendanceController::class, 'addJustification']);
-    Route::get('/attendance/history', [AttendanceController::class, 'studentHistory']);
-    Route::get('/modules/{moduleId}/absences', [AttendanceController::class, 'moduleAbsences']);
-    Route::get('/students/{studentId}/absence-count', [AttendanceController::class, 'absenceCount']);
 
     // Lettres de recommandation
     Route::post('/recommendations', [RecommendationRequestController::class, 'store']);

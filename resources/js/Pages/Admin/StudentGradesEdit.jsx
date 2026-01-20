@@ -20,10 +20,16 @@ export default function StudentGradesEdit({ module, students, flash }) {
             return;
         }
 
+        const mention = formData[studentId];
+        if (!mention) {
+            alert('❌ Veuillez sélectionner une mention');
+            return;
+        }
+
         setLoading(true);
-        router.post(
+        router.patch(
             route('admin.grades.update', gradeId),
-            { mention: formData[studentId] },
+            { mention: mention },
             {
                 onSuccess: () => {
                     setEditingId(null);
@@ -32,6 +38,7 @@ export default function StudentGradesEdit({ module, students, flash }) {
                 },
                 onError: (errors) => {
                     console.error('Erreur:', errors);
+                    alert('❌ Erreur lors de la sauvegarde');
                     setLoading(false);
                 },
             }

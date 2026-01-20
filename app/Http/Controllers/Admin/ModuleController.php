@@ -87,9 +87,30 @@ class ModuleController extends Controller
             'student_ids.*' => 'exists:students,id',
         ]);
 
+        // ✅ Synchroniser la relation pivot module_student
         $module->students()->sync($validated['student_ids'] ?? []);
 
-        return redirect('/admin/modules')->with('success', 'Étudiants assignés avec succès!');
+        // ✅ CRÉER LES MODULESSTUDENTGRADES MANQUANTS
+        $studentIds = $validated['student_ids'] ?? [];
+        $mentions = ['Très Bien', 'Bien', 'Assez Bien', 'Passable'];
+        
+        foreach ($studentIds as $studentId) {
+            // Vérifier si la mention existe déjà
+            $gradeExists = ModuleStudentGrade::where('student_id', $studentId)
+                ->where('module_id', $module->id)
+                ->exists();
+            
+            // Si n'existe pas, la créer avec mention par défaut
+            if (!$gradeExists) {
+                ModuleStudentGrade::create([
+                    'student_id' => $studentId,
+                    'module_id' => $module->id,
+                    'mention' => 'Passable', // Mention par défaut
+                ]);
+            }
+        }
+
+        return redirect('/admin/modules')->with('success', '✅ Étudiants assignés et mentions créées avec succès!');
     }
 
     // ========== GESTION MENTIONS ==========
@@ -137,11 +158,16 @@ class ModuleController extends Controller
     public function updateGrade(ModuleStudentGrade $moduleStudentGrade, Request $request)
     {
         $validated = $request->validate([
-            'mention' => 'required|in:Très Bien,Bien,Assez Bien,Passable',
+            'mention' => 'required|string|in:Très Bien,Bien,Assez Bien,Passable',
         ]);
 
-        $moduleStudentGrade->update(['mention' => $validated['mention']]);
-
-        return redirect()->back()->with('success', '✅ Mention mise à jour !');
+        try {
+            $moduleStudentGrade->update(['mention' => $validated['mention']]);
+            
+            return redirect()->back()->with('success', '✅ Mention mise à jour avec succès !');
+        } catch (\Exception $e) {
+            \Log::error('Erreur mise à jour mention:', ['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => 'Erreur lors de la mise à jour']);
+        }
     }
 }

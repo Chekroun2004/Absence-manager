@@ -5,12 +5,12 @@ import AdminDashboard from '@/Pages/Dashboard/AdminDashboard';
 import ProfessorDashboard from '@/Pages/Dashboard/ProfessorDashboard';
 import StudentDashboard from '@/Pages/Dashboard/StudentDashboard';
 
-export default function Dashboard({ role, stats, modules, sessions, recentSessions, activeSessions }) {
+export default function Dashboard({ role, stats, modules, sessions, recentSessions, activeSessions, studentsWithHighAbsence }) {
   return (
     <AuthenticatedLayout>
       <Head title="Dashboard" />
 
-      {role === 'admin' && <AdminDashboard stats={stats} />}
+      {role === 'admin' && <AdminDashboard stats={stats} studentsWithHighAbsence={studentsWithHighAbsence} />}
       {role === 'professor' && (
         <ProfessorDashboard stats={stats} modules={modules} recentSessions={recentSessions} activeSessions={activeSessions} />
       )}

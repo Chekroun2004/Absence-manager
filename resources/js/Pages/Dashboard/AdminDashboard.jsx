@@ -1,3 +1,5 @@
+import { Link } from '@inertiajs/react';
+
 export default function AdminDashboard({ stats, studentsWithHighAbsence }) {
   return (
     <div className="py-12">
@@ -17,11 +19,15 @@ export default function AdminDashboard({ stats, studentsWithHighAbsence }) {
                 <h2 className="text-xl font-bold text-red-800 mb-3">Étudiants avec +3 absences</h2>
                 <div className="space-y-2">
                   {studentsWithHighAbsence.map((student) => (
-                    <div key={student.id} className="bg-white p-3 rounded-lg border-l-4 border-red-400">
-                      <div className="font-semibold text-gray-900">{student.name}</div>
+                    <Link
+                      key={student.id}
+                      href={`/admin/students/${student.id}/absences`}
+                      className="block bg-white p-4 rounded-lg border-l-4 border-red-400 hover:bg-red-50 hover:shadow-md transition transform hover:scale-105"
+                    >
+                      <div className="font-semibold text-red-600">{student.name}</div>
                       <div className="text-sm text-gray-600">{student.email}</div>
                       <div className="text-sm font-bold text-red-700 mt-1">{student.absence_count} absences</div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
                 <p className="text-sm text-red-700 mt-4">Les étudiants listés ont dépassé le seuil de 3 absences. Veuillez prendre les mesures appropriées.</p>

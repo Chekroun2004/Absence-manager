@@ -8,8 +8,11 @@ use App\Models\Professor;
 use App\Models\SchoolClass;
 use App\Models\Module;
 use App\Models\ModuleStudentGrade;
+use App\Models\ClassSession;
+use App\Models\Attendance;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
@@ -119,6 +122,65 @@ class DatabaseSeeder extends Seeder
         // ✅ ATTACHER LES ÉTUDIANTS AUX MODULES
         foreach ($students as $student) {
             $student->modules()->attach([$module1->id, $module2->id]);
+        }
+
+        // ✅ CRÉER LES SÉANCES DE CLASSE
+        $sessions = [];
+        for ($i = 1; $i <= 3; $i++) {
+            $sessions[] = ClassSession::create([
+                'module_id' => $module1->id,
+                'code' => 'CODE' . str_pad($i, 3, '0', STR_PAD_LEFT),
+                'professor_id' => $professor1->id,
+                'started_at' => now()->subDays(10 - $i),
+                'expires_at' => now()->subDays(10 - $i)->addHours(2),
+                'status' => 'closed',
+            ]);
+            
+            $sessions[] = ClassSession::create([
+                'module_id' => $module2->id,
+                'code' => 'CODE' . str_pad($i + 10, 3, '0', STR_PAD_LEFT),
+                'professor_id' => $professor2->id,
+                'started_at' => now()->subDays(9 - $i),
+                'expires_at' => now()->subDays(9 - $i)->addHours(2),
+                'status' => 'closed',
+            ]);
+        }
+
+        // ✅ CRÉER LES ABSENCES (Pour les 2 premiers étudiants : 6+ absences)
+        // Étudiant 1 : 6 absences
+        for ($j = 0; $j < count($sessions); $j++) {
+            Attendance::create([
+                'student_id' => $students[0]->id,
+                'class_session_id' => $sessions[$j]->id,
+                'module_id' => $sessions[$j]->module_id,
+                'date' => $sessions[$j]->started_at->toDateString(),
+                'status' => 'absent',
+                'marked_at' => $sessions[$j]->started_at,
+            ]);
+        }
+
+        // Étudiant 2 : 4 absences
+        for ($j = 0; $j < 4; $j++) {
+            Attendance::create([
+                'student_id' => $students[1]->id,
+                'class_session_id' => $sessions[$j]->id,
+                'module_id' => $sessions[$j]->module_id,
+                'date' => $sessions[$j]->started_at->toDateString(),
+                'status' => 'absent',
+                'marked_at' => $sessions[$j]->started_at,
+            ]);
+        }
+
+        // Étudiant 3 : 3 absences (seuil minimum)
+        for ($j = 0; $j < 3; $j++) {
+            Attendance::create([
+                'student_id' => $students[2]->id,
+                'class_session_id' => $sessions[$j]->id,
+                'module_id' => $sessions[$j]->module_id,
+                'date' => $sessions[$j]->started_at->toDateString(),
+                'status' => 'absent',
+                'marked_at' => $sessions[$j]->started_at,
+            ]);
         }
     }
 }

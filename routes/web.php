@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\UserApprovalController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SchoolClassController;
+use App\Http\Controllers\Admin\AbsenceController;
 use App\Http\Controllers\Professor\RecommendationController;
 use App\Http\Controllers\Professor\SessionController as ProfessorSessionController;
 use App\Http\Controllers\Professor\AbsenceJustificationController as ProfessorAbsenceJustificationController;
@@ -63,7 +64,10 @@ Route::middleware(['auth', 'verified', 'approved', 'role:admin'])
         // ========== GESTION MENTIONS ÉTUDIANTS ==========
         Route::get('/grades', [ModuleController::class, 'gradesIndex'])->name('grades.index');
         Route::get('/grades/module/{module}', [ModuleController::class, 'gradesModule'])->name('grades.module');
-        Route::post('/grades/{moduleStudentGrade}/update', [ModuleController::class, 'updateGrade'])->name('grades.update');
+        Route::patch('/grades/{moduleStudentGrade}', [ModuleController::class, 'updateGrade'])->name('grades.update');
+
+        // ========== GESTION ABSENCES ==========
+        Route::get('/students/{student}/absences', [AbsenceController::class, 'studentAbsences'])->name('students.absences');
     });
 
 // ========== ROUTES PROFESSEUR ==========
@@ -112,6 +116,9 @@ Route::middleware(['auth', 'verified', 'approved', 'role:student'])
         // ========== PRÉSENCES ==========
         Route::get('/mark-presence', [StudentController::class, 'markPresenceForm'])->name('mark-presence');
         Route::post('/mark-presence', [StudentController::class, 'markPresence'])->name('mark-presence.store');
+
+        // ========== MARQUAGE PRÉSENCE ==========
+        Route::get('/mark-presence', fn() => inertia('Student/MarkSessionPresence'))->name('mark-presence');
 
         // ========== LETTRES RECOMMANDATION ==========
         Route::get('/letters', [StudentController::class, 'letters'])->name('letters');

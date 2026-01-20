@@ -143,9 +143,15 @@ export default function ActiveSession({ session, students: initialStudents }) {
             <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 p-16 text-center">
               <p className="text-lg font-bold text-blue-100 uppercase mb-8 tracking-wide">Code PIN à communiquer</p>
               
+              {/* SESSION ID */}
+              <div className="mb-6 p-3 bg-blue-800 rounded-lg">
+                <p className="text-sm text-blue-200">Session ID</p>
+                <p className="text-3xl font-bold text-white">{session.id}</p>
+              </div>
+              
               {/* CODE CARD */}
               <div className="bg-white rounded-2xl p-12 mb-8 shadow-2xl border-4 border-blue-100">
-                <p className="text-gray-500 text-sm font-semibold mb-4 uppercase">Présence</p>
+                <p className="text-gray-500 text-sm font-semibold mb-4 uppercase">Code PIN</p>
                 <p className="text-9xl font-black font-mono tracking-widest text-blue-900 leading-none">
                   {timeLeft <= 0 ? '✕' : session.code}
                 </p>

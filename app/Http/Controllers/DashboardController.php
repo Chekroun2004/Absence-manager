@@ -22,24 +22,19 @@ class DashboardController extends Controller
             $totalModules = \App\Models\Module::count();
             $pendingApprovals = \App\Models\User::where('is_approved', false)->count();
 
-            // ✅ ÉTUDIANTS AVEC +3 ABSENCES
-            $studentsWithHighAbsence = \App\Models\Student::with('user', 'attendances')
+            // ✅ ÉTUDIANTS AVEC +3 ABSENCES (optimisé avec query)
+            $studentsWithHighAbsence = \App\Models\Student::with('user')
+                ->withCount(['attendances as absence_count' => function ($query) {
+                    $query->where('status', '!=', 'present');
+                }])
+                ->having('absence_count', '>=', 3)
                 ->get()
-                ->filter(function ($student) {
-                    $absenceCount = $student->attendances
-                        ->where('status', '!=', 'present')
-                        ->count();
-                    return $absenceCount >= 3;
-                })
                 ->map(function ($student) {
-                    $absenceCount = $student->attendances
-                        ->where('status', '!=', 'present')
-                        ->count();
                     return [
                         'id' => $student->id,
                         'name' => $student->user->name,
                         'email' => $student->user->email,
-                        'absence_count' => $absenceCount,
+                        'absence_count' => (int) $student->absence_count,
                     ];
                 })
                 ->values();

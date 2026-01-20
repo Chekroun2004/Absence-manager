@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from '@inertiajs/react';
 import JustifyAbsenceModal from '@/Pages/Student/JustifyAbsenceModal';
 
 export default function StudentDashboard({ stats, sessions }) {
@@ -93,16 +92,10 @@ export default function StudentDashboard({ stats, sessions }) {
               <div className="text-4xl">🚨</div>
               <div className="flex-1">
                 <h2 className="text-xl font-bold text-red-800 mb-2">Alerte: Vous avez dépassé 3 absences</h2>
-                <p className="text-red-700 mb-4">
+                <p className="text-red-700">
                   Vous avez actuellement <span className="font-bold">{stats.total_absences} absences</span>. 
                   Veuillez justifier vos absences au plus tôt pour éviter des mesures disciplinaires.
                 </p>
-                <Link 
-                  href="/student/letters"
-                  className="inline-block px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition"
-                >
-                  Justifier mes absences
-                </Link>
               </div>
             </div>
           </div>
