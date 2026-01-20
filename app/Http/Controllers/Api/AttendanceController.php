@@ -32,6 +32,17 @@ class AttendanceController extends Controller
             ], 401);
         }
 
+        // ✅ VÉRIFICATION SÉCURITÉ : Vérifier que l'étudiant appartient au module
+        $isEnrolled = $student->modules()
+            ->where('modules.id', $session->module_id)
+            ->exists();
+
+        if (!$isEnrolled) {
+            return response()->json([
+                'error' => '❌ Vous n\'êtes pas inscrit à ce module'
+            ], 403);
+        }
+
         // ✅ VÉRIFICATION : Vérifier si le code est expiré
         $now = Carbon::now();
         $isExpired = $now->isAfter($session->expires_at);

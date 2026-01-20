@@ -63,10 +63,6 @@ export default function StudentGradesEdit({ module, students, flash }) {
             </div>
 
             <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <Head title={`Mentions - ${module.name}`} />
-
-            <div className="py-12">
                 <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
                     {/* Messages flash */}
                     {flash?.success && (
