@@ -27,6 +27,7 @@ export default function StudentGrades({ schoolClasses }) {
 
             <div className="py-12">
                 <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* SÉLECTIONNER LA CLASSE */}
                         <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
                             <h2 className="text-xl font-bold mb-4 text-red-700">Sélectionner une Classe</h2>
@@ -89,5 +90,7 @@ export default function StudentGrades({ schoolClasses }) {
                 </div>
             </div>
         </AuthenticatedLayout>
+    );
+}
     );
 }
