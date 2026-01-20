@@ -44,37 +44,33 @@ export default function StudentGradesEdit({ module, students, flash }) {
     };
 
     return (
-        <AuthenticatedLayout>
+        <AuthenticatedLayout
+            header={
+                <div className="bg-gradient-to-r from-red-900 to-red-700 text-white px-6 py-8 rounded-lg shadow-lg">
+                    <h1 className="text-3xl font-bold">{module.name}</h1>
+                    <p className="text-red-100 mt-2">Modifier les mentions des étudiants</p>
+                </div>
+            }
+        >
             <Head title={`Mentions - ${module.name}`} />
 
             <div className="py-12">
-                <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
-                    {/* En-tête */}
-                    <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900">
-                            {module.name}
-                        </h1>
-                        <p className="text-gray-600">
-                            {module.class}
-                        </p>
-                    </div>
-
-                    {/* Messages flash */}
+                <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">}
                     {flash?.success && (
-                        <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                        <div className="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-lg shadow-md">
                             {flash.success}
                         </div>
                     )}
                     {flash?.error && (
-                        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                        <div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg shadow-md">
                             {flash.error}
                         </div>
                     )}
 
                     {/* Tableau des étudiants */}
-                    <div className="bg-white shadow rounded-lg overflow-hidden">
+                    <div className="bg-white shadow-md rounded-lg overflow-hidden border-l-4 border-red-500">
                         <table className="w-full">
-                            <thead className="bg-gray-100 border-b">
+                            <thead className="bg-red-50 border-b-2 border-red-500">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                                         Nom
@@ -92,7 +88,7 @@ export default function StudentGradesEdit({ module, students, flash }) {
                             </thead>
                             <tbody className="divide-y">
                                 {students.map((student) => (
-                                    <tr key={student.id} className="hover:bg-gray-50">
+                                    <tr key={student.id} className="hover:bg-red-50 transition">
                                         <td className="px-6 py-4 font-semibold text-gray-900">
                                             {student.name}
                                         </td>
@@ -109,7 +105,7 @@ export default function StudentGradesEdit({ module, students, flash }) {
                                                             [student.id]: e.target.value,
                                                         })
                                                     }
-                                                    className="p-2 border rounded-lg"
+                                                    className="p-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                                                 >
                                                     {mentions.map((mention) => (
                                                         <option key={mention} value={mention}>
@@ -118,7 +114,7 @@ export default function StudentGradesEdit({ module, students, flash }) {
                                                     ))}
                                                 </select>
                                             ) : (
-                                                <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
+                                                <span className="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-semibold">
                                                     {student.mention}
                                                 </span>
                                             )}
@@ -129,30 +125,30 @@ export default function StudentGradesEdit({ module, students, flash }) {
                                                     <button
                                                         onClick={() => {
                                                             if (!student.gradeId) {
-                                                                alert('❌ Erreur : Impossible de modifier cette note');
+                                                                alert('Erreur : Impossible de modifier cette note');
                                                                 return;
                                                             }
                                                             handleSave(student.gradeId, student.id);
                                                         }}
                                                         disabled={loading || !student.gradeId}
-                                                        className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm disabled:opacity-50"
+                                                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm shadow-md hover:shadow-lg transition transform hover:scale-105 disabled:opacity-50"
                                                     >
-                                                        ✅ Sauver
+                                                        Sauver
                                                     </button>
                                                     <button
                                                         onClick={handleCancel}
                                                         disabled={loading}
-                                                        className="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white rounded text-sm disabled:opacity-50"
+                                                        className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg text-sm shadow-md hover:shadow-lg transition disabled:opacity-50"
                                                     >
-                                                        ❌ Annuler
+                                                        Annuler
                                                     </button>
                                                 </div>
                                             ) : (
                                                 <button
                                                     onClick={() => handleEditStart(student)}
-                                                    className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm"
+                                                    className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm shadow-md hover:shadow-lg transition transform hover:scale-105"
                                                 >
-                                                    ✏️ Modifier
+                                                    Modifier
                                                 </button>
                                             )}
                                         </td>
