@@ -19,13 +19,15 @@ export default function AuthenticatedLayout({ header, children }) {
                         <div className="flex items-center gap-3">
                             <Link href="/">
                                 <div className="flex items-center gap-2">
-                                    {/* LOGO UMV SIMPLIFIÉ - CERCLE AVEC INITIALES */}
-                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-                                        <span className="text-white font-bold text-xs text-center">UMV</span>
-                                    </div>
+                                    {/* LOGO FACULTÉ - IMAGE */}
+                                    <img 
+                                        src="/images/faculte_logo.jfif" 
+                                        alt="Faculté des Sciences Rabat"
+                                        className="w-10 h-10 object-contain rounded"
+                                    />
                                     <div className="hidden sm:block">
-                                        <p className="text-white font-bold text-sm">Université Mohamed V</p>
-                                        <p className="text-blue-300 text-xs">Gestion des Absences</p>
+                                        <p className="text-white font-bold text-sm">Faculté des Sciences</p>
+                                        <p className="text-blue-300 text-xs">Rabat - Gestion Absences</p>
                                     </div>
                                 </div>
                             </Link>
@@ -36,7 +38,6 @@ export default function AuthenticatedLayout({ header, children }) {
                             <NavLink
                                 href={route('dashboard')}
                                 active={route().current('dashboard')}
-                                className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                             >
                                 Dashboard
                             </NavLink>
@@ -47,35 +48,30 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <NavLink
                                         href={route('admin.modules.index')}
                                         active={route().current('admin.modules.index')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Modules
                                     </NavLink>
                                     <NavLink
                                         href={route('admin.school-classes.index')}
                                         active={route().current('admin.school-classes.index')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Classes
                                     </NavLink>
                                     <NavLink 
                                         href={route('admin.grades.index')}
                                         active={route().current('admin.grades.index')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Mentions
                                     </NavLink>
                                     <NavLink
                                         href={route('admin.pending-users')}
                                         active={route().current('admin.pending-users')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Approbations
                                     </NavLink>
                                     <NavLink
                                         href={route('admin.users.index')}
                                         active={route().current('admin.users.index')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Utilisateurs
                                     </NavLink>
@@ -88,28 +84,24 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <NavLink
                                         href={route('professor.sessions')}
                                         active={route().current('professor.sessions')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Mes Séances
                                     </NavLink>
                                     <NavLink 
                                         href={route('professor.grades.index')}
                                         active={route().current('professor.grades.index')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Mentions
                                     </NavLink>
                                     <NavLink
                                         href={route('professor.absences.justifications')}
                                         active={route().current('professor.absences.justifications')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Justifications
                                     </NavLink>
                                     <NavLink
                                         href={route('professor.recommendations')}
                                         active={route().current('professor.recommendations')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Recommandations
                                     </NavLink>
@@ -122,21 +114,18 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <NavLink
                                         href={route('student.modules')}
                                         active={route().current('student.modules')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Mes Modules
                                     </NavLink>
                                     <NavLink
                                         href={route('student.mark-presence')}
                                         active={route().current('student.mark-presence')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Marquer Présence
                                     </NavLink>
                                     <NavLink
                                         href={route('student.letters')}
                                         active={route().current('student.letters')}
-                                        className="!text-white !hover:text-blue-200 !px-3 !py-2 !text-sm"
                                     >
                                         Mes Lettres
                                     </NavLink>
