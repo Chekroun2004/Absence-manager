@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
-import PrimaryButton from '@/Components/PrimaryButton';
 
 export default function CreateLesson() {
     const [moduleId, setModuleId] = useState('');
@@ -38,107 +35,99 @@ export default function CreateLesson() {
             const data = await response.json();
 
             if (response.ok) {
-                setMessage(`✅ Leçon créée avec succès ! ID: ${data.id}`);
+                setMessage(`Leçon créée avec succès ! ID: ${data.id}`);
                 setModuleId('');
                 setStartTime('');
                 setEndTime('');
             } else {
-                setMessage('❌ ' + (data.message || 'Erreur'));
+                setMessage(data.message || 'Erreur lors de la création');
             }
         } catch (error) {
-            setMessage('❌ Erreur de connexion: ' + error.message);
+            setMessage('Erreur de connexion: ' + error.message);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Créer une leçon
-                </h2>
-            }
-        >
+        <AuthenticatedLayout>
             <Head title="Créer une leçon" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-2xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <h3 className="text-lg font-medium mb-6">
-                                Nouvelle leçon
-                            </h3>
+            <div className="min-h-screen" style={{ backgroundColor: '#f8fafc' }}>
+                {/* Header */}
+                <div className="bg-gradient-to-r from-blue-900 to-blue-700 px-6 py-12">
+                    <div className="max-w-2xl mx-auto">
+                        <h1 className="text-4xl font-bold text-white mb-2">Créer une Leçon</h1>
+                        <p className="text-blue-100">Planifiez une nouvelle leçon pour vos étudiants</p>
+                    </div>
+                </div>
 
+                <div className="max-w-2xl mx-auto sm:px-6 lg:px-8 py-8">
+                    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div className="p-8 text-gray-900 space-y-6">
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div>
-                                    <InputLabel
-                                        htmlFor="module_id"
-                                        value="ID du module"
-                                    />
-                                    <TextInput
+                                    <label htmlFor="module_id" className="block text-sm font-semibold text-gray-700 mb-2">
+                                        ID du module
+                                    </label>
+                                    <input
                                         id="module_id"
                                         type="number"
                                         value={moduleId}
-                                        onChange={(e) =>
-                                            setModuleId(e.target.value)
-                                        }
-                                        className="mt-1 block w-full"
+                                        onChange={(e) => setModuleId(e.target.value)}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         placeholder="Ex: 1"
                                         required
                                     />
-                                    <p className="mt-1 text-sm text-gray-500">
+                                    <p className="mt-2 text-sm text-gray-500">
                                         Pour ce test, utilise l'ID 1 ou 2
                                     </p>
                                 </div>
 
                                 <div>
-                                    <InputLabel
-                                        htmlFor="start_time"
-                                        value="Date et heure de début"
-                                    />
-                                    <TextInput
+                                    <label htmlFor="start_time" className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Date et heure de début
+                                    </label>
+                                    <input
                                         id="start_time"
                                         type="datetime-local"
                                         value={startTime}
-                                        onChange={(e) =>
-                                            setStartTime(e.target.value)
-                                        }
-                                        className="mt-1 block w-full"
+                                        onChange={(e) => setStartTime(e.target.value)}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         required
                                     />
                                 </div>
 
                                 <div>
-                                    <InputLabel
-                                        htmlFor="end_time"
-                                        value="Date et heure de fin"
-                                    />
-                                    <TextInput
+                                    <label htmlFor="end_time" className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Date et heure de fin
+                                    </label>
+                                    <input
                                         id="end_time"
                                         type="datetime-local"
                                         value={endTime}
-                                        onChange={(e) =>
-                                            setEndTime(e.target.value)
-                                        }
-                                        className="mt-1 block w-full"
+                                        onChange={(e) => setEndTime(e.target.value)}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         required
                                     />
                                 </div>
 
-                                <PrimaryButton disabled={loading}>
-                                    {loading
-                                        ? 'Création en cours...'
-                                        : 'Créer la leçon'}
-                                </PrimaryButton>
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    style={{ backgroundColor: '#1e40af' }}
+                                    className="w-full px-6 py-3 text-white font-semibold rounded-lg hover:opacity-90 transition disabled:opacity-50"
+                                >
+                                    {loading ? 'Création en cours...' : 'Créer la leçon'}
+                                </button>
                             </form>
 
                             {message && (
                                 <div
-                                    className={`mt-6 rounded-lg p-4 ${
-                                        message.includes('✅')
-                                            ? 'bg-green-50 border border-green-200 text-green-800'
-                                            : 'bg-red-50 border border-red-200 text-red-800'
+                                    className={`rounded-lg p-4 border-l-4 ${
+                                        message.includes('succès')
+                                            ? 'bg-green-50 border-green-500 text-green-800'
+                                            : 'bg-red-50 border-red-500 text-red-800'
                                     }`}
                                 >
                                     {message}
