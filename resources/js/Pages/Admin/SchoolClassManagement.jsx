@@ -53,13 +53,20 @@ export default function SchoolClassManagement({ schoolClasses }) {
   };
 
   return (
-    <AuthenticatedLayout>
+    <AuthenticatedLayout
+      header={
+        <div className="bg-gradient-to-r from-red-900 to-red-700 text-white px-6 py-8 rounded-lg shadow-lg">
+          <h1 className="text-3xl font-bold">Gestion des Classes</h1>
+          <p className="text-red-100 mt-2">Créez et gérez les classes de l'établissement</p>
+        </div>
+      }
+    >
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="bg-white shadow rounded-lg p-8">
+          <div className="bg-white shadow-md rounded-lg p-8 border-l-4 border-red-500">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold">
-                🎓 Gestion des Classes
+              <h1 className="text-3xl font-bold text-red-700">
+                Gestion des Classes
               </h1>
               <button
                 onClick={() => {
@@ -67,9 +74,9 @@ export default function SchoolClassManagement({ schoolClasses }) {
                   reset();
                   setIsFormOpen(!isFormOpen);
                 }}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+                className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105"
               >
-                {isFormOpen ? '✖ Fermer' : '+ Créer'}
+                {isFormOpen ? 'Fermer' : 'Créer'}
               </button>
             </div>
 
@@ -77,7 +84,7 @@ export default function SchoolClassManagement({ schoolClasses }) {
             {isFormOpen && (
               <form
                 onSubmit={handleSubmit}
-                className="mb-8 p-6 bg-gray-100 rounded-lg space-y-4"
+                className="mb-8 p-6 bg-red-50 rounded-lg space-y-4 border-l-4 border-red-500"
               >
                 {/* NOM */}
                 <div>
@@ -91,7 +98,7 @@ export default function SchoolClassManagement({ schoolClasses }) {
                       setData('name', e.target.value)
                     }
                     placeholder="Ex: Master 1, Master 2"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                   />
                   {errors.name && (
                     <p className="text-red-600 text-sm mt-1">
@@ -112,7 +119,7 @@ export default function SchoolClassManagement({ schoolClasses }) {
                       setData('speciality', e.target.value)
                     }
                     placeholder="Ex: Informatique, Génie Logiciel"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                   />
                   {errors.speciality && (
                     <p className="text-red-600 text-sm mt-1">
@@ -133,7 +140,7 @@ export default function SchoolClassManagement({ schoolClasses }) {
                       setData('academic_year', e.target.value)
                     }
                     placeholder="Ex: 2025-2026"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
                   />
                   {errors.academic_year && (
                     <p className="text-red-600 text-sm mt-1">
@@ -146,7 +153,7 @@ export default function SchoolClassManagement({ schoolClasses }) {
                   <button
                     type="submit"
                     disabled={processing}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg disabled:opacity-50"
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105 disabled:opacity-50"
                   >
                     {processing
                       ? 'Traitement...'
@@ -161,7 +168,7 @@ export default function SchoolClassManagement({ schoolClasses }) {
                       setEditingId(null);
                       reset();
                     }}
-                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg"
+                    className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition"
                   >
                     Annuler
                   </button>
@@ -172,7 +179,7 @@ export default function SchoolClassManagement({ schoolClasses }) {
             {/* TABLEAU */}
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border border-gray-300">
-                <thead className="bg-gray-200">
+                <thead className="bg-red-50 border-b-2 border-red-500">
                   <tr>
                     <th className="border border-gray-300 px-4 py-2 text-left">
                       Nom
@@ -205,7 +212,7 @@ export default function SchoolClassManagement({ schoolClasses }) {
                     schoolClasses.map((schoolClass) => (
                       <tr
                         key={schoolClass.id}
-                        className="hover:bg-gray-50"
+                        className="hover:bg-red-50 transition"
                       >
                         <td className="border border-gray-300 px-4 py-2">
                           <strong>{schoolClass.name}</strong>
@@ -227,17 +234,17 @@ export default function SchoolClassManagement({ schoolClasses }) {
                             onClick={() =>
                               handleEdit(schoolClass)
                             }
-                            className="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded text-sm"
+                            className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-lg text-sm shadow-md hover:shadow-lg transition transform hover:scale-105"
                           >
-                            ✏️ Modifier
+                            Modifier
                           </button>
                           <button
                             onClick={() =>
                               handleDelete(schoolClass.id)
                             }
-                            className="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded text-sm"
+                            className="bg-rose-600 hover:bg-rose-700 text-white py-2 px-4 rounded-lg text-sm shadow-md hover:shadow-lg transition transform hover:scale-105"
                           >
-                            🗑️ Supprimer
+                            Supprimer
                           </button>
                         </td>
                       </tr>
