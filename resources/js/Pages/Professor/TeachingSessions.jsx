@@ -77,7 +77,15 @@ export default function TeachingSessions({ modules }) {
 
           <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900">
-              <h1 className="text-2xl font-bold mb-6">📚 Mes Modules</h1>
+              <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-bold">📚 Mes Modules</h1>
+                <button
+                  onClick={() => router.visit(route('professor.sessions.history'))}
+                  className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition text-sm"
+                >
+                  📋 Voir Historique
+                </button>
+              </div>
 
               {modules.length === 0 ? (
                 <p className="text-gray-500">

@@ -12,12 +12,14 @@ class ClassSession extends Model
         'professor_id',
         'started_at',
         'expires_at',
+        'ended_at',
         'status',
     ];
 
     protected $casts = [
         'started_at' => 'datetime',
         'expires_at' => 'datetime',
+        'ended_at' => 'datetime',
     ];
 
     public function module()

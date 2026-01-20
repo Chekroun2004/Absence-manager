@@ -242,9 +242,12 @@ export default function AbsenceJustifications({ justifications, pagination }) {
 
 // ========== MODAL DÉTAILS AMÉLIORÉ ==========
 function DetailsModal({ justification, onClose }) {
+  const [showPdfViewer, setShowPdfViewer] = useState(false);
+
+  const isPdf = justification.document_path && justification.document_path.toLowerCase().endsWith('.pdf');
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-xl max-w-5xl w-11/12 mx-4 max-h-screen overflow-y-auto">
         {/* HEADER */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 sticky top-0">
           <div className="flex items-center justify-between">
@@ -303,20 +306,61 @@ function DetailsModal({ justification, onClose }) {
               <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">
                 📎 Document joint
               </h3>
-              <div className="bg-indigo-50 p-4 rounded border border-indigo-200">
-                <p className="text-sm text-indigo-900 mb-3">
-                  L'étudiant a fourni un document justificatif
-                </p>
-                <a
-                  href={route(
-                    'professor.absences.justifications.download',
-                    justification.id
-                  )}
-                  className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-medium transition"
-                >
-                  📥 Télécharger le document
-                </a>
-              </div>
+
+              {/* VUE PRÉALABLE PDF */}
+              {showPdfViewer && isPdf ? (
+                <div className="space-y-3">
+                  <div className="bg-white border-2 border-indigo-200 rounded-lg overflow-hidden">
+                    <iframe
+                      src={route('professor.absences.justifications.view', justification.id) + '#toolbar=1&navpanes=0'}
+                      className="w-full h-96 rounded-lg"
+                      title="PDF Preview"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setShowPdfViewer(false)}
+                      className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 font-medium transition"
+                    >
+                      📖 Masquer l'aperçu
+                    </button>
+                    <a
+                      href={route(
+                        'professor.absences.justifications.download',
+                        justification.id
+                      )}
+                      className="flex-1 inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-medium transition"
+                    >
+                      📥 Télécharger
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-indigo-50 p-4 rounded border border-indigo-200 space-y-3">
+                  <p className="text-sm text-indigo-900">
+                    {isPdf ? '📄 Fichier PDF détecté' : '📎 Document justificatif joint'}
+                  </p>
+                  <div className="flex gap-2">
+                    {isPdf && (
+                      <button
+                        onClick={() => setShowPdfViewer(true)}
+                        className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-medium transition"
+                      >
+                        👁️ Voir l'aperçu
+                      </button>
+                    )}
+                    <a
+                      href={route(
+                        'professor.absences.justifications.download',
+                        justification.id
+                      )}
+                      className="flex-1 inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-medium transition"
+                    >
+                      📥 Télécharger
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

@@ -8,6 +8,7 @@ export default function ActiveSession({ session, students: initialStudents }) {
   const [students, setStudents] = useState(initialStudents);
   const [sessionExpired, setSessionExpired] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [isResuming, setIsResuming] = useState(false);
 
   // ✅ CALCUL DU TEMPS DEPUIS expires_at
   useEffect(() => {
@@ -99,6 +100,24 @@ export default function ActiveSession({ session, students: initialStudents }) {
     }
   };
 
+  // ✅ FONCTION POUR RÉACTIVER LE CODE
+  const handleResumeSession = () => {
+    if (confirm('Êtes-vous sûr de vouloir générer un nouveau code PIN ?')) {
+      setIsResuming(true);
+      router.post(route('professor.sessions.resume', session.id), {}, {
+        onSuccess: () => {
+          setIsResuming(false);
+          window.location.reload(); // Rafraîchir pour voir le nouveau code
+        },
+        onError: (error) => {
+          console.error('❌ Erreur:', error);
+          setIsResuming(false);
+          alert('❌ Erreur lors de la réactivation du code');
+        }
+      });
+    }
+  };
+
   const presentCount = useMemo(
     () => students.filter((s) => s.is_present).length,
     [students]
@@ -139,6 +158,15 @@ export default function ActiveSession({ session, students: initialStudents }) {
                   {copied ? '✅ Copié !' : '📋 Copier'}
                 </button>
               </div>
+
+              {/* ⚠️ ALERTE SI SÉANCE OUBLIÉE */}
+              {session.is_forgotten && (
+                <div className="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded">
+                  <p className="text-sm text-yellow-800 font-semibold">
+                    ⚠️ Cette séance a été lancée il y a longtemps. N'oublie pas de la terminer!
+                  </p>
+                </div>
+              )}
 
               {/* TIMER */}
               <div
@@ -221,6 +249,14 @@ export default function ActiveSession({ session, students: initialStudents }) {
 
               {/* ✅ BOUTONS D'ACTIONS */}
               <div className="flex gap-3 mt-6">
+                <button
+                  onClick={handleResumeSession}
+                  disabled={isResuming}
+                  className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isResuming ? '⏳ Réactivation...' : '🔄 Réactiver le code'}
+                </button>
+
                 <button
                   onClick={handleCloseSession}
                   disabled={isClosing}

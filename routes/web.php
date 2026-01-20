@@ -75,14 +75,18 @@ Route::middleware(['auth', 'verified', 'approved', 'role:professor'])
         Route::get('/sessions', [ProfessorSessionController::class, 'index'])->name('sessions');
         Route::post('/sessions/{module}/start', [ProfessorSessionController::class, 'start'])->name('sessions.start');
         Route::get('/sessions/{session}/active', [ProfessorSessionController::class, 'showActive'])->name('sessions.active');
+        Route::post('/sessions/{session}/resume', [ProfessorSessionController::class, 'resumeSession'])->name('sessions.resume');
         Route::post('/sessions/{session}/close', [ProfessorSessionController::class, 'close'])->name('sessions.close');
         Route::get('/sessions/{session}/stats', [ProfessorSessionController::class, 'stats'])->name('sessions.stats');
         Route::get('/sessions/{session}/attendances', [ProfessorSessionController::class, 'getAttendances'])->name('sessions.attendances');
+        Route::get('/sessions/history/list', [ProfessorSessionController::class, 'history'])->name('sessions.history');
+        Route::get('/sessions/{session}/details', [ProfessorSessionController::class, 'sessionDetails'])->name('sessions.details');
 
         // ========== JUSTIFICATIONS ABSENCES ==========
         Route::get('/absences/justifications', [ProfessorAbsenceJustificationController::class, 'index'])->name('absences.justifications');
         Route::post('/absences/justifications/{justification}/approve', [ProfessorAbsenceJustificationController::class, 'approve'])->name('absences.justifications.approve');
         Route::post('/absences/justifications/{justification}/reject', [ProfessorAbsenceJustificationController::class, 'reject'])->name('absences.justifications.reject');
+        Route::get('/absences/justifications/{justification}/view', [ProfessorAbsenceJustificationController::class, 'viewFile'])->name('absences.justifications.view');
         Route::get('/absences/justifications/{justification}/download', [ProfessorAbsenceJustificationController::class, 'downloadFile'])->name('absences.justifications.download');
 
         // ========== LETTRES RECOMMANDATION ==========

@@ -121,6 +121,28 @@ class AbsenceJustificationController extends Controller
         return redirect()->back()->with('success', '✅ Justification rejetée.');
     }
 
+    // ========== VISUALISER DOCUMENT PDF ==========
+    public function viewFile(AbsenceJustification $justification)
+    {
+        $professor = auth()->user()->professor;
+
+        if (!$professor) {
+            abort(403, 'Professeur non trouvé');
+        }
+
+        // ✅ COMPARAISON DIRECTE
+        if ($justification->attendance->classSession->professor_id !== $professor->id) {
+            abort(403, 'Non autorisé');
+        }
+
+        if (!$justification->document_path) {
+            abort(404, 'Aucun document');
+        }
+
+        // ✅ UTILISER 'local' AU LIEU DE 'private'
+        return Storage::disk('local')->response($justification->document_path);
+    }
+
     // ========== TÉLÉCHARGER DOCUMENT ==========
     public function downloadFile(AbsenceJustification $justification)
     {
