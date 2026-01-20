@@ -5,32 +5,34 @@ export default function StudentModules({ modules }) {
     <AuthenticatedLayout>
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold mb-6">📚 Mes Modules</h1>
+          {/* HEADER GRADIENT */}
+          <div className="mb-8 rounded-lg bg-gradient-to-r from-green-900 to-green-700 shadow-lg px-6 py-8">
+            <h1 className="text-4xl font-bold text-white">Mes Modules</h1>
+            <p className="text-green-100 mt-2">Consulter vos modules assignés</p>
+          </div>
 
           {modules.length === 0 ? (
-            <div className="bg-white shadow rounded-lg p-8">
-              <p className="text-gray-600 text-center">
-                Aucun module assigné
-              </p>
+            <div className="bg-white shadow-md rounded-lg p-12 border border-gray-200">
+              <p className="text-gray-600 text-center text-lg">Aucun module assigné</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {modules.map((module) => (
                 <div
                   key={module.id}
-                  className="bg-white shadow rounded-lg p-6 hover:shadow-lg transition"
+                  className="bg-white shadow-md rounded-lg p-6 border-l-4 border-green-500 hover:shadow-lg transition transform hover:scale-105"
                 >
-                  <h2 className="text-xl font-bold text-blue-600 mb-2">
+                  <h2 className="text-xl font-bold text-green-700 mb-4">
                     {module.name}
                   </h2>
-                  <div className="space-y-2 text-sm text-gray-700">
+                  <div className="space-y-3 text-sm text-gray-700 border-t pt-4">
                     <p>
-                      <strong>👨🏫 Professeur :</strong>{' '}
-                      {module.professor?.user?.name || 'N/A'}
+                      <strong className="text-gray-900">Professeur :</strong><br/>
+                      <span className="text-gray-600">{module.professor?.user?.name || 'N/A'}</span>
                     </p>
                     <p>
-                      <strong>🎓 Classe :</strong>{' '}
-                      {module.school_class?.name || 'N/A'}
+                      <strong className="text-gray-900">Classe :</strong><br/>
+                      <span className="text-gray-600">{module.school_class?.name || 'N/A'}</span>
                     </p>
                   </div>
                 </div>

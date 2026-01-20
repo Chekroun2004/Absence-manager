@@ -60,21 +60,21 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
         {/* HEADER */}
-        <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-4">
+        <div className="bg-gradient-to-r from-green-900 to-green-700 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-white">
-                📝 Justifier votre absence
+                Justifier votre absence
               </h2>
-              <p className="text-indigo-100 text-sm mt-1">
+              <p className="text-green-100 text-sm mt-1">
                 {session.module_name} - {session.professor_name}
               </p>
             </div>
             <button
               onClick={onClose}
-              className="text-indigo-100 hover:text-white transition text-2xl"
+              className="text-green-100 hover:text-white transition text-2xl font-bold"
             >
-              ✕
+              ×
             </button>
           </div>
         </div>
@@ -83,7 +83,7 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
         <form onSubmit={handleSubmit} className="p-6">
           {/* RAISON */}
           <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-900 mb-2">
               Raison de l'absence <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -91,10 +91,10 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
               onChange={(e) => setData('reason', e.target.value)}
               rows="5"
               placeholder="Expliquez la raison de votre absence (minimum 10 caractères)..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
             />
             {errors.reason && (
-              <p className="text-red-500 text-sm mt-1">{errors.reason}</p>
+              <p className="text-red-600 text-sm mt-1 font-medium">{errors.reason}</p>
             )}
             <p className="text-gray-500 text-xs mt-2">
               {data.reason.length}/10 caractères minimum
@@ -103,10 +103,10 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
 
           {/* DOCUMENT */}
           <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-900 mb-2">
               Document justificatif (optionnel)
             </label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-500 transition cursor-pointer relative">
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-500 hover:bg-green-50 transition cursor-pointer relative">
               <input
                 type="file"
                 onChange={handleFileChange}
@@ -115,15 +115,15 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
               />
               {fileName ? (
                 <div>
-                  <p className="text-green-600 font-semibold">✅ {fileName}</p>
+                  <p className="text-green-700 font-semibold">Document : {fileName}</p>
                   <p className="text-gray-500 text-xs mt-1">
                     PDF, DOC, JPG, PNG (Max 5MB)
                   </p>
                 </div>
               ) : (
                 <div>
-                  <p className="text-gray-600 font-medium">
-                    📎 Cliquez ou glissez un fichier
+                  <p className="text-gray-700 font-medium">
+                    Cliquez ou glissez un fichier
                   </p>
                   <p className="text-gray-500 text-xs mt-1">
                     PDF, DOC, JPG, PNG (Max 5MB)
@@ -132,32 +132,29 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
               )}
             </div>
             {errors.document && (
-              <p className="text-red-500 text-sm mt-1">{errors.document}</p>
+              <p className="text-red-600 text-sm mt-1 font-medium">{errors.document}</p>
             )}
           </div>
 
           {/* ACTIONS */}
-          <div className="flex gap-3 justify-end">
+          <div className="flex gap-3 justify-end border-t pt-4">
             <button
               type="button"
               onClick={onClose}
               disabled={processing}
-              className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition disabled:opacity-50"
+              className="px-4 py-2 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition disabled:opacity-50"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={processing || data.reason.length < 10}
-              className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition disabled:opacity-50 flex items-center gap-2"
+              className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium transition flex items-center gap-2 shadow-md hover:shadow-lg"
             >
               {processing ? (
-                <>
-                  <span className="animate-spin">⏳</span>
-                  Envoi en cours...
-                </>
+                <>En cours...</>
               ) : (
-                <>✅ Soumettre</>
+                <>Soumettre</>
               )}
             </button>
           </div>

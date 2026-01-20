@@ -48,39 +48,48 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                 <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
                     {/* Messages Flash */}
                     {flash?.success && (
-                        <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                        <div className="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-800 rounded-lg font-medium">
                             {flash.success}
                         </div>
                     )}
                     {flash?.error && (
-                        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                        <div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-800 rounded-lg font-medium">
                             {flash.error}
                         </div>
                     )}
 
-                    <div className="bg-white shadow-lg rounded-lg p-6">
-                        <div className="flex justify-between items-center mb-6">
-                            <h1 className="text-3xl font-bold text-gray-900">📝 Mes Lettres</h1>
-                            <button
-                                onClick={() => setShowModal(true)}
-                                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-                            >
-                                ➕ Nouvelle Demande
-                            </button>
+                    <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+                        {/* HEADER GRADIENT */}
+                        <div className="bg-gradient-to-r from-green-900 to-green-700 px-6 py-6">
+                            <div className="flex justify-between items-center">
+                                <h1 className="text-3xl font-bold text-white">Mes Lettres de Recommandation</h1>
+                                <button
+                                    onClick={() => setShowModal(true)}
+                                    className="px-4 py-2 bg-white text-green-700 font-semibold rounded-lg hover:bg-green-50 transition shadow-md"
+                                >
+                                    + Nouvelle Demande
+                                </button>
+                            </div>
                         </div>
+
+                        <div className="p-6">
 
                         {/* MODAL NOUVELLE DEMANDE */}
                         {showModal && (
                             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                                <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-                                    <h2 className="text-xl font-bold mb-4">Demander une Lettre</h2>
-                                    <form onSubmit={handleSubmit}>
+                                <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden">
+                                    {/* MODAL HEADER */}
+                                    <div className="bg-gradient-to-r from-green-900 to-green-700 px-6 py-4">
+                                        <h2 className="text-xl font-bold text-white">Demander une Lettre</h2>
+                                    </div>
+
+                                    <form onSubmit={handleSubmit} className="p-6">
                                         <div className="mb-4">
-                                            <label className="block text-sm font-semibold mb-2">Module :</label>
+                                            <label className="block text-sm font-semibold text-gray-900 mb-2">Module :</label>
                                             <select
                                                 value={formData.module_id}
                                                 onChange={(e) => setFormData({ ...formData, module_id: e.target.value })}
-                                                className="w-full p-2 border rounded-lg"
+                                                className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
                                                 required
                                             >
                                                 <option value="">-- Sélectionner --</option>
@@ -94,27 +103,27 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
 
                                         {/* ✅ AFFICHER LES INFOS DU MODULE ET LA MENTION */}
                                         {selectedModuleInfo && (
-                                            <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                                                <p className="text-sm text-gray-700 mb-2">
+                                            <div className="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                                                <p className="text-sm text-gray-900 mb-2">
                                                     <strong>Professeur :</strong> {selectedModuleInfo.professor.user.name}
                                                 </p>
-                                                <p className="text-sm text-gray-700">
+                                                <p className="text-sm text-gray-900">
                                                     <strong>Mention :</strong>{' '}
-                                                    <span className="inline-block px-2 py-1 bg-green-100 text-green-800 rounded font-semibold">
+                                                    <span className="inline-block px-3 py-1 bg-green-200 text-green-900 rounded-full font-semibold text-xs mt-1">
                                                         {selectedModuleInfo.mention}
                                                     </span>
                                                 </p>
-                                                <p className="text-xs text-gray-500 mt-2">
+                                                <p className="text-xs text-gray-600 mt-2">
                                                     (Mention attribuée par le professeur pour ce module)
                                                 </p>
                                             </div>
                                         )}
 
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-2 border-t pt-4">
                                             <button
                                                 type="submit"
                                                 disabled={loading || !formData.module_id}
-                                                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg disabled:opacity-50"
+                                                className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition"
                                             >
                                                 Envoyer
                                             </button>
@@ -122,7 +131,7 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                                                 type="button"
                                                 onClick={() => setShowModal(false)}
                                                 disabled={loading}
-                                                className="flex-1 px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg disabled:opacity-50"
+                                                className="flex-1 px-4 py-2 bg-gray-300 hover:bg-gray-400 disabled:opacity-50 text-gray-900 font-semibold rounded-lg transition"
                                             >
                                                 Annuler
                                             </button>
@@ -134,13 +143,13 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
 
                         {/* LISTE DES DEMANDES */}
                         {myRequests.length === 0 ? (
-                            <p className="text-gray-500 text-center py-8">Aucune demande pour l'instant</p>
+                            <p className="text-gray-500 text-center py-12 text-lg">Aucune demande pour l'instant</p>
                         ) : (
                             <div className="space-y-4">
                                 {myRequests.map((req) => (
                                     <div
                                         key={req.id}
-                                        className={`p-4 rounded-lg border-l-4 ${
+                                        className={`p-4 rounded-lg border-l-4 transition ${
                                             req.status === 'pending'
                                                 ? 'bg-yellow-50 border-yellow-500'
                                                 : req.status === 'accepted'
@@ -150,24 +159,26 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                                     >
                                         <div className="flex justify-between items-start">
                                             <div className="flex-1">
-                                                <p className="font-semibold text-gray-900">
+                                                <p className="font-semibold text-gray-900 mb-2">
                                                     {req.status === 'pending' && '⏳ En attente - '}
                                                     {req.status === 'accepted' && '✅ Acceptée - '}
                                                     {req.status === 'rejected' && '❌ Refusée - '}
                                                     {req.professor.user.name}
                                                 </p>
-                                                <p className="text-sm text-gray-600">
-                                                    Module : <span className="font-semibold">{req.module.name}</span>
-                                                </p>
-                                                <p className="text-sm text-gray-600">
-                                                    Mention : <span className="font-semibold">{req.mention}</span>
-                                                </p>
-                                                <p className="text-xs text-gray-500">
-                                                    Demandé le : {new Date(req.created_at).toLocaleDateString('fr-FR')}
-                                                </p>
+                                                <div className="space-y-1 text-sm">
+                                                    <p className="text-gray-700">
+                                                        <strong className="text-gray-900">Module :</strong> {req.module.name}
+                                                    </p>
+                                                    <p className="text-gray-700">
+                                                        <strong className="text-gray-900">Mention :</strong> <span className="inline-block px-2 py-0.5 bg-green-100 text-green-800 rounded font-semibold text-xs">{req.mention}</span>
+                                                    </p>
+                                                    <p className="text-gray-600 text-xs">
+                                                        Demandé le {new Date(req.created_at).toLocaleDateString('fr-FR')}
+                                                    </p>
+                                                </div>
 
                                                 {req.status === 'rejected' && req.rejection_reason && (
-                                                    <p className="text-sm text-red-700 mt-2">
+                                                    <p className="text-sm text-red-700 mt-2 border-t pt-2">
                                                         <strong>Raison du refus :</strong> {req.rejection_reason}
                                                     </p>
                                                 )}
@@ -177,9 +188,9 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                                             {req.status === 'accepted' && req.has_letter && (
                                                 <button
                                                     onClick={() => handleDownload(req.id)}
-                                                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold flex items-center gap-2 whitespace-nowrap"
+                                                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold whitespace-nowrap shadow-md hover:shadow-lg transition ml-4"
                                                 >
-                                                    📥 Télécharger
+                                                    Télécharger
                                                 </button>
                                             )}
                                         </div>
@@ -187,6 +198,7 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                                 ))}
                             </div>
                         )}
+                        </div>
                     </div>
                 </div>
             </div>
