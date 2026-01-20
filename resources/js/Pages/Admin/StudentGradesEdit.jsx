@@ -57,6 +57,7 @@ export default function StudentGradesEdit({ module, students, flash }) {
             <div className="py-12">
                 <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
                     {/* Messages flash */}
+                    {flash?.success && (
                         <div className="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-lg shadow-md">
                             {flash.success}
                         </div>
