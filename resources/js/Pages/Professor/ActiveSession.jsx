@@ -139,26 +139,38 @@ export default function ActiveSession({ session, students: initialStudents }) {
 
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-12">
           {/* CODE PIN - SECTION PRINCIPALE */}
-          <div className="bg-white rounded-lg shadow-lg border border-gray-200 mb-8 overflow-hidden">
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-12 text-center border-b border-gray-200">
-              <p className="text-sm font-semibold text-gray-600 uppercase mb-4">Code PIN à communiquer</p>
-              <div style={{ backgroundColor: '#1e40af' }} className="w-48 mx-auto rounded-lg p-8 text-white">
-                <p className="text-6xl font-bold font-mono tracking-widest">
-                  {timeLeft <= 0 ? 'EXPIRÉ' : session.code}
+          <div className="bg-white rounded-lg shadow-xl border-2 border-blue-200 mb-8 overflow-hidden">
+            <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 p-16 text-center">
+              <p className="text-lg font-bold text-blue-100 uppercase mb-8 tracking-wide">Code PIN à communiquer</p>
+              
+              {/* CODE CARD */}
+              <div className="bg-white rounded-2xl p-12 mb-8 shadow-2xl border-4 border-blue-100">
+                <p className="text-gray-500 text-sm font-semibold mb-4 uppercase">Présence</p>
+                <p className="text-9xl font-black font-mono tracking-widest text-blue-900 leading-none">
+                  {timeLeft <= 0 ? '✕' : session.code}
                 </p>
               </div>
-              <p style={{ color: timeLeft <= 0 ? '#dc2626' : '#059669' }} className="text-5xl font-bold font-mono mt-6">
-                {timeLeft}s
-              </p>
-              <p className="text-gray-600 text-sm mt-2">Temps restant</p>
 
+              {/* TIMER */}
+              <div className="flex items-center justify-center gap-4">
+                <div className="text-center">
+                  <p className={`text-7xl font-black font-mono ${timeLeft <= 0 ? 'text-red-500' : 'text-emerald-500'}`}>
+                    {timeLeft}
+                  </p>
+                  <p className={`text-sm font-semibold uppercase mt-2 ${timeLeft <= 0 ? 'text-red-300' : 'text-emerald-300'}`}>
+                    secondes
+                  </p>
+                </div>
+              </div>
+
+              {/* COPY BUTTON */}
               <button
                 onClick={copyCode}
                 disabled={timeLeft <= 0}
-                style={{ backgroundColor: timeLeft <= 0 ? '#9ca3af' : '#1e40af' }}
-                className="mt-6 text-white px-6 py-2 rounded font-medium hover:opacity-90 transition disabled:cursor-not-allowed"
+                style={{ backgroundColor: timeLeft <= 0 ? '#9ca3af' : '#059669' }}
+                className="mt-8 text-white px-8 py-3 rounded-lg font-bold text-lg hover:opacity-90 transition disabled:cursor-not-allowed shadow-lg"
               >
-                {copied ? 'Copié' : 'Copier le code'}
+                {copied ? '✓ Copié au presse-papiers' : 'Copier le code'}
               </button>
             </div>
 
