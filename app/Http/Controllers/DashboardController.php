@@ -173,9 +173,15 @@ class DashboardController extends Controller
             $absentCount = $totalSessions - $presentCount - $justifiedCount;
             $attendanceRate = $totalSessions > 0 ? round((($presentCount + $justifiedCount) / $totalSessions) * 100, 2) : 0;
 
-            // ✅ VÉRIFIER SI ÉTUDIANT A +3 ABSENCES
+            // ✅ VÉRIFIER SI ÉTUDIANT A +3 ABSENCES (exclure les justifications approuvées)
             $totalAbsences = Attendance::where('student_id', $student->id)
                 ->where('status', '!=', 'present')
+                ->whereDoesntHave('session', function ($query) {
+                    $query->whereHas('justifications', function ($subQuery) {
+                        $subQuery->where('student_id', auth()->id())
+                                 ->where('status', 'approved');
+                    });
+                })
                 ->count();
             $hasHighAbsence = $totalAbsences >= 3;
 
