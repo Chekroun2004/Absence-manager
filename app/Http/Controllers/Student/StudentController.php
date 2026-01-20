@@ -153,10 +153,10 @@ public function letters()
                         'name' => $request->professor->user->name,
                     ],
                 ],
-                'module' => [
+                'module' => $request->module ? [
                     'id' => $request->module->id,
                     'name' => $request->module->name,
-                ],
+                ] : null,
                 'has_letter' => $request->letter !== null,
                 'letter' => $request->letter,
             ];
