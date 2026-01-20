@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useForm } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 
 export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
   const { data, setData, post, processing, errors } = useForm({
@@ -47,6 +47,8 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
         setData({ reason: '', document: null });
         setFileName('');
         onClose();
+        // 🔄 Rafraîchir les données du dashboard
+        router.visit(window.location.href);
       },
       onError: (errors) => {
         console.error('❌ Erreurs de validation:', errors);
