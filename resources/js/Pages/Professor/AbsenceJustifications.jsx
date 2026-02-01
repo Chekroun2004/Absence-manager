@@ -31,19 +31,19 @@ export default function AbsenceJustifications({ justifications, pagination }) {
       pending: {
         bg: 'bg-yellow-100',
         text: 'text-yellow-800',
-        icon: '⏳',
+        icon: '',
         label: 'En attente',
       },
       approved: {
         bg: 'bg-green-100',
         text: 'text-green-800',
-        icon: '✅',
+        icon: '',
         label: 'Approuvée',
       },
       rejected: {
         bg: 'bg-red-100',
         text: 'text-red-800',
-        icon: '❌',
+        icon: '',
         label: 'Rejetée',
       },
     };
@@ -219,7 +219,7 @@ function DetailsModal({ justification, onClose }) {
         {/* HEADER */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 sticky top-0">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-white">👁️ Détails de la Justification</h2>
+            <h2 className="text-xl font-bold text-white">Détails de la Justification</h2>
             <button
               onClick={onClose}
               className="text-blue-100 hover:text-white text-2xl"
@@ -272,7 +272,7 @@ function DetailsModal({ justification, onClose }) {
           {justification.document_path && (
             <div>
               <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">
-                📎 Document joint
+                Document joint
               </h3>
 
               {/* VUE PRÉALABLE PDF */}
@@ -290,7 +290,7 @@ function DetailsModal({ justification, onClose }) {
                       onClick={() => setShowPdfViewer(false)}
                       className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 font-medium transition"
                     >
-                      📖 Masquer l'aperçu
+                      Masquer l'aperçu
                     </button>
                     <a
                       href={route(
@@ -299,14 +299,14 @@ function DetailsModal({ justification, onClose }) {
                       )}
                       className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-medium transition"
                     >
-                      📥 Télécharger
+                      Télécharger
                     </a>
                   </div>
                 </div>
               ) : (
                 <div className="bg-blue-50 p-4 rounded border border-blue-200 space-y-3">
                   <p className="text-sm text-blue-900">
-                    {isPdf ? '📄 Fichier PDF détecté' : '📎 Document justificatif joint'}
+                    {isPdf ? 'Fichier PDF détecté' : 'Document justificatif joint'}
                   </p>
                   <div className="flex gap-2">
                     {isPdf && (
@@ -314,7 +314,7 @@ function DetailsModal({ justification, onClose }) {
                         onClick={() => setShowPdfViewer(true)}
                         className="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-medium transition"
                       >
-                        👁️ Voir l'aperçu
+                        Voir l'aperçu
                       </button>
                     )}
                     <a
@@ -324,7 +324,7 @@ function DetailsModal({ justification, onClose }) {
                       )}
                       className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-medium transition"
                     >
-                      📥 Télécharger
+                      Télécharger
                     </a>
                   </div>
                 </div>
@@ -336,7 +336,7 @@ function DetailsModal({ justification, onClose }) {
           {justification.status === 'rejected' && (
             <div>
               <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">
-                ❌ Motif de Rejet
+                Motif de Rejet
               </h3>
               <div className="bg-red-50 p-4 rounded border border-red-200">
                 <p className="text-red-900 whitespace-pre-wrap">
@@ -354,17 +354,17 @@ function DetailsModal({ justification, onClose }) {
             <div className="flex gap-2">
               {justification.status === 'pending' && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-                  ⏳ En attente
+                  En attente
                 </span>
               )}
               {justification.status === 'approved' && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                  ✅ Approuvée
+                  Approuvée
                 </span>
               )}
               {justification.status === 'rejected' && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                  ❌ Rejetée
+                  Rejetée
                 </span>
               )}
             </div>

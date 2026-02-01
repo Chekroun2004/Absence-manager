@@ -16,7 +16,7 @@ export default function StudentGradesEdit({ module, students, flash }) {
 
     const handleSave = (gradeId, studentId) => {
         if (!gradeId) {
-            alert('❌ Erreur : ID de note manquant');
+            alert('Erreur : ID de note manquant');
             return;
         }
 

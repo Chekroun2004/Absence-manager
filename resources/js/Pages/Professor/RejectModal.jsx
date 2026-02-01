@@ -34,7 +34,7 @@ export default function RejectModal({ isOpen, justification, onClose }) {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-white">
-                ❌ Rejeter la Justification
+                Rejeter la Justification
               </h2>
               <p className="text-gray-200 text-sm mt-1">
                 {justification.student_name} - {justification.module_name}
@@ -100,11 +100,11 @@ export default function RejectModal({ isOpen, justification, onClose }) {
             >
               {processing ? (
                 <>
-                  <span className="animate-spin">⏳</span>
+                  <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                   Envoi en cours...
                 </>
               ) : (
-                <>❌ Rejeter avec raison</>
+                <>Rejeter avec raison</>
               )}
             </button>
           </div>

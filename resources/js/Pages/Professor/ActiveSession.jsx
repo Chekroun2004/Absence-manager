@@ -10,7 +10,7 @@ export default function ActiveSession({ session, students: initialStudents }) {
   const [isClosing, setIsClosing] = useState(false);
   const [isResuming, setIsResuming] = useState(false);
 
-  // ✅ CALCUL DU TEMPS DEPUIS expires_at
+  // CALCUL DU TEMPS DEPUIS expires_at
   useEffect(() => {
     const calculateTimeLeft = () => {
       const now = new Date().getTime();
@@ -28,23 +28,23 @@ export default function ActiveSession({ session, students: initialStudents }) {
     return () => clearInterval(interval);
   }, [session.expires_at]);
 
-  // ✅ POLLING : Rafraîchir les présences toutes les 2 secondes
+  // POLLING : Rafraîchir les présences toutes les 2 secondes
   useEffect(() => {
     if (sessionExpired) {
-      console.log('⏸️ POLLING ARRÊTÉ - Temps écoulé');
+      console.log('POLLING ARRÊTÉ - Temps écoulé');
       return;
     }
 
     const interval = setInterval(async () => {
       try {
-        console.log(`🔄 [${new Date().toLocaleTimeString()}] Polling...`);
+        console.log(`[${new Date().toLocaleTimeString()}] Polling...`);
         
         const response = await fetch(
           `/professor/sessions/${session.id}/attendances`
         );
         
         if (!response.ok) {
-          console.error(`❌ ERREUR HTTP ${response.status}`);
+          console.error(`ERREUR HTTP ${response.status}`);
           return;
         }
         
@@ -57,7 +57,7 @@ export default function ActiveSession({ session, students: initialStudents }) {
             );
             
             if (attendance && attendance.status === 'present' && !student.is_present) {
-              console.log(`✅ ${student.name} est maintenant PRÉSENT`);
+              console.log(`${student.name} est maintenant PRÉSENT`);
               return {
                 ...student,
                 is_present: true,
@@ -71,7 +71,7 @@ export default function ActiveSession({ session, students: initialStudents }) {
         });
         
       } catch (error) {
-        console.error('❌ ERREUR FETCH:', error);
+        console.error('ERREUR FETCH:', error);
       }
     }, 2000);
 
@@ -84,7 +84,7 @@ export default function ActiveSession({ session, students: initialStudents }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // ✅ FONCTION POUR ARRÊTER LA SÉANCE
+  // FONCTION POUR ARRÊTER LA SÉANCE
   const handleCloseSession = () => {
     if (confirm('Êtes-vous sûr de vouloir arrêter la séance ?')) {
       setIsClosing(true);
@@ -93,14 +93,14 @@ export default function ActiveSession({ session, students: initialStudents }) {
           router.visit(route('professor.sessions.stats', session.id));
         },
         onError: (error) => {
-          console.error('❌ Erreur:', error);
+          console.error('Erreur:', error);
           setIsClosing(false);
         }
       });
     }
   };
 
-  // ✅ FONCTION POUR RÉACTIVER LE CODE
+  // FONCTION POUR RÉACTIVER LE CODE
   const handleResumeSession = () => {
     if (confirm('Êtes-vous sûr de vouloir générer un nouveau code PIN ?')) {
       setIsResuming(true);
@@ -110,9 +110,9 @@ export default function ActiveSession({ session, students: initialStudents }) {
           window.location.reload(); // Rafraîchir pour voir le nouveau code
         },
         onError: (error) => {
-          console.error('❌ Erreur:', error);
+          console.error('Erreur:', error);
           setIsResuming(false);
-          alert('❌ Erreur lors de la réactivation du code');
+          alert('Erreur lors de la réactivation du code');
         }
       });
     }
@@ -176,7 +176,7 @@ export default function ActiveSession({ session, students: initialStudents }) {
                 style={{ backgroundColor: timeLeft <= 0 ? '#9ca3af' : '#059669' }}
                 className="mt-8 text-white px-8 py-3 rounded-lg font-bold text-lg hover:opacity-90 transition disabled:cursor-not-allowed shadow-lg"
               >
-                {copied ? '✓ Copié au presse-papiers' : 'Copier le code'}
+                {copied ? 'Copié au presse-papiers' : 'Copier le code'}
               </button>
             </div>
 

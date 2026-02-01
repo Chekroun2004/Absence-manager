@@ -14,7 +14,7 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
         e.preventDefault();
         
         if (!formData.module_id) {
-            alert('⚠️ Veuillez sélectionner un module');
+            alert('Veuillez sélectionner un module');
             return;
         }
 
@@ -162,9 +162,9 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                                         <div className="flex justify-between items-start">
                                             <div className="flex-1">
                                                 <p className="font-semibold text-gray-900 mb-2">
-                                                    {req.status === 'pending' && '⏳ En attente - '}
-                                                    {req.status === 'accepted' && '✅ Acceptée - '}
-                                                    {req.status === 'rejected' && '❌ Refusée - '}
+                                                    {req.status === 'pending' && 'En attente - '}
+                                                    {req.status === 'accepted' && 'Acceptée - '}
+                                                    {req.status === 'rejected' && 'Refusée - '}
                                                     {req.professor.user.name}
                                                 </p>
                                                 <div className="space-y-1 text-sm">

@@ -27,7 +27,7 @@ export default function StudentDashboard({ stats, sessions }) {
     if (session.attendance && session.attendance.status === 'present') {
       return (
         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-          ✅ Présent
+          Présent
         </span>
       );
     }
@@ -39,7 +39,7 @@ export default function StudentDashboard({ stats, sessions }) {
     ) {
       return (
         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-          ✓ Absence Justifiée
+          Absence Justifiée
         </span>
       );
     }
@@ -51,7 +51,7 @@ export default function StudentDashboard({ stats, sessions }) {
     ) {
       return (
         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-          ⏳ En attente
+          En attente
         </span>
       );
     }
@@ -63,7 +63,7 @@ export default function StudentDashboard({ stats, sessions }) {
     ) {
       return (
         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800">
-          ⚠️ Justification Rejetée
+          Justification Rejetée
         </span>
       );
     }
@@ -71,7 +71,7 @@ export default function StudentDashboard({ stats, sessions }) {
     // Absence non justifiée
     return (
       <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-        ❌ Absent
+        Absent
       </span>
     );
   };
@@ -92,7 +92,11 @@ export default function StudentDashboard({ stats, sessions }) {
           {stats.has_high_absence && (
             <div className="mb-8 bg-red-50 border-l-4 border-red-600 p-6 rounded-lg shadow-md">
               <div className="flex items-start gap-4">
-                <div className="text-4xl">🚨</div>
+                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
                 <div className="flex-1">
                   <h2 className="text-xl font-bold text-red-800 mb-2">Alerte: Vous avez dépassé 3 absences</h2>
                   <p className="text-red-700">
@@ -138,10 +142,10 @@ export default function StudentDashboard({ stats, sessions }) {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Filtres</h3>
             <div className="flex gap-2 flex-wrap">
               {[
-                { value: 'all', label: 'Tous', icon: '📋' },
-                { value: 'present', label: 'Présences', icon: '✓' },
-                { value: 'justified', label: 'Justifiées', icon: '✓' },
-                { value: 'absent', label: 'Absences', icon: 'X' },
+                { value: 'all', label: 'Tous' },
+                { value: 'present', label: 'Présences' },
+                { value: 'justified', label: 'Justifiées' },
+                { value: 'absent', label: 'Absences' },
               ].map((btn) => (
                 <button
                   key={btn.value}
@@ -307,7 +311,7 @@ function JustificationDetailsModal({ session, onClose }) {
         headerClass: 'bg-gradient-to-r from-green-600 to-green-700',
         badgeClass: 'bg-green-50 border-green-200',
         textClass: 'text-green-900',
-        icon: '✓',
+        icon: '',
         label: 'Approuvée',
       };
     }
@@ -316,7 +320,7 @@ function JustificationDetailsModal({ session, onClose }) {
         headerClass: 'bg-gradient-to-r from-red-600 to-red-700',
         badgeClass: 'bg-red-50 border-red-200',
         textClass: 'text-red-900',
-        icon: 'X',
+        icon: '',
         label: 'Rejetée',
       };
     }
@@ -324,7 +328,7 @@ function JustificationDetailsModal({ session, onClose }) {
       headerClass: 'bg-gradient-to-r from-amber-600 to-amber-700',
       badgeClass: 'bg-amber-50 border-amber-200',
       textClass: 'text-amber-900',
-      icon: '⏳',
+      icon: '',
       label: 'En attente',
     };
   };

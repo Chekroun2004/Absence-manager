@@ -18,7 +18,7 @@ export default function MarkSessionPresence() {
         setMessageType('');
 
         if (!code) {
-            setMessage('❌ Veuillez entrer le code PIN');
+            setMessage('Veuillez entrer le code PIN');
             setMessageType('error');
             setLoading(false);
             return;
@@ -44,8 +44,8 @@ export default function MarkSessionPresence() {
 
             if (response.ok) {
                 const successMsg = data.is_expired 
-                    ? `⏰ Code expiré ! Marqué ABSENT (Retard: ${data.delay_seconds}s). Le professeur peut rafraîchir.`
-                    : '✅ Présence marquée avec succès !';
+                    ? `Code expiré ! Marqué ABSENT (Retard: ${data.delay_seconds}s). Le professeur peut rafraîchir.`
+                    : 'Présence marquée avec succès !';
                 setMessage(successMsg);
                 setMessageType('success');
                 setCode('');
@@ -55,7 +55,7 @@ export default function MarkSessionPresence() {
                 setMessageType('error');
             }
         } catch (error) {
-            setMessage('❌ Erreur de connexion: ' + error.message);
+            setMessage('Erreur de connexion: ' + error.message);
             setMessageType('error');
         } finally {
             setLoading(false);
@@ -108,7 +108,7 @@ export default function MarkSessionPresence() {
                                         autoFocus
                                     />
                                     <p className="text-xs text-gray-500 mt-2">
-                                        ⚠️ Le code expire après 20 secondes
+                                        Le code expire après 20 secondes
                                     </p>
                                 </div>
 
@@ -119,7 +119,7 @@ export default function MarkSessionPresence() {
                                         disabled={loading || !code}
                                         className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold shadow-md hover:shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
                                     >
-                                        {loading ? 'Traitement...' : '✓ Valider'}
+                                        {loading ? 'Traitement...' : 'Valider'}
                                     </button>
                                     <button
                                         type="button"
@@ -137,13 +137,13 @@ export default function MarkSessionPresence() {
 
                             {/* INSTRUCTIONS */}
                             <div className="mt-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
-                                <h3 className="font-bold text-blue-900 mb-2">📋 Instructions</h3>
+                                <h3 className="font-bold text-blue-900 mb-2">Instructions</h3>
                                 <ul className="text-sm text-blue-800 space-y-1">
-                                    <li>✓ Demandez le code PIN au professeur</li>
-                                    <li>✓ Entrez le code dans le champ ci-dessus</li>
-                                    <li>✓ Cliquez sur "Valider"</li>
-                                    <li>⚠️ Le code n'est valide que pendant 20 secondes</li>
-                                    <li>⏰ Si vous l'entrez après 20 secondes, vous serez marqué ABSENT</li>
+                                    <li>- Demandez le code PIN au professeur</li>
+                                    <li>- Entrez le code dans le champ ci-dessus</li>
+                                    <li>- Cliquez sur "Valider"</li>
+                                    <li>- Le code n'est valide que pendant 20 secondes</li>
+                                    <li>- Si vous l'entrez après 20 secondes, vous serez marqué ABSENT</li>
                                 </ul>
                             </div>
                         </div>

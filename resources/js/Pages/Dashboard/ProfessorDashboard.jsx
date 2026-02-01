@@ -51,7 +51,7 @@ export default function ProfessorDashboard({ stats, modules, activeSessions, rec
           <StatCard 
             title="Modules" 
             value={stats.total_modules} 
-            icon="📚"
+            icon="M"
             bgColor="bg-blue-50"
             borderColor="border-blue-200"
             textColor="text-blue-900"
@@ -60,7 +60,7 @@ export default function ProfessorDashboard({ stats, modules, activeSessions, rec
           <StatCard 
             title="Étudiants" 
             value={stats.total_students} 
-            icon="👥"
+            icon="E"
             bgColor="bg-emerald-50"
             borderColor="border-emerald-200"
             textColor="text-emerald-900"
@@ -69,7 +69,7 @@ export default function ProfessorDashboard({ stats, modules, activeSessions, rec
           <StatCard 
             title="Séances" 
             value={stats.total_sessions} 
-            icon="📊"
+            icon="S"
             bgColor="bg-cyan-50"
             borderColor="border-cyan-200"
             textColor="text-cyan-900"
@@ -78,7 +78,7 @@ export default function ProfessorDashboard({ stats, modules, activeSessions, rec
           <StatCard 
             title="En attente" 
             value={stats.pending_justifications} 
-            icon="⏳"
+            icon="P"
             bgColor="bg-amber-50"
             borderColor="border-amber-200"
             textColor="text-amber-900"

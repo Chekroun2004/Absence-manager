@@ -16,13 +16,13 @@ export default function StudentGradesEdit({ module, students, flash }) {
 
     const handleSave = (gradeId, studentId) => {
         if (!gradeId) {
-            alert('❌ Erreur : ID de note manquant');
+            alert('Erreur : ID de note manquant');
             return;
         }
 
         const mention = formData[studentId];
         if (!mention) {
-            alert('❌ Veuillez sélectionner une mention');
+            alert('Veuillez sélectionner une mention');
             return;
         }
 
@@ -38,7 +38,7 @@ export default function StudentGradesEdit({ module, students, flash }) {
                 },
                 onError: (errors) => {
                     console.error('Erreur:', errors);
-                    alert('❌ Erreur lors de la sauvegarde');
+                    alert('Erreur lors de la sauvegarde');
                     setLoading(false);
                 },
             }

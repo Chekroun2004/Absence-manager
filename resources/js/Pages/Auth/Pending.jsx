@@ -8,7 +8,13 @@ export default function Pending() {
       <div className="flex min-h-screen items-center justify-center bg-gray-100">
         <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
           <div className="text-center">
-            <div className="mb-4 text-5xl">⏳</div>
+            <div className="mb-4 flex justify-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
             <h1 className="mb-4 text-2xl font-bold text-gray-900">
               Demande en attente
             </h1>
@@ -23,7 +29,7 @@ export default function Pending() {
 
             <div className="mb-8 rounded-lg bg-blue-50 p-4">
               <p className="text-sm font-semibold text-blue-900">
-                ℹ️ Qu'est-ce que j'attends ?
+                Qu'est-ce que j'attends ?
               </p>
               <p className="mt-2 text-xs text-blue-700">
                 Les administrateurs vérifient chaque nouvelle

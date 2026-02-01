@@ -9,7 +9,7 @@ export default function Recommendations({ pendingRequests, processedRequests, fl
     const [loading, setLoading] = useState(false);
 
     const handleAccept = (id) => {
-        if (confirm('✅ Générer la lettre de recommandation ?')) {
+        if (confirm('Générer la lettre de recommandation ?')) {
             setLoading(true);
             router.post(route('professor.recommendations.accept', id), {}, {
                 onSuccess: () => {
@@ -24,7 +24,7 @@ export default function Recommendations({ pendingRequests, processedRequests, fl
 
     const handleRejectSubmit = (id) => {
         if (!rejectionReason.trim()) {
-            alert('⚠️ Veuillez entrer une raison');
+            alert('Veuillez entrer une raison');
             return;
         }
         

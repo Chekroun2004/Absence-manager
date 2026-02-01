@@ -20,21 +20,21 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // ✅ VÉRIFICATION : Session existe et a un ID
+    // VÉRIFICATION : Session existe et a un ID
     if (!session || !session.id) {
-      console.error('❌ Session ID manquante!', session);
-      alert('❌ Erreur : Session non trouvée');
+      console.error('Session ID manquante!', session);
+      alert('Erreur : Session non trouvée');
       return;
     }
 
-    // ✅ VÉRIFICATION : Raison minimum 10 caractères
+    // VÉRIFICATION : Raison minimum 10 caractères
     if (data.reason.length < 10) {
-      console.error('❌ Raison trop courte!', data.reason.length);
-      alert('❌ La raison doit faire minimum 10 caractères');
+      console.error('Raison trop courte!', data.reason.length);
+      alert('La raison doit faire minimum 10 caractères');
       return;
     }
 
-    console.log('🎯 Soumission justification', {
+    console.log('Soumission justification', {
       session_id: session.id,
       reason_length: data.reason.length,
       has_document: !!data.document,
@@ -43,15 +43,15 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
     post(route('student.justifications.store', session.id), {
       forceFormData: true,
       onSuccess: () => {
-        console.log('✅ Justification créée avec succès');
+        console.log('Justification créée avec succès');
         setData({ reason: '', document: null });
         setFileName('');
         onClose();
-        // 🔄 Rafraîchir les données du dashboard
+        // Rafraîchir les données du dashboard
         router.visit(window.location.href);
       },
       onError: (errors) => {
-        console.error('❌ Erreurs de validation:', errors);
+        console.error('Erreurs de validation:', errors);
       },
     });
   };
