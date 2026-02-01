@@ -7,10 +7,10 @@ export default function StudentAbsences({ student, absences, absenceCount, total
       <Head title={`Absences - ${student.name}`} />
 
       {/* HEADER - FULL WIDTH */}
-      <div className="bg-gradient-to-r from-red-900 to-red-700 text-white py-8">
+      <div className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold">{student.name}</h1>
-          <p className="text-red-100 mt-2">Détails des absences</p>
+          <p className="text-blue-100 mt-2">Détails des absences</p>
         </div>
       </div>
 
@@ -18,33 +18,33 @@ export default function StudentAbsences({ student, absences, absenceCount, total
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           {/* INFO ÉTUDIANT */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
+            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500">
               <p className="text-sm text-gray-600 mb-1">Nom</p>
               <p className="text-2xl font-bold text-gray-900">{student.name}</p>
             </div>
-            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
+            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500">
               <p className="text-sm text-gray-600 mb-1">Email</p>
               <p className="text-lg text-gray-900 break-all">{student.email}</p>
             </div>
-            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
+            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500">
               <p className="text-sm text-gray-600 mb-1">Mention Académique</p>
-              <p className="text-lg font-semibold text-red-700">{student.academic_mention}</p>
+              <p className="text-lg font-semibold text-blue-700">{student.academic_mention}</p>
             </div>
           </div>
 
           {/* STATISTIQUES ABSENCES */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-red-50 shadow-md rounded-lg p-6 border-l-4 border-red-600">
+            <div className="bg-blue-50 shadow-md rounded-lg p-6 border-l-4 border-blue-600">
               <p className="text-sm text-gray-600 mb-1">Total Absences</p>
-              <p className="text-4xl font-bold text-red-700">{absenceCount}</p>
+              <p className="text-4xl font-bold text-blue-700">{absenceCount}</p>
             </div>
-            <div className="bg-orange-50 shadow-md rounded-lg p-6 border-l-4 border-orange-500">
+            <div className="bg-blue-50 shadow-md rounded-lg p-6 border-l-4 border-blue-500">
               <p className="text-sm text-gray-600 mb-1">Total Séances</p>
-              <p className="text-4xl font-bold text-orange-700">{totalSessions}</p>
+              <p className="text-4xl font-bold text-blue-700">{totalSessions}</p>
             </div>
-            <div className="bg-rose-50 shadow-md rounded-lg p-6 border-l-4 border-rose-500">
+            <div className="bg-blue-50 shadow-md rounded-lg p-6 border-l-4 border-blue-500">
               <p className="text-sm text-gray-600 mb-1">Taux d'Absence</p>
-              <p className="text-4xl font-bold text-rose-700">
+              <p className="text-4xl font-bold text-blue-700">
                 {totalSessions > 0 ? Math.round((absenceCount / totalSessions) * 100) : 0}%
               </p>
             </div>
@@ -67,9 +67,9 @@ export default function StudentAbsences({ student, absences, absenceCount, total
           )}
 
           {/* TABLEAU DES ABSENCES */}
-          <div className="bg-white shadow-md rounded-lg overflow-hidden border-l-4 border-red-500">
-            <div className="px-6 py-4 bg-red-50 border-b-2 border-red-500">
-              <h3 className="text-lg font-bold text-red-800">Historique des Absences ({absenceCount})</h3>
+          <div className="bg-white shadow-md rounded-lg overflow-hidden border-l-4 border-blue-500">
+            <div className="px-6 py-4 bg-blue-50 border-b-2 border-blue-500">
+              <h3 className="text-lg font-bold text-blue-800">Historique des Absences ({absenceCount})</h3>
             </div>
             
             {absences.length === 0 ? (
@@ -79,18 +79,18 @@ export default function StudentAbsences({ student, absences, absenceCount, total
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full divide-y divide-gray-200">
-                  <thead className="bg-red-50">
+                  <thead className="bg-blue-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-bold text-red-900 uppercase">Module</th>
-                      <th className="px-6 py-3 text-left text-xs font-bold text-red-900 uppercase">Professeur</th>
-                      <th className="px-6 py-3 text-left text-xs font-bold text-red-900 uppercase">Date</th>
-                      <th className="px-6 py-3 text-left text-xs font-bold text-red-900 uppercase">Statut</th>
-                      <th className="px-6 py-3 text-left text-xs font-bold text-red-900 uppercase">Notes</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-blue-900 uppercase">Module</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-blue-900 uppercase">Professeur</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-blue-900 uppercase">Date</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-blue-900 uppercase">Statut</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-blue-900 uppercase">Notes</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {absences.map((absence) => (
-                      <tr key={absence.id} className="hover:bg-red-50 transition">
+                      <tr key={absence.id} className="hover:bg-blue-50 transition">
                         <td className="px-6 py-4 font-semibold text-gray-900">{absence.module_name}</td>
                         <td className="px-6 py-4 text-gray-700">{absence.professor_name}</td>
                         <td className="px-6 py-4 text-gray-700">{absence.date || 'N/A'}</td>
@@ -116,7 +116,7 @@ export default function StudentAbsences({ student, absences, absenceCount, total
           <div className="mt-8">
             <Link
               href="/dashboard"
-              className="inline-block px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition"
+              className="inline-block px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition"
             >
               Retour au Dashboard
             </Link>

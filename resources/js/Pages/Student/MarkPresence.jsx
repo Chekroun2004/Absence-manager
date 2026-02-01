@@ -28,10 +28,10 @@ export default function MarkPresence() {
   return (
     <AuthenticatedLayout>
       {/* HEADER - FULL WIDTH */}
-      <div className="bg-gradient-to-r from-green-900 to-green-700 text-white py-8">
+      <div className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold">Marquer Présence</h1>
-          <p className="text-green-100 mt-2">Entrez le code PIN pour marquer votre présence</p>
+          <p className="text-blue-100 mt-2">Entrez le code PIN pour marquer votre présence</p>
         </div>
       </div>
 
@@ -65,7 +65,7 @@ export default function MarkPresence() {
                     className={`w-full px-4 py-3 text-center text-3xl font-bold border-2 rounded-lg focus:outline-none focus:ring-2 transition ${
                       errors.code
                         ? 'border-red-500 focus:ring-red-500 bg-red-50'
-                        : 'border-green-300 focus:ring-green-500 focus:border-green-500'
+                        : 'border-blue-300 focus:ring-blue-500 focus:border-blue-500'
                     }`}
                   />
                   {errors.code && (
@@ -78,15 +78,15 @@ export default function MarkPresence() {
                 <button
                   type="submit"
                   disabled={processing || data.code.length !== 6}
-                  className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition shadow-md hover:shadow-lg"
+                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition shadow-md hover:shadow-lg"
                 >
                   {processing ? 'Traitement...' : 'Marquer Présence'}
                 </button>
               </form>
 
-              <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+              <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <p className="text-sm text-gray-700">
-                  <strong className="text-green-900">Information :</strong> Demandez le code PIN au professeur. Vous avez 20 secondes pour marquer votre présence.
+                  <strong className="text-blue-900">Information :</strong> Demandez le code PIN au professeur. Vous avez 20 secondes pour marquer votre présence.
                 </p>
               </div>
             </div>

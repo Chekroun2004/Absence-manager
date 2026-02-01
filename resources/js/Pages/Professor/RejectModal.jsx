@@ -30,19 +30,19 @@ export default function RejectModal({ isOpen, justification, onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
         {/* HEADER */}
-        <div className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4">
+        <div className="bg-gradient-to-r from-gray-700 to-gray-600 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-white">
                 ❌ Rejeter la Justification
               </h2>
-              <p className="text-red-100 text-sm mt-1">
+              <p className="text-gray-200 text-sm mt-1">
                 {justification.student_name} - {justification.module_name}
               </p>
             </div>
             <button
               onClick={onClose}
-              className="text-red-100 hover:text-white transition text-2xl"
+              className="text-gray-200 hover:text-white transition text-2xl"
             >
               ✕
             </button>
@@ -71,7 +71,7 @@ export default function RejectModal({ isOpen, justification, onClose }) {
               onChange={(e) => setData('rejection_reason', e.target.value)}
               rows="6"
               placeholder="Expliquez pourquoi vous rejetez cette justification (minimum 10 caractères)..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
             />
             {errors.rejection_reason && (
               <p className="text-red-500 text-sm mt-1">

@@ -19,10 +19,10 @@ export default function StudentGrades({ schoolClasses }) {
             <Head title="Gestion des Mentions - Admin" />
 
             {/* HEADER - FULL WIDTH */}
-            <div className="bg-gradient-to-r from-red-900 to-red-700 text-white py-8">
+            <div className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <h1 className="text-4xl font-bold">Gestion des Mentions</h1>
-                    <p className="text-red-100 mt-2">Consultez et modifiez les mentions par étudiant</p>
+                    <p className="text-blue-100 mt-2">Consultez et modifiez les mentions par étudiant</p>
                 </div>
             </div>
 
@@ -30,8 +30,8 @@ export default function StudentGrades({ schoolClasses }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* SÉLECTIONNER LA CLASSE */}
-                        <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
-                            <h2 className="text-xl font-bold mb-4 text-red-700">Sélectionner une Classe</h2>
+                        <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500">
+                            <h2 className="text-xl font-bold mb-4 text-blue-700">Sélectionner une Classe</h2>
                             <div className="space-y-2">
                                 {schoolClasses.map((schoolClass) => (
                                     <button
@@ -39,8 +39,8 @@ export default function StudentGrades({ schoolClasses }) {
                                         onClick={() => handleClassSelect(schoolClass)}
                                         className={`w-full text-left p-3 rounded-lg border-l-4 transition shadow-sm hover:shadow-md ${
                                             selectedClass?.id === schoolClass.id
-                                                ? 'bg-red-50 border-red-500 font-semibold text-red-900'
-                                                : 'bg-gray-50 border-gray-300 hover:bg-red-50 hover:border-red-300'
+                                                ? 'bg-blue-50 border-blue-500 font-semibold text-blue-900'
+                                                : 'bg-gray-50 border-gray-300 hover:bg-blue-50 hover:border-blue-300'
                                         }`}
                                     >
                                         {schoolClass.name}
@@ -51,8 +51,8 @@ export default function StudentGrades({ schoolClasses }) {
 
                         {/* SÉLECTIONNER LE MODULE */}
                         {selectedClass && (
-                            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
-                                <h2 className="text-xl font-bold mb-4 text-red-700">Sélectionner un Module</h2>
+                            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500">
+                                <h2 className="text-xl font-bold mb-4 text-blue-700">Sélectionner un Module</h2>
                                 {modules.length === 0 ? (
                                     <p className="text-gray-500">Aucun module dans cette classe</p>
                                 ) : (
@@ -63,8 +63,8 @@ export default function StudentGrades({ schoolClasses }) {
                                                 href={route('admin.grades.module', module.id)}
                                                 className={`block w-full text-left p-3 rounded-lg border-l-4 transition shadow-sm hover:shadow-md ${
                                                     selectedModule?.id === module.id
-                                                        ? 'bg-red-50 border-red-500 font-semibold text-red-900'
-                                                        : 'bg-gray-50 border-gray-300 hover:bg-red-50 hover:border-red-300'
+                                                        ? 'bg-blue-50 border-blue-500 font-semibold text-blue-900'
+                                                        : 'bg-gray-50 border-gray-300 hover:bg-blue-50 hover:border-blue-300'
                                                 }`}
                                             >
                                                 {module.name}
@@ -79,9 +79,9 @@ export default function StudentGrades({ schoolClasses }) {
                         )}
 
                         {/* INFO */}
-                        <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-6 shadow-md">
-                            <h3 className="font-bold text-red-900 mb-2 text-lg">Instructions</h3>
-                            <p className="text-sm text-red-800">
+                        <div className="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-6 shadow-md">
+                            <h3 className="font-bold text-blue-900 mb-2 text-lg">Instructions</h3>
+                            <p className="text-sm text-blue-800">
                                 1. Sélectionnez une classe<br />
                                 2. Sélectionnez un module<br />
                                 3. Modifiez les mentions des étudiants

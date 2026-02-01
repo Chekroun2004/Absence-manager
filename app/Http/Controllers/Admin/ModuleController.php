@@ -87,15 +87,15 @@ class ModuleController extends Controller
             'student_ids.*' => 'exists:students,id',
         ]);
 
-        // ✅ Synchroniser la relation pivot module_student
+        
         $module->students()->sync($validated['student_ids'] ?? []);
 
-        // ✅ CRÉER LES MODULESSTUDENTGRADES MANQUANTS
+       
         $studentIds = $validated['student_ids'] ?? [];
         $mentions = ['Très Bien', 'Bien', 'Assez Bien', 'Passable'];
         
         foreach ($studentIds as $studentId) {
-            // Vérifier si la mention existe déjà
+        
             $gradeExists = ModuleStudentGrade::where('student_id', $studentId)
                 ->where('module_id', $module->id)
                 ->exists();

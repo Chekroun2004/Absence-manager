@@ -67,16 +67,16 @@ export default function MarkSessionPresence() {
             <Head title="Marquer ma Présence" />
 
             {/* HEADER - FULL WIDTH */}
-            <div className="bg-gradient-to-r from-green-900 to-green-700 text-white py-8">
+            <div className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <h1 className="text-4xl font-bold">Marquer ma présence</h1>
-                    <p className="text-green-100 mt-2">Entrez le code PIN donné par le professeur</p>
+                    <p className="text-blue-100 mt-2">Entrez le code PIN donné par le professeur</p>
                 </div>
             </div>
 
             <div className="py-12">
                 <div className="max-w-md mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-lg sm:rounded-lg border-l-4 border-green-500">
+                    <div className="bg-white overflow-hidden shadow-lg sm:rounded-lg border-l-4 border-blue-500">
                         <div className="p-8 text-gray-900">
                             {/* MESSAGE */}
                             {message && (
@@ -102,7 +102,7 @@ export default function MarkSessionPresence() {
                                         value={code}
                                         onChange={(e) => setCode(e.target.value.toUpperCase())}
                                         placeholder="Ex: CODE001"
-                                        className="mt-2 w-full p-4 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition font-mono text-center text-3xl tracking-widest"
+                                        className="mt-2 w-full p-4 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition font-mono text-center text-3xl tracking-widest"
                                         disabled={loading}
                                         maxLength="20"
                                         autoFocus
@@ -117,7 +117,7 @@ export default function MarkSessionPresence() {
                                     <button
                                         type="submit"
                                         disabled={loading || !code}
-                                        className="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold shadow-md hover:shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+                                        className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold shadow-md hover:shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
                                     >
                                         {loading ? 'Traitement...' : '✓ Valider'}
                                     </button>

@@ -1,41 +1,29 @@
 # 🎨 Design System - Absence Manager
 
 ## Vue d'ensemble
-Système de design professionnel avec thématiques spécifiques par rôle utilisateur (Prof/Admin/Étudiant).
+Système de design professionnel avec un **thème bleu unifié** pour tous les rôles utilisateurs (Prof/Admin/Étudiant).
 
 ---
 
-## 📊 Palettes de Couleurs
+## 📊 Palette de Couleurs Unifiée
 
-### 👨‍🏫 **Thématique PROFESSEUR**
-**Thème : Bleu Professionnel + Gris Moderne**
-- **Primaire** : `#1e40af` (Bleu Indigo 800) - Actions principales, headers
-- **Secondaire** : `#0369a1` (Cyan 700) - Accents, hover states
-- **Succès** : `#059669` (Vert Émeraude 600) - Validations, approbations
-- **Alerte** : `#dc2626` (Rouge 600) - Actions destructrices, rejets
-- **Avertissement** : `#d97706` (Ambre 500) - Attention, en attente
-- **Neutre** : `#64748b` (Ardoise 500) - Texte secondaire, borders
-- **Background** : `#f8fafc` (Ardoise 50) - Fonds
+### 🔵 **Thème Principal : Bleu Professionnel**
+- **Primaire** : `#2563eb` (Blue-600) - Actions principales, boutons
+- **Primaire foncé** : `#1e40af` (Blue-800) - Headers, gradients
+- **Primaire clair** : `#3b82f6` (Blue-500) - Focus, hover states
+- **Background primaire** : `#eff6ff` (Blue-50) - Cartes actives
+- **Border primaire** : `#3b82f6` (Blue-500) - Bordures accent
 
-### 👨‍💼 **Thématique ADMINISTRATEUR**
-**Thème : Violet + Gris Charbon**
-- **Primaire** : `#7c3aed` (Violet 600) - Actions principales
-- **Secondaire** : `#6d28d9` (Violet 700) - Focus states
-- **Succès** : `#059669` (Vert)
-- **Alerte** : `#dc2626` (Rouge)
-- **Avertissement** : `#f59e0b` (Ambre 400)
-- **Neutre** : `#4b5563` (Charbon)
-- **Background** : `#faf5ff` (Violet 50)
+### 🎯 **Couleurs Sémantiques** (conservées pour leur signification)
+- **Succès** : `#059669` (Green-600) - Validations, approbations, présences
+- **Danger/Erreur** : `#dc2626` (Red-600) - Rejets, absences, suppressions
+- **Avertissement** : `#d97706` (Amber-600) - Attention, en attente
+- **Neutre** : `#64748b` (Slate-500) - Texte secondaire, borders
 
-### 👨‍🎓 **Thématique ÉTUDIANT**
-**Thème : Vert Frais + Bleu Ciel**
-- **Primaire** : `#16a34a` (Vert 600) - Actions, validations
-- **Secondaire** : `#0ea5e9` (Cyan 500) - Accents, liens
-- **Succès** : `#059669` (Vert Émeraude)
-- **Alerte** : `#dc2626` (Rouge)
-- **Avertissement** : `#fbbf24` (Ambre 300) - Attention plus douce
-- **Neutre** : `#6b7280` (Gris 500)
-- **Background** : `#f0fdf4` (Vert 50)
+### 🖼️ **Backgrounds**
+- **Page** : `#f8fafc` (Slate-50)
+- **Cartes** : `#ffffff` (White)
+- **Tableaux header** : `from-blue-700 to-blue-600` (Gradient)
 
 ---
 
@@ -43,7 +31,7 @@ Système de design professionnel avec thématiques spécifiques par rôle utilis
 
 ### Buttons
 ```
-Primaire : bg-[COLOR]-600 text-white hover:bg-[COLOR]-700 
+Primaire : bg-blue-600 text-white hover:bg-blue-700 
 Secondaire : bg-gray-200 text-gray-900 hover:bg-gray-300
 Succès : bg-green-600 text-white hover:bg-green-700
 Danger : bg-red-600 text-white hover:bg-red-700
@@ -51,26 +39,35 @@ Danger : bg-red-600 text-white hover:bg-red-700
 
 ### Cards
 ```
-bg-white shadow-md rounded-lg border border-gray-200
-padding: p-6 ou p-4
+bg-white shadow-md rounded-lg border-l-4 border-blue-500 p-6
 ```
 
-### Headers
+### Headers (toutes les pages)
 ```
-bg-gradient-to-r from-[COLOR]-600 to-[COLOR]-700 text-white py-4 px-6
+bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8
 ```
 
-### Badges
+### Table Headers
 ```
-En attente : bg-[COLOR]-100 text-[COLOR]-800
-Approuvé : bg-green-100 text-green-800
-Rejeté : bg-red-100 text-red-800
+bg-gradient-to-r from-blue-700 to-blue-600 text-white
+```
+
+### Badges de Statut
+```
+En attente : bg-amber-100 text-amber-800
+Approuvé/Présent : bg-green-100 text-green-800
+Rejeté/Absent : bg-red-100 text-red-800
+```
+
+### Focus States
+```
+focus:ring-2 focus:ring-blue-500 focus:border-blue-500
 ```
 
 ---
 
 ## 📐 Espacement & Typographie
-- **H1** : text-3xl font-bold
+- **H1** : text-4xl font-bold text-white (dans headers)
 - **H2** : text-2xl font-bold
 - **H3** : text-lg font-semibold
 - **Body** : text-base text-gray-700
@@ -82,22 +79,32 @@ Rejeté : bg-red-100 text-red-800
 
 ---
 
-## 🎯 Zones de Focus
+## 🎯 Navigation
 
-### Dashboard Professeur
-- Header gradient bleu
-- Cartes de stats avec couleurs distinctes
-- Section alerte en jaune/ambre
-- Actions claires : Vert (approuver), Bleu (voir), Rouge (rejeter)
+### Barre de Navigation
+```
+bg-gradient-to-r from-blue-800 to-blue-700
+```
 
-### Dashboard Admin
-- Header gradient violet
-- Tables modernes avec hover effects
-- Badges de statut clairs
+### Liens actifs
+```
+bg-blue-700 text-white
+```
 
-### Dashboard Étudiant
-- Header gradient vert
-- Cartes de modules en cyan
+### Liens hover
+```
+hover:bg-blue-700/50 hover:text-white
+```
+
+---
+
+## 📱 Cohérence Visuelle
+
+Le thème bleu unifié assure :
+- ✅ Une identité visuelle cohérente
+- ✅ Aucun conflit de couleurs entre les pages
+- ✅ Une expérience utilisateur harmonieuse
+- ✅ Les couleurs sémantiques (vert=succès, rouge=erreur) sont préservées
 - Actions positives en vert
 
 ---

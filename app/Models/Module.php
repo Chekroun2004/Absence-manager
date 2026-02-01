@@ -48,7 +48,6 @@ class Module extends Model
         return $this->hasMany(ClassSession::class);
     }
 
-    // ✅ UTILISER LE BON NOM : moduleGrades()
     public function moduleGrades(): HasMany
     {
         return $this->hasMany(ModuleStudentGrade::class);

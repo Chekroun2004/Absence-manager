@@ -102,7 +102,7 @@ export default function Recommendations({ pendingRequests, processedRequests, fl
                                                         <button
                                                             onClick={() => handleAccept(req.id)}
                                                             disabled={loading}
-                                                            style={{ backgroundColor: '#059669' }}
+                                                            style={{ backgroundColor: '#2563eb' }}
                                                             className="px-4 py-2 text-white rounded-lg font-medium transition hover:opacity-90 disabled:opacity-50"
                                                         >
                                                             Accepter
@@ -110,7 +110,7 @@ export default function Recommendations({ pendingRequests, processedRequests, fl
                                                         <button
                                                             onClick={() => setShowRejectModal(req.id)}
                                                             disabled={loading}
-                                                            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition disabled:opacity-50"
+                                                            className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium transition disabled:opacity-50"
                                                         >
                                                             Refuser
                                                         </button>
@@ -158,11 +158,11 @@ export default function Recommendations({ pendingRequests, processedRequests, fl
 
                         {/* DEMANDES TRAITÉES */}
                         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                            <div className="bg-gradient-to-r from-gray-800 to-gray-700 px-6 py-4">
+                            <div className="bg-gradient-to-r from-blue-700 to-blue-600 px-6 py-4">
                                 <h2 className="text-2xl font-bold text-white">
                                     Demandes Traitées
                                 </h2>
-                                <p className="text-gray-300 text-sm mt-1">{processedRequests.length} demande(s)</p>
+                                <p className="text-blue-100 text-sm mt-1">{processedRequests.length} demande(s)</p>
                             </div>
 
                             <div className="p-6">
@@ -199,7 +199,7 @@ export default function Recommendations({ pendingRequests, processedRequests, fl
                                                     {req.status === 'accepted' && req.letter && (
                                                         <a
                                                             href={route('professor.recommendations.download', req.id)}
-                                                            style={{ backgroundColor: '#059669' }}
+                                                            style={{ backgroundColor: '#2563eb' }}
                                                             className="px-4 py-2 text-white rounded-lg font-medium transition hover:opacity-90"
                                                         >
                                                             Télécharger

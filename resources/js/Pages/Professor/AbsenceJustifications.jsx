@@ -103,7 +103,7 @@ export default function AbsenceJustifications({ justifications, pagination }) {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-gradient-to-r from-gray-800 to-gray-700">
+                    <tr className="bg-gradient-to-r from-blue-700 to-blue-600">
                       <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Étudiant</th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Module</th>
                       <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Date</th>
@@ -278,7 +278,7 @@ function DetailsModal({ justification, onClose }) {
               {/* VUE PRÉALABLE PDF */}
               {showPdfViewer && isPdf ? (
                 <div className="space-y-3">
-                  <div className="bg-white border-2 border-indigo-200 rounded-lg overflow-hidden">
+                  <div className="bg-white border-2 border-blue-200 rounded-lg overflow-hidden">
                     <iframe
                       src={route('professor.absences.justifications.view', justification.id) + '#toolbar=1&navpanes=0'}
                       className="w-full h-96 rounded-lg"
@@ -297,22 +297,22 @@ function DetailsModal({ justification, onClose }) {
                         'professor.absences.justifications.download',
                         justification.id
                       )}
-                      className="flex-1 inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-medium transition"
+                      className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-medium transition"
                     >
                       📥 Télécharger
                     </a>
                   </div>
                 </div>
               ) : (
-                <div className="bg-indigo-50 p-4 rounded border border-indigo-200 space-y-3">
-                  <p className="text-sm text-indigo-900">
+                <div className="bg-blue-50 p-4 rounded border border-blue-200 space-y-3">
+                  <p className="text-sm text-blue-900">
                     {isPdf ? '📄 Fichier PDF détecté' : '📎 Document justificatif joint'}
                   </p>
                   <div className="flex gap-2">
                     {isPdf && (
                       <button
                         onClick={() => setShowPdfViewer(true)}
-                        className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-medium transition"
+                        className="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-medium transition"
                       >
                         👁️ Voir l'aperçu
                       </button>
@@ -322,7 +322,7 @@ function DetailsModal({ justification, onClose }) {
                         'professor.absences.justifications.download',
                         justification.id
                       )}
-                      className="flex-1 inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-medium transition"
+                      className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-medium transition"
                     >
                       📥 Télécharger
                     </a>

@@ -15,7 +15,7 @@ class Attendance extends Model
         'class_session_id',
         'module_id',
         'date',
-        'status',  // ✅ CHANGÉ de 'is_present' à 'status'
+        'status',  
         'notes',
         'marked_at',
     ];
@@ -39,7 +39,7 @@ class Attendance extends Model
         return $this->belongsTo(Module::class);
     }
 
-    // ✅ RELATION POUR JUSTIFICATIONS
+   
     public function justification()
     {
         return $this->hasOne(AbsenceJustification::class);

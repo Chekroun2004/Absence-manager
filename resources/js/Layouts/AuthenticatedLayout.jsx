@@ -11,8 +11,8 @@ export default function AuthenticatedLayout({ header, children }) {
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 shadow-lg">
+        <div className="min-h-screen bg-slate-50">
+            <nav className="bg-gradient-to-r from-blue-800 via-blue-700 to-blue-800 shadow-lg">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between items-center">
                         {/* LOGO ET NOM FACULTÉ */}
@@ -141,7 +141,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                         <span className="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-3 py-2 text-sm font-medium leading-4 text-gray-300 transition duration-150 ease-in-out hover:text-white hover:bg-gray-700 focus:outline-none"
+                                                className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out hover:bg-blue-500 focus:outline-none"
                                             >
                                                 {user.name}
 
@@ -187,7 +187,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                         (previousState) => !previousState
                                     )
                                 }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-300 transition duration-150 ease-in-out hover:bg-gray-700 hover:text-white focus:bg-gray-700 focus:text-white focus:outline-none"
+                                className="inline-flex items-center justify-center rounded-md p-2 text-blue-100 transition duration-150 ease-in-out hover:bg-blue-600 hover:text-white focus:bg-blue-600 focus:text-white focus:outline-none"
                             >
                                 <svg
                                     className="h-6 w-6"
@@ -227,7 +227,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 <div
                     className={
                         (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden bg-gray-800'
+                        ' sm:hidden bg-blue-700'
                     }
                 >
                     <div className="space-y-1 pb-3 pt-2">
@@ -329,7 +329,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     </div>
 
                     {/* MOBILE PROFILE */}
-                    <div className="border-t border-gray-700 bg-gray-800 pb-1 pt-4">
+                    <div className="border-t border-blue-600 bg-blue-700 pb-1 pt-4">
                         <div className="px-4">
                             <div className="text-base font-medium text-white">
                                 {user.name}

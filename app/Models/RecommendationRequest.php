@@ -40,7 +40,6 @@ class RecommendationRequest extends Model
         return $this->belongsTo(Module::class);
     }
 
-    // ✅ CORRIGER : Spécifier la clé étrangère exacte
     public function letter(): HasOne
     {
         return $this->hasOne(RecommendationLetter::class, 'recommendation_request_id');

@@ -62,19 +62,19 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
         {/* HEADER */}
-        <div className="bg-gradient-to-r from-green-900 to-green-700 px-6 py-4">
+        <div className="bg-gradient-to-r from-blue-800 to-blue-600 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-white">
                 Justifier votre absence
               </h2>
-              <p className="text-green-100 text-sm mt-1">
+              <p className="text-blue-100 text-sm mt-1">
                 {session.module_name} - {session.professor_name}
               </p>
             </div>
             <button
               onClick={onClose}
-              className="text-green-100 hover:text-white transition text-2xl font-bold"
+              className="text-blue-100 hover:text-white transition text-2xl font-bold"
             >
               ×
             </button>
@@ -93,7 +93,7 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
               onChange={(e) => setData('reason', e.target.value)}
               rows="5"
               placeholder="Expliquez la raison de votre absence (minimum 10 caractères)..."
-              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
             />
             {errors.reason && (
               <p className="text-red-600 text-sm mt-1 font-medium">{errors.reason}</p>
@@ -108,7 +108,7 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
             <label className="block text-sm font-semibold text-gray-900 mb-2">
               Document justificatif (optionnel)
             </label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-500 hover:bg-green-50 transition cursor-pointer relative">
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 hover:bg-blue-50 transition cursor-pointer relative">
               <input
                 type="file"
                 onChange={handleFileChange}
@@ -117,7 +117,7 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
               />
               {fileName ? (
                 <div>
-                  <p className="text-green-700 font-semibold">Document : {fileName}</p>
+                  <p className="text-blue-700 font-semibold">Document : {fileName}</p>
                   <p className="text-gray-500 text-xs mt-1">
                     PDF, DOC, JPG, PNG (Max 5MB)
                   </p>
@@ -151,7 +151,7 @@ export default function JustifyAbsenceModal({ isOpen, session, onClose }) {
             <button
               type="submit"
               disabled={processing || data.reason.length < 10}
-              className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium transition flex items-center gap-2 shadow-md hover:shadow-lg"
+              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium transition flex items-center gap-2 shadow-md hover:shadow-lg"
             >
               {processing ? (
                 <>En cours...</>

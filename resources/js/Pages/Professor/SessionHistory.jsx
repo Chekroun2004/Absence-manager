@@ -58,7 +58,7 @@ export default function SessionHistory({ sessions }) {
 
           {/* FILTRES ET TABLE */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="bg-gradient-to-r from-gray-800 to-gray-700 px-6 py-4">
+            <div className="bg-gradient-to-r from-blue-700 to-blue-600 px-6 py-4">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-bold text-white">Séances Terminées</h2>
                 <div className="flex gap-2">
@@ -95,7 +95,7 @@ export default function SessionHistory({ sessions }) {
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="bg-gradient-to-r from-gray-800 to-gray-700">
+                      <tr className="bg-gradient-to-r from-blue-700 to-blue-600">
                         <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Module</th>
                         <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Date de Fin</th>
                         <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Durée</th>

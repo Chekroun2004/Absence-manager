@@ -89,11 +89,11 @@ export default function ProfessorDashboard({ stats, modules, activeSessions, rec
         {/* SESSIONS ACTIVES - ALERTE */}
         {activeSessions && activeSessions.length > 0 && (
           <div className="mb-12">
-            <div className="bg-white rounded-lg shadow-md border border-red-200 overflow-hidden">
+            <div className="bg-white rounded-lg shadow-md border border-amber-200 overflow-hidden">
               {/* Header de l'alerte */}
-              <div className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4">
+              <div className="bg-gradient-to-r from-amber-600 to-amber-500 px-6 py-4">
                 <h2 className="text-xl font-semibold text-white">Sessions actives</h2>
-                <p className="text-red-100 text-sm mt-1">{activeSessions.length} séance(s) en cours</p>
+                <p className="text-amber-100 text-sm mt-1">{activeSessions.length} séance(s) en cours</p>
               </div>
 
               {/* Contenu */}
@@ -102,30 +102,30 @@ export default function ProfessorDashboard({ stats, modules, activeSessions, rec
                   {activeSessions.map((session) => (
                     <div
                       key={session.id}
-                      className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-100 rounded-lg p-5 hover:shadow-md transition"
+                      className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100 rounded-lg p-5 hover:shadow-md transition"
                     >
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex-1">
                           <h3 className="text-lg font-semibold text-gray-900">{session.module_name}</h3>
                           <div className="mt-2 space-y-1">
                             <p className="text-sm text-gray-600">
-                              Code PIN: <span className="font-mono font-bold text-red-700 text-base">{session.code}</span>
+                              Code PIN: <span className="font-mono font-bold text-amber-700 text-base">{session.code}</span>
                             </p>
                             <p className="text-xs text-gray-500">
                               Démarrée: {session.started_at}
                             </p>
                           </div>
                         </div>
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-700">
                           Actif
                         </span>
                       </div>
 
                       {/* Actions */}
-                      <div className="flex gap-3 pt-4 border-t border-red-100">
+                      <div className="flex gap-3 pt-4 border-t border-amber-100">
                         <button
                           onClick={() => handleGoToSession(session.id)}
-                          style={{ backgroundColor: '#1e40af' }}
+                          style={{ backgroundColor: '#2563eb' }}
                           className="flex-1 text-white px-4 py-2 rounded font-medium hover:opacity-90 transition"
                         >
                           Consulter
@@ -157,7 +157,7 @@ export default function ProfessorDashboard({ stats, modules, activeSessions, rec
         {/* SÉANCES RÉCENTES */}
         <div className="bg-white rounded-lg shadow-md border border-gray-200">
           {/* Header */}
-          <div className="bg-gradient-to-r from-gray-800 to-gray-700 px-6 py-4">
+          <div className="bg-gradient-to-r from-blue-700 to-blue-600 px-6 py-4">
             <h2 className="text-xl font-semibold text-white">Séances récentes</h2>
           </div>
 

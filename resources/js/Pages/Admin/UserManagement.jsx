@@ -58,10 +58,10 @@ export default function UserManagement({ users }) {
   return (
     <AuthenticatedLayout>
       {/* HEADER - FULL WIDTH */}
-      <div className="bg-gradient-to-r from-red-900 to-red-700 text-white py-8">
+      <div className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold">Gestion des Utilisateurs</h1>
-          <p className="text-red-100 mt-2">Gérer les comptes utilisateurs du système</p>
+          <p className="text-blue-100 mt-2">Gérer les comptes utilisateurs du système</p>
         </div>
       </div>
 
@@ -70,9 +70,9 @@ export default function UserManagement({ users }) {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* AJOUTER/MODIFIER UTILISATEUR */}
-            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
+            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-red-700">
+                <h2 className="text-xl font-bold text-blue-700">
                   {editingUser ? 'Modifier' : 'Ajouter'}
                 </h2>
                 <button
@@ -102,7 +102,7 @@ export default function UserManagement({ users }) {
                       onChange={(e) =>
                         setData('name', e.target.value)
                       }
-                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                       required
                     />
                     {errors.name && (
@@ -122,7 +122,7 @@ export default function UserManagement({ users }) {
                       onChange={(e) =>
                         setData('email', e.target.value)
                       }
-                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                       required
                     />
                     {errors.email && (
@@ -148,7 +148,7 @@ export default function UserManagement({ users }) {
                       onChange={(e) =>
                         setData('password', e.target.value)
                       }
-                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                       required={!editingUser}
                     />
                     {errors.password && (
@@ -168,7 +168,7 @@ export default function UserManagement({ users }) {
                         onChange={(e) =>
                           setData('role', e.target.value)
                         }
-                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                       >
                         <option value="student">
                           Étudiant
@@ -182,7 +182,7 @@ export default function UserManagement({ users }) {
 
                   <button
                     type="submit"
-                    className="w-full rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700 transition shadow-md font-semibold"
+                    className="w-full rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition shadow-md font-semibold"
                   >
                     {editingUser ? 'Modifier' : 'Créer'}
                   </button>
@@ -202,8 +202,8 @@ export default function UserManagement({ users }) {
             </div>
 
             {/* PROFESSEURS */}
-            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
-              <h2 className="text-xl font-bold mb-4 text-red-700">
+            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500">
+              <h2 className="text-xl font-bold mb-4 text-blue-700">
                 Professeurs ({professors.length})
               </h2>
               <div className="space-y-3">
@@ -226,13 +226,13 @@ export default function UserManagement({ users }) {
                       <div className="mt-2 flex gap-2">
                         <button
                           onClick={() => handleEdit(user)}
-                          className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 font-medium transition"
+                          className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 font-medium transition"
                         >
                           Modifier
                         </button>
                         <button
                           onClick={() => handleDelete(user)}
-                          className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded hover:bg-red-300 font-medium transition"
+                          className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded hover:bg-gray-200 font-medium transition"
                         >
                           Supprimer
                         </button>
@@ -244,8 +244,8 @@ export default function UserManagement({ users }) {
             </div>
 
             {/* ÉTUDIANTS */}
-            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
-              <h2 className="text-xl font-bold mb-4 text-red-700">
+            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500">
+              <h2 className="text-xl font-bold mb-4 text-blue-700">
                 Étudiants ({students.length})
               </h2>
               <div className="space-y-3">
@@ -268,13 +268,13 @@ export default function UserManagement({ users }) {
                       <div className="mt-2 flex gap-2">
                         <button
                           onClick={() => handleEdit(user)}
-                          className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 font-medium transition"
+                          className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 font-medium transition"
                         >
                           Modifier
                         </button>
                         <button
                           onClick={() => handleDelete(user)}
-                          className="text-xs bg-red-200 text-red-800 px-3 py-1 rounded hover:bg-red-300 font-medium transition"
+                          className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded hover:bg-gray-200 font-medium transition"
                         >
                           Supprimer
                         </button>

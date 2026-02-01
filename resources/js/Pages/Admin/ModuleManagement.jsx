@@ -64,10 +64,10 @@ export default function ModuleManagement({
   return (
     <AuthenticatedLayout>
       {/* HEADER - FULL WIDTH */}
-      <div className="bg-gradient-to-r from-red-900 to-red-700 text-white py-8">
+      <div className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold">Gestion des Modules</h1>
-          <p className="text-red-100 mt-2">Gérer les modules et leurs affectations</p>
+          <p className="text-blue-100 mt-2">Gérer les modules et leurs affectations</p>
         </div>
       </div>
 
@@ -76,8 +76,8 @@ export default function ModuleManagement({
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* CRÉER/MODIFIER */}
-            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
-              <h2 className="text-xl font-bold mb-4 text-red-700">
+            <div className="bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500">
+              <h2 className="text-xl font-bold mb-4 text-blue-700">
                 {editingModule ? 'Modifier' : 'Créer'}
               </h2>
 
@@ -95,7 +95,7 @@ export default function ModuleManagement({
                     onChange={(e) =>
                       setData('name', e.target.value)
                     }
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                     required
                   />
                   {errors.name && (
@@ -114,7 +114,7 @@ export default function ModuleManagement({
                     onChange={(e) =>
                       setData('school_class_id', e.target.value)
                     }
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                     required
                   >
                     {schoolClasses.map((cls) => (
@@ -134,7 +134,7 @@ export default function ModuleManagement({
                     onChange={(e) =>
                       setData('professor_id', e.target.value)
                     }
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition"
+                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                     required
                   >
                     <option value="">Sélectionner...</option>
@@ -149,7 +149,7 @@ export default function ModuleManagement({
                 <div className="flex gap-3">
                   <button
                     type="submit"
-                    className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition transform hover:scale-105"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition transform hover:scale-105"
                   >
                     {editingModule ? 'Modifier' : 'Créer'}
                   </button>
@@ -167,15 +167,15 @@ export default function ModuleManagement({
             </div>
 
             {/* LISTE */}
-            <div className="lg:col-span-2 bg-white shadow-md rounded-lg p-6 border-l-4 border-red-500">
-              <h2 className="text-2xl font-bold mb-6 text-red-700">
+            <div className="lg:col-span-2 bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500">
+              <h2 className="text-2xl font-bold mb-6 text-blue-700">
                 Modules ({modules.length})
               </h2>
               <div className="space-y-4 max-h-96 overflow-y-auto">
                 {modules.map((module) => (
                   <div
                     key={module.id}
-                    className="border-l-4 border-red-300 bg-white rounded-lg p-4 hover:shadow-lg transition transform hover:scale-105 hover:border-red-500"
+                    className="border-l-4 border-blue-300 bg-white rounded-lg p-4 hover:shadow-lg transition transform hover:scale-105 hover:border-blue-500"
                   >
                     <h3 className="font-bold text-lg text-gray-900">{module.name}</h3>
                     <p className="text-sm text-gray-600">
@@ -191,7 +191,7 @@ export default function ModuleManagement({
                     <div className="mt-4 flex gap-2">
                       <a
                         href={`/admin/modules/${module.id}/assign`}
-                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm shadow-md hover:shadow-lg transition"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm shadow-md hover:shadow-lg transition"
                       >
                         Assigner
                       </a>
@@ -199,7 +199,7 @@ export default function ModuleManagement({
                         onClick={() =>
                           handleEditModule(module)
                         }
-                        className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm shadow-md hover:shadow-lg transition"
+                        className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-lg text-sm shadow-md hover:shadow-lg transition"
                       >
                         Modifier
                       </button>
@@ -207,7 +207,7 @@ export default function ModuleManagement({
                         onClick={() =>
                           handleDeleteModule(module)
                         }
-                        className="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg text-sm shadow-md hover:shadow-lg transition"
+                        className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm shadow-md hover:shadow-lg transition"
                       >
                         Supprimer
                       </button>

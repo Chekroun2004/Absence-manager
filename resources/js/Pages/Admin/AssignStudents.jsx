@@ -24,23 +24,23 @@ export default function AssignStudents({ module, students }) {
   return (
     <AuthenticatedLayout>
       {/* HEADER - FULL WIDTH */}
-      <div className="bg-gradient-to-r from-red-900 to-red-700 text-white py-8">
+      <div className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold">Assigner des Étudiants</h1>
-          <p className="text-red-100 mt-2">Module : <span className="font-semibold">{module.name}</span></p>
+          <p className="text-blue-100 mt-2">Module : <span className="font-semibold">{module.name}</span></p>
         </div>
       </div>
 
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="bg-white shadow-md rounded-lg p-8 border-l-4 border-red-500">
+          <div className="bg-white shadow-md rounded-lg p-8 border-l-4 border-blue-500">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-red-700 mb-3 font-semibold">
+                <label className="block text-sm font-medium text-blue-700 mb-3 font-semibold">
                   Sélectionner les étudiants ({data.student_ids.length})
                 </label>
 
-                <div className="space-y-2 border-2 border-gray-300 rounded-lg p-4 bg-red-50 max-h-96 overflow-y-auto focus-within:ring-2 focus-within:ring-red-500">
+                <div className="space-y-2 border-2 border-gray-300 rounded-lg p-4 bg-blue-50 max-h-96 overflow-y-auto focus-within:ring-2 focus-within:ring-blue-500">
                   {students.length === 0 ? (
                     <p className="text-gray-500">
                       Aucun étudiant créé
@@ -49,7 +49,7 @@ export default function AssignStudents({ module, students }) {
                     students.map((student) => (
                       <label
                         key={student.id}
-                        className="flex items-center p-3 hover:bg-red-100 rounded-lg cursor-pointer border-2 border-gray-300 hover:border-red-500 transition shadow-sm hover:shadow-md bg-white"
+                        className="flex items-center p-3 hover:bg-blue-100 rounded-lg cursor-pointer border-2 border-gray-300 hover:border-blue-500 transition shadow-sm hover:shadow-md bg-white"
                       >
                         <input
                           type="checkbox"
@@ -59,7 +59,7 @@ export default function AssignStudents({ module, students }) {
                           onChange={() =>
                             handleToggle(student.id)
                           }
-                          className="w-4 h-4 text-red-600 rounded focus:ring-2 focus:ring-red-500 accent-red-600"
+                          className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 accent-blue-600"
                         />
                         <div className="ml-3 flex-1">
                           <p className="font-medium text-gray-900">
@@ -79,7 +79,7 @@ export default function AssignStudents({ module, students }) {
                 <button
                   type="submit"
                   disabled={processing}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105 disabled:opacity-50"
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105 disabled:opacity-50"
                 >
                   {processing
                     ? 'Assignation...'

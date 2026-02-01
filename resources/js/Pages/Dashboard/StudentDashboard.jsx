@@ -79,10 +79,10 @@ export default function StudentDashboard({ stats, sessions }) {
   return (
     <>
       {/* HEADER - FULL WIDTH */}
-      <div className="bg-gradient-to-r from-green-900 to-green-700 text-white py-8">
+      <div className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold">Mon Historique de Présence</h1>
-          <p className="text-green-100 mt-2">Consultez vos présences, absences et justifications</p>
+          <p className="text-blue-100 mt-2">Consultez vos présences, absences et justifications</p>
         </div>
       </div>
 
@@ -134,7 +134,7 @@ export default function StudentDashboard({ stats, sessions }) {
           </div>
 
           {/* FILTRES */}
-          <div className="bg-white overflow-hidden shadow-md sm:rounded-lg p-6 mb-6 border-l-4 border-green-500">
+          <div className="bg-white overflow-hidden shadow-md sm:rounded-lg p-6 mb-6 border-l-4 border-blue-500">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Filtres</h3>
             <div className="flex gap-2 flex-wrap">
               {[
@@ -148,8 +148,8 @@ export default function StudentDashboard({ stats, sessions }) {
                   onClick={() => setFilter(btn.value)}
                   className={`px-4 py-2 rounded font-medium transition ${
                     filter === btn.value
-                      ? 'bg-green-600 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-700 hover:bg-green-50 hover:text-green-700 border border-gray-200'
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-700 border border-gray-200'
                   }`}
                 >
                   {btn.label}
@@ -159,24 +159,24 @@ export default function StudentDashboard({ stats, sessions }) {
           </div>
 
           {/* TABLEAU SÉANCES */}
-          <div className="bg-white overflow-hidden shadow-md sm:rounded-lg border-l-4 border-green-500">
+          <div className="bg-white overflow-hidden shadow-md sm:rounded-lg border-l-4 border-blue-500">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-green-50 border-b-2 border-green-500">
+                <thead className="bg-blue-50 border-b-2 border-blue-500">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">
                       Module
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">
                       Professeur
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">
                       Date & Heure
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">
                       Statut
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-green-900 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -186,7 +186,7 @@ export default function StudentDashboard({ stats, sessions }) {
                     filteredSessions.map((session) => (
                       <tr
                         key={session.id}
-                        className="hover:bg-green-50 transition"
+                        className="hover:bg-blue-50 transition"
                       >
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                           {session.module_name}
@@ -208,7 +208,7 @@ export default function StudentDashboard({ stats, sessions }) {
                               !session.justification && (
                                 <button
                                   onClick={() => handleJustifyClick(session)}
-                                  className="text-green-600 hover:text-green-900 font-medium transition hover:underline"
+                                  className="text-blue-600 hover:text-blue-900 font-medium transition hover:underline"
                                 >
                                   Justifier
                                 </button>
@@ -218,7 +218,7 @@ export default function StudentDashboard({ stats, sessions }) {
                             {session.justification && (
                               <button
                                 onClick={() => setSelectedSession(session)}
-                                className="text-green-600 hover:text-green-900 font-medium transition hover:underline"
+                                className="text-blue-600 hover:text-blue-900 font-medium transition hover:underline"
                               >
                                 Détails
                               </button>
@@ -257,22 +257,22 @@ export default function StudentDashboard({ stats, sessions }) {
 function StatCard({ title, value, color, span = 'col-span-1' }) {
   const colors = {
     green: {
-      bg: 'bg-green-50',
-      border: 'border-green-500',
-      text: 'text-green-700',
-      hover: 'hover:shadow-lg hover:bg-green-100'
-    },
-    emerald: {
       bg: 'bg-emerald-50',
       border: 'border-emerald-500',
       text: 'text-emerald-700',
       hover: 'hover:shadow-lg hover:bg-emerald-100'
     },
+    emerald: {
+      bg: 'bg-blue-50',
+      border: 'border-blue-500',
+      text: 'text-blue-700',
+      hover: 'hover:shadow-lg hover:bg-blue-100'
+    },
     lime: {
-      bg: 'bg-lime-50',
-      border: 'border-lime-500',
-      text: 'text-lime-700',
-      hover: 'hover:shadow-lg hover:bg-lime-100'
+      bg: 'bg-sky-50',
+      border: 'border-sky-500',
+      text: 'text-sky-700',
+      hover: 'hover:shadow-lg hover:bg-sky-100'
     },
     red: {
       bg: 'bg-red-50',
@@ -281,10 +281,10 @@ function StatCard({ title, value, color, span = 'col-span-1' }) {
       hover: 'hover:shadow-lg hover:bg-red-100'
     },
     teal: {
-      bg: 'bg-teal-50',
-      border: 'border-teal-500',
-      text: 'text-teal-700',
-      hover: 'hover:shadow-lg hover:bg-teal-100'
+      bg: 'bg-cyan-50',
+      border: 'border-cyan-500',
+      text: 'text-cyan-700',
+      hover: 'hover:shadow-lg hover:bg-cyan-100'
     },
   };
 
@@ -410,7 +410,7 @@ function JustificationDetailsModal({ session, onClose }) {
         <div className="bg-gray-50 px-6 py-4 border-t text-right">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition shadow-md"
+            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition shadow-md"
           >
             Fermer
           </button>

@@ -45,15 +45,15 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
             <Head title="Mes Lettres de Recommandation" />
 
             {/* HEADER - FULL WIDTH */}
-            <div className="bg-gradient-to-r from-green-900 to-green-700 text-white py-8">
+            <div className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-8">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-between items-center">
                     <div>
                         <h1 className="text-4xl font-bold">Mes Lettres de Recommandation</h1>
-                        <p className="text-green-100 mt-2">Demander et télécharger vos lettres de recommandation</p>
+                        <p className="text-blue-100 mt-2">Demander et télécharger vos lettres de recommandation</p>
                     </div>
                     <button
                         onClick={() => setShowModal(true)}
-                        className="px-6 py-3 bg-white text-green-700 font-semibold rounded-lg hover:bg-green-50 transition shadow-md"
+                        className="px-6 py-3 bg-white text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition shadow-md"
                     >
                         + Nouvelle Demande
                     </button>
@@ -81,7 +81,7 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                                 <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden">
                                     {/* MODAL HEADER */}
-                                    <div className="bg-gradient-to-r from-green-900 to-green-700 px-6 py-4">
+                                    <div className="bg-gradient-to-r from-blue-800 to-blue-600 px-6 py-4">
                                         <h2 className="text-xl font-bold text-white">Demander une Lettre</h2>
                                     </div>
 
@@ -91,7 +91,7 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                                             <select
                                                 value={formData.module_id}
                                                 onChange={(e) => setFormData({ ...formData, module_id: e.target.value })}
-                                                className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+                                                className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                                                 required
                                             >
                                                 <option value="">-- Sélectionner --</option>
@@ -105,13 +105,13 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
 
                                         {/* ✅ AFFICHER LES INFOS DU MODULE ET LA MENTION */}
                                         {selectedModuleInfo && (
-                                            <div className="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                                            <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
                                                 <p className="text-sm text-gray-900 mb-2">
                                                     <strong>Professeur :</strong> {selectedModuleInfo.professor.user.name}
                                                 </p>
                                                 <p className="text-sm text-gray-900">
                                                     <strong>Mention :</strong>{' '}
-                                                    <span className="inline-block px-3 py-1 bg-green-200 text-green-900 rounded-full font-semibold text-xs mt-1">
+                                                    <span className="inline-block px-3 py-1 bg-blue-200 text-blue-900 rounded-full font-semibold text-xs mt-1">
                                                         {selectedModuleInfo.mention}
                                                     </span>
                                                 </p>
@@ -125,7 +125,7 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                                             <button
                                                 type="submit"
                                                 disabled={loading || !formData.module_id}
-                                                className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition"
+                                                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition"
                                             >
                                                 Envoyer
                                             </button>
@@ -190,7 +190,7 @@ export default function RequestLetter({ myRequests, modulesWithGrades, flash }) 
                                             {req.status === 'accepted' && req.has_letter && (
                                                 <button
                                                     onClick={() => handleDownload(req.id)}
-                                                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold whitespace-nowrap shadow-md hover:shadow-lg transition ml-4"
+                                                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold whitespace-nowrap shadow-md hover:shadow-lg transition ml-4"
                                                 >
                                                     Télécharger
                                                 </button>

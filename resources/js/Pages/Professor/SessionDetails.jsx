@@ -93,7 +93,7 @@ export default function SessionDetails({ session, students: initialStudents }) {
 
           {/* LISTE DES ÉTUDIANTS */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="bg-gradient-to-r from-gray-800 to-gray-700 px-6 py-4">
+            <div className="bg-gradient-to-r from-blue-700 to-blue-600 px-6 py-4">
               <h2 className="text-xl font-bold text-white">Liste des Étudiants</h2>
             </div>
 
@@ -127,7 +127,7 @@ export default function SessionDetails({ session, students: initialStudents }) {
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="bg-gradient-to-r from-gray-800 to-gray-700">
+                      <tr className="bg-gradient-to-r from-blue-700 to-blue-600">
                         <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Nom</th>
                         <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Email</th>
                         <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Statut</th>
