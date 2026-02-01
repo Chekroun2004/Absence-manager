@@ -26,14 +26,20 @@ export default function UpdateProfileInformation({
 
     return (
         <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900">
-                    Profile Information
-                </h2>
-
-                <p className="mt-1 text-sm text-gray-600">
-                    Update your account's profile information and email address.
-                </p>
+            <header className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+                <div>
+                    <h2 className="text-lg font-semibold text-slate-800">
+                        Informations du Profil
+                    </h2>
+                    <p className="text-sm text-slate-500">
+                        Mettez à jour vos informations personnelles et votre adresse e-mail.
+                    </p>
+                </div>
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">

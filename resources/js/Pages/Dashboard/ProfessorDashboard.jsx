@@ -36,12 +36,25 @@ export default function ProfessorDashboard({ stats, modules, activeSessions, rec
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f8fafc' }}>
-      {/* HEADER GRADIENT */}
-      <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-8">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold">Tableau de bord</h1>
-          <p className="text-blue-100 mt-2">Bienvenue dans votre espace professeur</p>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      {/* HEADER GRADIENT avec effet décoratif */}
+      <div className="relative bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white py-12 overflow-hidden">
+        {/* Cercles décoratifs */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-700/30 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-600/20 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+        
+        <div className="relative max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold">Tableau de bord</h1>
+              <p className="text-blue-200 mt-1">Bienvenue dans votre espace professeur</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -51,38 +64,42 @@ export default function ProfessorDashboard({ stats, modules, activeSessions, rec
           <StatCard 
             title="Modules" 
             value={stats.total_modules} 
-            icon="M"
-            bgColor="bg-blue-50"
+            icon={<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>}
+            bgColor="bg-gradient-to-br from-blue-50 to-blue-100"
             borderColor="border-blue-200"
             textColor="text-blue-900"
             accentColor="bg-blue-100"
+            iconColor="text-blue-600"
           />
           <StatCard 
             title="Étudiants" 
             value={stats.total_students} 
-            icon="E"
-            bgColor="bg-emerald-50"
+            icon={<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" /></svg>}
+            bgColor="bg-gradient-to-br from-emerald-50 to-emerald-100"
             borderColor="border-emerald-200"
             textColor="text-emerald-900"
             accentColor="bg-emerald-100"
+            iconColor="text-emerald-600"
           />
           <StatCard 
             title="Séances" 
             value={stats.total_sessions} 
-            icon="S"
-            bgColor="bg-cyan-50"
+            icon={<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>}
+            bgColor="bg-gradient-to-br from-cyan-50 to-cyan-100"
             borderColor="border-cyan-200"
             textColor="text-cyan-900"
             accentColor="bg-cyan-100"
+            iconColor="text-cyan-600"
           />
           <StatCard 
             title="En attente" 
             value={stats.pending_justifications} 
-            icon="P"
-            bgColor="bg-amber-50"
+            icon={<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+            bgColor="bg-gradient-to-br from-amber-50 to-amber-100"
             borderColor="border-amber-200"
             textColor="text-amber-900"
             accentColor="bg-amber-100"
+            iconColor="text-amber-600"
           />
         </div>
 
@@ -219,16 +236,16 @@ export default function ProfessorDashboard({ stats, modules, activeSessions, rec
   );
 }
 
-function StatCard({ title, value, icon, bgColor, borderColor, textColor, accentColor }) {
+function StatCard({ title, value, icon, bgColor, borderColor, textColor, accentColor, iconColor }) {
   return (
-    <div className={`${bgColor} border ${borderColor} rounded-lg overflow-hidden shadow-md hover:shadow-lg transition`}>
+    <div className={`${bgColor} border ${borderColor} rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1`}>
       <div className="p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className={`text-sm font-medium ${textColor.replace('900', '700')}`}>{title}</p>
             <p className={`text-3xl font-bold mt-2 ${textColor}`}>{value}</p>
           </div>
-          <div className={`${accentColor} w-14 h-14 rounded-lg flex items-center justify-center text-2xl`}>
+          <div className={`${accentColor} ${iconColor} w-14 h-14 rounded-2xl flex items-center justify-center shadow-inner`}>
             {icon}
           </div>
         </div>
