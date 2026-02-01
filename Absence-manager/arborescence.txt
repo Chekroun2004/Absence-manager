@@ -1,0 +1,380 @@
+﻿|-- app
+|   |-- Http
+|   |   |-- Controllers
+|   |   |   |-- Admin
+|   |   |   |   |-- ModuleController.php
+|   |   |   |   |-- ModuleManagement.jsx
+|   |   |   |   |-- SchoolClassController.php
+|   |   |   |   |-- UserApprovalController.php
+|   |   |   |   |-- UserController.php
+|   |   |   |   +-- UserManager.jsx
+|   |   |   |-- Api
+|   |   |   |   |-- AttendanceController.php
+|   |   |   |   |-- LessonController.php
+|   |   |   |   +-- RecommendationRequestController.php
+|   |   |   |-- Auth
+|   |   |   |   |-- AuthenticatedSessionController.php
+|   |   |   |   |-- ConfirmablePasswordController.php
+|   |   |   |   |-- EmailVerificationNotificationController.php
+|   |   |   |   |-- EmailVerificationPromptController.php
+|   |   |   |   |-- LoginController.php
+|   |   |   |   |-- NewPasswordController.php
+|   |   |   |   |-- PasswordController.php
+|   |   |   |   |-- PasswordResetLinkController.php
+|   |   |   |   |-- RegisteredUserController.php
+|   |   |   |   +-- VerifyEmailController.php
+|   |   |   |-- Professor
+|   |   |   |   |-- AbsenceJustificationController.php
+|   |   |   |   |-- RecommendationController.php
+|   |   |   |   +-- SessionController.php
+|   |   |   |-- Student
+|   |   |   |   |-- AbsenceJustificationController.php
+|   |   |   |   +-- StudentController.php
+|   |   |   |-- Controller.php
+|   |   |   |-- DashboardController.php
+|   |   |   |-- ProfileController.php
+|   |   |   +-- SessionController.php
+|   |   |-- Middleware
+|   |   |   |-- CheckRole.php
+|   |   |   |-- CheckUserApproved.php
+|   |   |   +-- HandleInertiaRequests.php
+|   |   +-- Requests
+|   |       |-- Auth
+|   |       |   +-- LoginRequest.php
+|   |       +-- ProfileUpdateRequest.php
+|   |-- Models
+|   |   |-- AbsenceJustification.php
+|   |   |-- Attendance.php
+|   |   |-- ClassSession.php
+|   |   |-- Lesson.php
+|   |   |-- Module.php
+|   |   |-- Professor.php
+|   |   |-- RecommendationLetter.php
+|   |   |-- RecommendationRequest.php
+|   |   |-- SchoolClass.php
+|   |   |-- Student.php
+|   |   +-- User.php
+|   |-- Providers
+|   |   |-- AppServiceProvider.php
+|   |   +-- EventServiceProvider.php
+|   +-- Services
+|       +-- RecommendationLetterService.php
+|-- bootstrap
+|   |-- cache
+|   |   |-- .gitignore
+|   |   |-- packages.php
+|   |   +-- services.php
+|   |-- app.php
+|   +-- providers.php
+|-- config
+|   |-- app.php
+|   |-- auth.php
+|   |-- cache.php
+|   |-- database.php
+|   |-- filesystems.php
+|   |-- logging.php
+|   |-- mail.php
+|   |-- queue.php
+|   |-- services.php
+|   |-- session.php
+|   +-- snappy.php
+|-- database
+|   |-- factories
+|   |   +-- UserFactory.php
+|   |-- migrations
+|   |   |-- 2025_12_31_233404_make_date_nullable_in_attendances_table.php
+|   |   +-- 2026_01_08_000001_create_absence_justifications_table.php
+|   |-- seeders
+|   |   |-- DatabaseSeeder.php
+|   |   +-- walou.txt
+|   +-- .gitignore
+|-- public
+|   |-- build
+|   |   |-- assets
+|   |   |   |-- app-CwvDm2lU.css
+|   |   |   |-- app-C_LbDOWR.js
+|   |   |   |-- ApplicationLogo-Bd6ZhVNt.js
+|   |   |   |-- AuthenticatedLayout-CvjvScPp.js
+|   |   |   |-- ConfirmPassword-DhntokpA.js
+|   |   |   |-- Dashboard-BzX5Rqop.js
+|   |   |   |-- DeleteUserForm-B9v8XhMP.js
+|   |   |   |-- Edit-DeSzyey9.js
+|   |   |   |-- ForgotPassword-CnG9coFl.js
+|   |   |   |-- GuestLayout-BsIDQUhv.js
+|   |   |   |-- InputLabel-NKcEDvRO.js
+|   |   |   |-- Login-CqBYEJNC.js
+|   |   |   |-- PrimaryButton-CnoSdVKY.js
+|   |   |   |-- Register-CmUCsRgy.js
+|   |   |   |-- ResetPassword-ysbOffxZ.js
+|   |   |   |-- TextInput-BOY7-KCj.js
+|   |   |   |-- transition-DL-QNpCQ.js
+|   |   |   |-- UpdatePasswordForm-BAO9AcA9.js
+|   |   |   |-- UpdateProfileInformationForm-hhLKfhvW.js
+|   |   |   |-- VerifyEmail-DVZzQee9.js
+|   |   |   +-- Welcome-DeLKhsKM.js
+|   |   +-- manifest.json
+|   |-- .htaccess
+|   |-- favicon.ico
+|   |-- hot
+|   |-- index.php
+|   +-- robots.txt
+|-- resources
+|   |-- css
+|   |   +-- app.css
+|   |-- js
+|   |   |-- Components
+|   |   |   |-- ApplicationLogo.jsx
+|   |   |   |-- Checkbox.jsx
+|   |   |   |-- DangerButton.jsx
+|   |   |   |-- Dropdown.jsx
+|   |   |   |-- InputError.jsx
+|   |   |   |-- InputLabel.jsx
+|   |   |   |-- Modal.jsx
+|   |   |   |-- NavLink.jsx
+|   |   |   |-- PrimaryButton.jsx
+|   |   |   |-- ResponsiveNavLink.jsx
+|   |   |   |-- SecondaryButton.jsx
+|   |   |   +-- TextInput.jsx
+|   |   |-- Layouts
+|   |   |   |-- AuthenticatedLayout.jsx
+|   |   |   +-- GuestLayout.jsx
+|   |   |-- Pages
+|   |   |   |-- Admin
+|   |   |   |   |-- AssignStudents.jsx
+|   |   |   |   |-- ModuleManagement.jsx
+|   |   |   |   |-- PendingUsers.jsx
+|   |   |   |   |-- SchoolClassManagement.jsx
+|   |   |   |   +-- UserManagement.jsx
+|   |   |   |-- Attendance
+|   |   |   |   +-- MarkAttendance.jsx
+|   |   |   |-- Auth
+|   |   |   |   |-- ConfirmPassword.jsx
+|   |   |   |   |-- ForgotPassword.jsx
+|   |   |   |   |-- Login.jsx
+|   |   |   |   |-- Pending.jsx
+|   |   |   |   |-- Register.jsx
+|   |   |   |   |-- ResetPassword.jsx
+|   |   |   |   +-- VerifyEmail.jsx
+|   |   |   |-- Dashboard
+|   |   |   |   |-- AdminDashboard.jsx
+|   |   |   |   |-- ProfessorDashboard.jsx
+|   |   |   |   +-- StudentDashboard.jsx
+|   |   |   |-- Professor
+|   |   |   |   |-- AbsenceJustifications.jsx
+|   |   |   |   |-- ActiveSession.jsx
+|   |   |   |   |-- CreateLesson.jsx
+|   |   |   |   |-- Recommendations.jsx
+|   |   |   |   |-- RejectModal.jsx
+|   |   |   |   +-- TeachingSessions.jsx
+|   |   |   |-- Profile
+|   |   |   |   |-- Partials
+|   |   |   |   |   |-- DeleteUserForm.jsx
+|   |   |   |   |   |-- UpdatePasswordForm.jsx
+|   |   |   |   |   +-- UpdateProfileInformationForm.jsx
+|   |   |   |   +-- Edit.jsx
+|   |   |   |-- Student
+|   |   |   |   |-- JustifyAbsenceModal.jsx
+|   |   |   |   |-- MarkPresence.jsx
+|   |   |   |   |-- RequestLetter.jsx
+|   |   |   |   +-- StudentModules.jsx
+|   |   |   |-- Dashboard.jsx
+|   |   |   +-- Welcome.jsx
+|   |   |-- app.jsx
+|   |   +-- bootstrap.js
+|   +-- views
+|       +-- app.blade.php
+|-- routes
+|   |-- api.php
+|   |-- auth.php
+|   |-- console.php
+|   +-- web.php
+|-- storage
+|   |-- app
+|   |   |-- private
+|   |   |   |-- justifications
+|   |   |   |   |-- KSy99tCdWC1pKY8HAkt8aPMF7gdPqn7ZmRXJPskw.pdf
+|   |   |   |   +-- o42HrQmvuC3SGV3IZbWrhv8aShvK6PU4xkGLvPvp.pdf
+|   |   |   |-- letters
+|   |   |   |   +-- letter_10_4_1768051800.pdf
+|   |   |   +-- .gitignore
+|   |   |-- public
+|   |   |   +-- .gitignore
+|   |   +-- .gitignore
+|   |-- framework
+|   |   |-- cache
+|   |   |   |-- data
+|   |   |   |   +-- .gitignore
+|   |   |   +-- .gitignore
+|   |   |-- sessions
+|   |   |   +-- .gitignore
+|   |   |-- testing
+|   |   |   +-- .gitignore
+|   |   |-- views
+|   |   |   |-- .gitignore
+|   |   |   |-- 017af7ec99ba1d6c9181aeb99d2cd9e6.php
+|   |   |   |-- 1747d9eeff4ae963421bf494c256c8f3.php
+|   |   |   |-- 1a96ba85987829ff037f5d9d49106364.php
+|   |   |   |-- 1f1b5664ca5c524d1f103df94b0efc6d.php
+|   |   |   |-- 28b901237a9b557c80ea8a92f1bbe78c.php
+|   |   |   |-- 2a149b55f72ccbb74d58ac58d81dcc63.php
+|   |   |   |-- 2e07f1070c3f8f306e1671eb7ddf58e7.php
+|   |   |   |-- 3175d8c89d41df43660b9731f5cedb80.php
+|   |   |   |-- 3232c409f248e0f9c815599ca1116bc6.php
+|   |   |   |-- 375174e8a4b74fdebde5653834d0e27e.php
+|   |   |   |-- 39733a579465aac22f3c9e1d402fef65.php
+|   |   |   |-- 3d8352dc94c976586734d6c491c1a08e.php
+|   |   |   |-- 3e55788400139442285d5dab3c8edb38.php
+|   |   |   |-- 43e7eb4aca74d55528c7262237180cc2.php
+|   |   |   |-- 44cf9c87e06f84f2849dbced5dbb309d.php
+|   |   |   |-- 4e4671a84b5f8b1670000d0b977fe2f1.php
+|   |   |   |-- 5197692a008dcb93b8d3591fe9fe8be7.php
+|   |   |   |-- 52ff13573232b4577d462888f2595c98.php
+|   |   |   |-- 55cdd7386408af4fbaec3ceec878f1e6.php
+|   |   |   |-- 55e0edea9adf201de812e1f20741f26f.php
+|   |   |   |-- 59aff74cc487b410280f21816d792434.php
+|   |   |   |-- 5cf5fe7acb34c94d25e58e97c52487f2.php
+|   |   |   |-- 5d520f6095e61b20eeb410e0fc96ac02.php
+|   |   |   |-- 637c270684e7911b2c3d639abeca71f1.php
+|   |   |   |-- 789190e993dcac5d350e725bae8ec691.php
+|   |   |   |-- 806da18eccb59ddbd055d83322edb14f.php
+|   |   |   |-- 818970314c75561e71c2d360572ea165.php
+|   |   |   |-- 927e3810c4c997b0cbdc231e2f3f47bb.php
+|   |   |   |-- a271415aa8e0cf9b681cc92a23cf1183.php
+|   |   |   |-- b3ebdb0c4d2cb7a17d50cd045a4f5c7b.php
+|   |   |   |-- b414300997b63600d5a6e39ef1c14f68.php
+|   |   |   |-- b4b0d21ede1eb2ec1d68331761b1e5c9.php
+|   |   |   |-- be0aa3019b9b77f3468cbb0cd94be1e3.php
+|   |   |   |-- c0cfec9887c7c15298756270b6f5a26a.php
+|   |   |   |-- cc258e8b20c3e28a1adf80ced4172e30.php
+|   |   |   |-- d0987cd2e3e7c909f1668a34d9f86451.php
+|   |   |   |-- da92c9f567ebe62a1672949b1abfe1da.php
+|   |   |   |-- e7a400f04b8226f24d9426fb6a3555d5.php
+|   |   |   |-- e82e85dcd997629c83d9cc50dfb071de.php
+|   |   |   |-- ef7ac9a162c9f66e4140486996b61bdb.php
+|   |   |   |-- f213cd81d28711b6fd3b07696a7f6824.php
+|   |   |   |-- f70c3ee4c046a7b23a6397f6b1073ea8.php
+|   |   |   +-- ff33bac693d56e4695fe63176f8d7108.php
+|   |   +-- .gitignore
+|   +-- logs
+|       |-- .gitignore
+|       +-- laravel.log
+|-- tests
+|   |-- Feature
+|   |   |-- Auth
+|   |   |   |-- AuthenticationTest.php
+|   |   |   |-- EmailVerificationTest.php
+|   |   |   |-- PasswordConfirmationTest.php
+|   |   |   |-- PasswordResetTest.php
+|   |   |   |-- PasswordUpdateTest.php
+|   |   |   +-- RegistrationTest.php
+|   |   |-- ExampleTest.php
+|   |   +-- ProfileTest.php
+|   |-- Unit
+|   |   +-- ExampleTest.php
+|   +-- TestCase.php
+|-- vendor
+|   |-- barryvdh
+|   |   +-- laravel-snappy
+|   |       |-- config
+|   |       |   |-- .gitkeep
+|   |       |   +-- snappy.php
+|   |       |-- src
+|   |       |   |-- Facades
+|   |       |   |   |-- SnappyImage.php
+|   |       |   |   +-- SnappyPdf.php
+|   |       |   |-- IlluminateSnappyImage.php
+|   |       |   |-- IlluminateSnappyPdf.php
+|   |       |   |-- ImageWrapper.php
+|   |       |   |-- LumenServiceProvider.php
+|   |       |   |-- PdfFaker.php
+|   |       |   |-- PdfWrapper.php
+|   |       |   +-- ServiceProvider.php
+|   |       |-- .editorconfig
+|   |       |-- composer.json
+|   |       |-- LICENSE
+|   |       +-- readme.md
+|   |-- bin
+|   |   |-- carbon
+|   |   |-- carbon.bat
+|   |   |-- patch-type-declarations
+|   |   |-- patch-type-declarations.bat
+|   |   |-- php-parse
+|   |   |-- php-parse.bat
+|   |   |-- phpunit
+|   |   |-- phpunit.bat
+|   |   |-- pint
+|   |   |-- pint.bat
+|   |   |-- psysh
+|   |   |-- psysh.bat
+|   |   |-- sail
+|   |   |-- sail.bat
+|   |   |-- var-dump-server
+|   |   |-- var-dump-server.bat
+|   |   |-- yaml-lint
+|   |   +-- yaml-lint.bat
+|   |-- brick
+|   |   +-- math
+|   |       |-- src
+|   |       |   |-- Exception
+|   |       |   |   |-- DivisionByZeroException.php
+|   |       |   |   |-- IntegerOverflowException.php
+|   |       |   |   |-- MathException.php
+|   |       |   |   |-- NegativeNumberException.php
+|   |       |   |   |-- NumberFormatException.php
+|   |       |   |   +-- RoundingNecessaryException.php
+|   |       |   |-- Internal
+|   |       |   |   |-- Calculator
+|   |       |   |   |   |-- BcMathCalculator.php
+|   |       |   |   |   |-- GmpCalculator.php
+|   |       |   |   |   +-- NativeCalculator.php
+|   |       |   |   |-- Calculator.php
+|   |       |   |   +-- CalculatorRegistry.php
+|   |       |   |-- BigDecimal.php
+|   |       |   |-- BigInteger.php
+|   |       |   |-- BigNumber.php
+|   |       |   |-- BigRational.php
+|   |       |   +-- RoundingMode.php
+|   |       |-- tools
+|   |       |   +-- ecs
+|   |       |       |-- composer.json
+|   |       |       +-- ecs.php
+|   |       |-- CHANGELOG.md
+|   |       |-- composer.json
+|   |       |-- LICENSE
+|   |       +-- phpstan.neon
+|   |-- carbonphp
+|   |   +-- carbon-doctrine-types
+|   |       |-- src
+|   |       |   +-- Carbon
+|   |       |       +-- Doctrine
+|   |       |           |-- CarbonDoctrineType.php
+|   |       |           |-- CarbonImmutableType.php
+|   |       |           |-- CarbonType.php
+|   |       |           |-- CarbonTypeConverter.php
+|   |       |           |-- DateTimeDefaultPrecision.php
+|   |       |           |-- DateTimeImmutableType.php
+|   |       |           +-- DateTimeType.php
+|   |       |-- composer.json
+|   |       |-- LICENSE
+|   |       +-- README.md
+|   |-- composer
+...
+|-- .editorconfig
+|-- .env
+|-- .env.example
+|-- .gitattributes
+|-- .gitignore
+|-- arborescence.ps1
+|-- artisan
+|-- composer.json
+|-- composer.lock
+|-- index.html
+|-- jsconfig.json
+|-- package-lock.json
+|-- package.json
+|-- phpunit.xml
+|-- postcss.config.js
+|-- README.md
+|-- structure.txt
+|-- tailwind.config.js
++-- vite.config.js
