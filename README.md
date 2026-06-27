@@ -107,7 +107,7 @@ Absence-manager/
 
 ## Authors
 
-**Omar Chekroun** & **Haytam Belghali** — M1 IGOV, Université Mohammed V de Rabat
+**Omar Chekroun** & **Haytam Belghali** — Projet de groupe, S1 Master IGOV, Université Mohammed V de Rabat
 [![GitHub](https://img.shields.io/badge/GitHub-Chekroun2004-181717?logo=github)](https://github.com/Chekroun2004)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-omar--chekroun-0A66C2?logo=linkedin)](https://linkedin.com/in/omar-chekroun)
 
